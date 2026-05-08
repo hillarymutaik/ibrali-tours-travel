@@ -2,7 +2,7 @@
   "name": "ibrali-tours-travel",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://hillarymutaik.github.io/ibrali-tours",
+  "homepage": "https://hillarymutaik.github.io/ibrali-tours-travel",
   "type": "module",
   "scripts": {
     "dev": "vite",

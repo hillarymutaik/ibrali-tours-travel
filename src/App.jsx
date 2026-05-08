@@ -11,7 +11,7 @@ import './index.css'
 
 function App() {
   return (
-    <Router basename="/ibrali-tours">
+    <Router basename="/ibrali-tours-travel">
       <AuthProvider>
         <Routes>
           <Route path="/" element={<Home />} />
