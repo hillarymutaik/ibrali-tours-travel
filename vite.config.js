@@ -8,5 +8,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: false,
+    cssMinify: false,  // Disable CSS minification to avoid Tailwind warnings
+
   }
 })
