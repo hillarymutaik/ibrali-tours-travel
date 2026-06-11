@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: "/ibrali-tours-travel/",
+  base: '/ibrali-tours-travel/',
 
   build: {
     outDir: 'dist',
