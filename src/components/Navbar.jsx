@@ -10,53 +10,61 @@ export default function Navbar() {
   const isActive = (path) => location.pathname === path
 
   return (
-    <nav className="bg-white shadow-lg sticky top-0 z-50">
+    <nav className="fixed top-0 left-0 w-full z-50 backdrop-blur-xl bg-white/70 border-b border-white/20 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <div className="text-2xl font-bold text-blue-600">🌍</div>
-            <span className="text-2xl font-bold text-blue-600 hidden sm:inline">Ibrali Tours</span>
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
+          {/* LOGO – Updated to use image from public folder */}
+          <Link
+            to="/"
+            className="flex items-center justify-center w-12 h-12 rounded-full bg-white/80 backdrop-blur-xl border border-gray-200 shadow-md hover:shadow-lg transition group"
+          >
+            <img
+              src="/ibrali-tours-travel/logo.webp"
+              alt="Ibrali Tours & Travel"
+              className="h-8 w-auto group-hover:scale-110 transition-transform duration-200"
+            />
           </Link>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link
-              to="/"
-              className={`transition font-medium ${isActive('/') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'}`}
-            >
-              Home
-            </Link>
-            <Link
-              to="/packages"
-              className={`transition font-medium ${isActive('/packages') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'}`}
-            >
-              Packages
-            </Link>
-            <Link
-              to="/booking"
-              className={`transition font-medium ${isActive('/booking') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'}`}
-            >
-              Book Now
-            </Link>
+          {/* DESKTOP MENU */}
+          <div className="hidden md:flex items-center gap-8">
+            {[
+              { path: '/', label: 'Home' },
+              { path: '/packages', label: 'Packages' },
+              { path: '/booking', label: 'Book Now' }
+            ].map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`relative font-medium transition ${isActive(item.path)
+                  ? 'text-blue-600'
+                  : 'text-gray-700 hover:text-blue-600'
+                  }`}
+              >
+                {item.label}
+                {isActive(item.path) && (
+                  <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-blue-600 rounded-full" />
+                )}
+              </Link>
+            ))}
 
+            {/* AUTH SECTION */}
             {user ? (
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 ml-4">
                 <Link
                   to="/my-bookings"
                   className="text-gray-700 hover:text-blue-600 transition font-medium"
                 >
-                  My Bookings
+                  My Trips
                 </Link>
                 <Link
                   to="/profile"
-                  className="text-gray-700 hover:text-blue-600 transition font-medium"
+                  className="px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 font-medium hover:bg-blue-100 transition"
                 >
                   {user.name}
                 </Link>
                 <button
                   onClick={logout}
-                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+                  className="px-4 py-2 rounded-full bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition"
                 >
                   Logout
                 </button>
@@ -64,70 +72,74 @@ export default function Navbar() {
             ) : (
               <Link
                 to="/profile"
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                className="px-5 py-2 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium shadow-md hover:shadow-xl hover:scale-105 transition"
               >
                 Login
               </Link>
             )}
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* MOBILE BUTTON */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
             </svg>
           </button>
         </div>
+      </div>
 
-        {/* Mobile Menu */}
-        {isOpen && (
-          <div className="md:hidden pb-4 space-y-2 border-t border-gray-200">
-            <Link
-              to="/"
-              onClick={() => setIsOpen(false)}
-              className="block px-3 py-2 rounded-lg hover:bg-gray-100 font-medium"
-            >
-              Home
-            </Link>
-            <Link
-              to="/packages"
-              onClick={() => setIsOpen(false)}
-              className="block px-3 py-2 rounded-lg hover:bg-gray-100 font-medium"
-            >
-              Packages
-            </Link>
-            <Link
-              to="/booking"
-              onClick={() => setIsOpen(false)}
-              className="block px-3 py-2 rounded-lg hover:bg-gray-100 font-medium"
-            >
-              Book Now
-            </Link>
+      {/* MOBILE MENU */}
+      {isOpen && (
+        <div className="md:hidden bg-white/95 backdrop-blur-xl border-t border-gray-200 shadow-lg">
+          <div className="px-4 py-4 space-y-2">
+            {[
+              { path: '/', label: 'Home' },
+              { path: '/packages', label: 'Packages' },
+              { path: '/booking', label: 'Book Now' }
+            ].map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={() => setIsOpen(false)}
+                className={`block px-4 py-2 rounded-lg font-medium transition ${isActive(item.path)
+                  ? 'bg-blue-50 text-blue-600'
+                  : 'hover:bg-gray-100'
+                  }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+
             {user ? (
               <>
                 <Link
                   to="/my-bookings"
                   onClick={() => setIsOpen(false)}
-                  className="block px-3 py-2 rounded-lg hover:bg-gray-100 font-medium"
+                  className="block px-4 py-2 rounded-lg hover:bg-gray-100 font-medium"
                 >
-                  My Bookings
+                  My Trips
                 </Link>
                 <Link
                   to="/profile"
                   onClick={() => setIsOpen(false)}
-                  className="block px-3 py-2 rounded-lg hover:bg-gray-100 font-medium"
+                  className="block px-4 py-2 rounded-lg bg-blue-50 text-blue-700 font-medium"
                 >
-                  Profile
+                  {user.name}
                 </Link>
                 <button
                   onClick={() => {
                     logout()
                     setIsOpen(false)
                   }}
-                  className="block w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 font-medium text-red-600"
+                  className="w-full text-left px-4 py-2 rounded-lg bg-red-50 text-red-600 font-medium hover:bg-red-100"
                 >
                   Logout
                 </button>
@@ -136,14 +148,14 @@ export default function Navbar() {
               <Link
                 to="/profile"
                 onClick={() => setIsOpen(false)}
-                className="block px-3 py-2 rounded-lg hover:bg-gray-100 font-medium text-blue-600"
+                className="block px-4 py-2 rounded-lg bg-blue-600 text-white text-center font-medium"
               >
                 Login
               </Link>
             )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </nav>
   )
 }
