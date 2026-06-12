@@ -5,64 +5,48 @@ import Footer from '../components/Footer'
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-
+    <div className="min-h-screen flex flex-col bg-[#F7F4EE] font-sans">
       <Navbar />
 
-      {/* BACKGROUND EFFECT */}
-      <div className="flex-1 relative flex items-center justify-center px-4 overflow-hidden">
+      <div className="flex-1 flex items-center justify-center px-6 py-28">
+        <div className="text-center max-w-lg">
 
-        <div className="absolute w-[500px] h-[500px] bg-blue-400/20 blur-3xl rounded-full -top-40 -left-40" />
-        <div className="absolute w-[500px] h-[500px] bg-indigo-400/20 blur-3xl rounded-full -bottom-40 -right-40" />
-
-        {/* CARD */}
-        <div className="relative z-10 text-center max-w-xl bg-white/70 backdrop-blur-xl border border-white/40 shadow-xl rounded-3xl p-10">
-
-          {/* ICON */}
-          <div className="text-7xl mb-4">🧭</div>
-
-          {/* ERROR CODE */}
-          <h1 className="text-6xl font-extrabold text-blue-600 mb-2">
+          {/* Large 404 */}
+          <p className="text-[140px] sm:text-[180px] font-black leading-none text-[#EAE6DF] select-none">
             404
-          </h1>
-
-          {/* TITLE */}
-          <h2 className="text-2xl font-bold text-gray-900 mb-3">
-            We couldn't find that page
-          </h2>
-
-          {/* DESCRIPTION */}
-          <p className="text-gray-600 mb-8 leading-relaxed">
-            The page you’re looking for might have been moved, deleted, or never existed.
-            Let’s get you back to exploring amazing destinations.
           </p>
 
-          {/* ACTIONS */}
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          {/* Icon + message overlaid */}
+          <div className="-mt-10 relative z-10">
+            <div className="inline-flex w-16 h-16 rounded-2xl bg-amber-500 items-center justify-center text-3xl mb-6 shadow-lg shadow-amber-200/60">
+              🧭
+            </div>
 
-            <Link
-              to="/"
-              className="px-6 py-3 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition shadow-md"
-            >
-              Go Home
-            </Link>
+            <h1 className="text-3xl font-black text-[#1C1A17] mb-3">
+              Page not found
+            </h1>
+            <p className="text-[#6B6560] text-sm leading-relaxed mb-8 max-w-sm mx-auto">
+              The page you're looking for might have moved, been deleted, or never existed.
+              Let's get you back to exploring amazing destinations.
+            </p>
 
-            <Link
-              to="/packages"
-              className="px-6 py-3 rounded-full border border-gray-300 bg-white text-gray-700 font-semibold hover:bg-gray-100 transition"
-            >
-              Explore Trips
-            </Link>
-
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link
+                to="/"
+                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#1C1A17] text-white text-sm font-bold hover:bg-[#333] transition-all duration-300 hover:scale-105 shadow-md"
+              >
+                ← Go Home
+              </Link>
+              <Link
+                to="/packages"
+                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full border border-[#E8E4DB] bg-white text-[#1C1A17] text-sm font-bold hover:border-amber-400 hover:bg-amber-50 transition-all duration-300"
+              >
+                Explore Trips
+              </Link>
+            </div>
           </div>
 
-          {/* SMALL HELP TEXT */}
-          <p className="text-xs text-gray-500 mt-6">
-            Need help? Contact support or return to homepage
-          </p>
-
         </div>
-
       </div>
 
       <Footer />

@@ -1,4 +1,21 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&display=swap');
+
+/* ── Brand theme — drawn from the Ibrali Tours logo (warm gold + earth) ── */
+@theme {
+  --color-sand:    #F7F4EE;  /* page background — light cream */
+  --color-ebony:   #1C1A17;  /* primary dark — near-black earth */
+  --color-bark:    #0F0C07;  /* deepest brown (footer) */
+  --color-gold:    #C4962A;  /* logo gold */
+  --color-brand-50:  #FBF6EC;
+  --color-brand-100: #F5E8CC;
+  --color-brand-200: #EAD19A;
+  --color-brand-300: #DDB661;
+  --color-brand-400: #CDA13C;
+  --color-brand-500: #C4962A;
+  --color-brand-600: #A87C1F;
+  --color-brand-700: #835f18;
+}
 
 * {
   margin: 0;
@@ -6,17 +23,179 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+html {
+  scroll-behavior: smooth;
 }
 
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #F7F4EE;
+  color: #1C1A17;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #F7F4EE; }
+::-webkit-scrollbar-thumb { background: #C9B99A; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #C4962A; }
+
+/* Text selection */
+::selection { background-color: #F59E0B; color: #1C1A17; }
+
+/* Line clamp utilities */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Playfair display headings */
+.font-display {
+  font-family: 'Playfair Display', serif;
+}
+
+/* ── Reusable components (consistent across every page) ──────────────── */
+
+/* Serif display heading helper — replaces the repeated inline `serif` const */
+.heading {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.3px;
+}
+.heading-accent {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-brand-300);
+}
+
+/* Buttons — hover handled in CSS so pages no longer need JS mouse handlers */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0.01em;
+  transition: background-color 0.25s, border-color 0.25s, color 0.25s, transform 0.25s;
+  cursor: pointer;
+}
+.btn-gold {
+  background: var(--color-gold);
+  color: #0A0703;
+}
+.btn-gold:hover {
+  background: var(--color-brand-300);
+  transform: translateY(-1px);
+}
+.btn-dark {
+  background: #0A0703;
+  color: #F5ECD8;
+}
+.btn-dark:hover {
+  background: var(--color-ebony);
+  transform: translateY(-1px);
+}
+.btn-light {
+  background: #fff;
+  color: var(--color-ebony);
+  border: 1px solid #E3DCCD;
+}
+.btn-light:hover {
+  border-color: var(--color-gold);
+}
+/* Ghost button over dark/photo backgrounds */
+.btn-ghost {
+  color: #F5ECD8;
+  border: 1px solid rgba(245, 236, 216, 0.3);
+  background: transparent;
+}
+.btn-ghost:hover {
+  border-color: rgba(245, 236, 216, 0.7);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Eyebrow — the gold dash + uppercase label used above every section title */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--color-brand-600);
+}
+.eyebrow::before {
+  content: "";
+  width: 1.5rem;
+  height: 1px;
+  background: var(--color-gold);
+}
+.eyebrow-light {
+  color: var(--color-brand-300);
+}
+
+/* Card — the white surface with a hairline border that warms to gold on hover */
+.card-surface {
+  background: #fff;
+  border: 0.5px solid #E3DCCD;
+  border-radius: 1rem;
+  transition: border-color 0.4s, transform 0.4s;
+}
+.card-surface:hover {
+  border-color: var(--color-gold);
+}
+
+/* Input focus — amber ring override */
+.input-safari {
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input-safari:focus {
+  outline: none;
+  border-color: #F59E0B;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+}
+
+/* ── Animations (consolidated here — index.css is the imported stylesheet) ── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn,
+.animate-fade-in {
+  animation: fadeIn 0.35s ease-out both;
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.animate-scaleIn {
+  animation: scaleIn 0.3s ease-out both;
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+  html { scroll-behavior: auto; }
 }

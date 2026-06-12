@@ -1,88 +1,149 @@
 import React from "react"
 import { Link } from "react-router-dom"
 
+const STATS = [
+  { num: "50+", label: "Destinations" },
+  { num: "4.9", label: "Average rating" },
+  { num: "1,200+", label: "Trips completed" },
+  { num: "Local", label: "Expert guides" },
+]
+
 export default function Hero() {
   return (
-    <section className="relative min-h-[92vh] flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[88vh] flex flex-col justify-end overflow-hidden font-[Inter]">
 
-      {/* BACKGROUND */}
+      {/* BACKGROUND IMAGE */}
       <div
         className="absolute inset-0 bg-cover bg-center scale-105"
         style={{
           backgroundImage:
-            "url(https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1800&auto=format&fit=crop)"
+            "url(https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1800&auto=format&fit=crop&q=80)",
         }}
       />
 
-      {/* GRADIENT OVERLAY */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
+      {/* WARM EARTH-TONE OVERLAY */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(10,7,3,0.35) 0%, rgba(10,7,3,0.55) 50%, rgba(10,7,3,0.82) 100%)",
+        }}
+      />
 
-      {/* SOFT GLOW LAYERS (CLEANED) */}
-      <div className="absolute inset-0">
-        <div className="absolute top-24 left-10 w-72 h-72 bg-blue-500/20 blur-[120px] rounded-full animate-pulse" />
-        <div className="absolute bottom-24 right-10 w-72 h-72 bg-indigo-500/20 blur-[120px] rounded-full animate-pulse" />
-      </div>
+      {/* CONTENT */}
+      <div className="relative z-10 w-full max-w-3xl mx-auto px-6 sm:px-10 pt-24">
 
-      {/* CONTENT WRAPPER */}
-      <div className="relative z-10 max-w-5xl text-center px-6">
-
-        {/* BADGE */}
-        <span className="inline-flex items-center gap-2 px-4 py-1 mb-6 rounded-full
-          bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm">
-          ✈️ Premium African Travel Experiences
-        </span>
+        {/* EYEBROW */}
+        <div className="inline-flex items-center gap-2 mb-5">
+          <span className="w-7 h-px" style={{ background: "#C4962A" }} />
+          <span
+            className="text-[11px] font-medium uppercase"
+            style={{ color: "#C4962A", letterSpacing: "2.5px" }}
+          >
+            Premium African Travel
+          </span>
+          <span className="w-7 h-px" style={{ background: "#C4962A" }} />
+        </div>
 
         {/* TITLE */}
-        <h1 className="text-white font-extrabold leading-tight text-4xl sm:text-5xl lg:text-6xl">
-          Discover Your Next{" "}
-          <span className="text-blue-300">Adventure</span>
+        <h1
+          className="leading-[1.1] mb-1.5"
+          style={{
+            fontFamily: "'Playfair Display', serif",
+            fontWeight: 700,
+            color: "#F5ECD8",
+            fontSize: "clamp(36px, 6vw, 58px)",
+          }}
+        >
+          Where every journey
+          <br />
+          becomes{" "}
+          <span style={{ fontStyle: "italic", fontWeight: 400, color: "#EDB84A" }}>
+            a story
+          </span>
         </h1>
 
-        {/* DESCRIPTION */}
-        <p className="mt-6 text-white/80 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-          Explore safaris, beaches, mountains, and cultural journeys across Africa
-          with hand-crafted travel experiences designed for unforgettable moments.
+        {/* SUBTITLE */}
+        <p
+          className="text-[15px] leading-[1.7] max-w-xl mt-4 mb-8"
+          style={{ color: "rgba(220,205,180,0.75)" }}
+        >
+          Safaris, coastlines, highlands, and living cultures — hand-crafted
+          itineraries across Africa built around the moments you'll never forget.
         </p>
 
-        {/* CTA BUTTONS */}
-        <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-
+        {/* CTAS */}
+        <div className="flex flex-wrap gap-3 mb-12">
           <Link
             to="/packages"
-            className="px-8 py-4 rounded-full bg-white text-blue-700 font-semibold
-            shadow-lg hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300"
+            className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-[13.5px] font-medium transition-colors"
+            style={{ background: "#C4962A", color: "#0A0703" }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "#EDB84A")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "#C4962A")}
           >
-            Explore Packages
+            Explore packages <span className="text-sm">→</span>
           </Link>
 
           <Link
             to="/booking"
-            className="px-8 py-4 rounded-full border border-white/30 text-white
-            bg-white/10 backdrop-blur-md hover:bg-white hover:text-blue-700
-            transition-all duration-300"
+            className="inline-flex items-center px-7 py-3 rounded-full text-[13.5px] transition-colors"
+            style={{
+              color: "#F5ECD8",
+              border: "1px solid rgba(245,236,216,0.3)",
+              background: "transparent",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = "rgba(245,236,216,0.7)"
+              e.currentTarget.style.color = "#fff"
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = "rgba(245,236,216,0.3)"
+              e.currentTarget.style.color = "#F5ECD8"
+            }}
           >
-            Book Your Trip
+            Plan your trip
           </Link>
-
         </div>
+      </div>
 
-        {/* STATS */}
-        <div className="mt-12 flex flex-wrap justify-center gap-3 text-sm text-white/80">
-
-          <div className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
-            🌍 50+ Destinations
+      {/* STATS BAR */}
+      <div
+        className="relative z-10 flex"
+        style={{
+          borderTop: "1px solid rgba(196,150,42,0.2)",
+          background: "rgba(10,7,3,0.6)",
+        }}
+      >
+        {STATS.map((s, i) => (
+          <div
+            key={s.label}
+            className="flex-1 px-6 py-4 flex flex-col gap-1"
+            style={{
+              borderRight:
+                i < STATS.length - 1
+                  ? "1px solid rgba(196,150,42,0.12)"
+                  : "none",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "22px",
+                fontWeight: 700,
+                color: "#EDB84A",
+                lineHeight: 1,
+              }}
+            >
+              {s.num}
+            </span>
+            <span
+              className="text-[11px]"
+              style={{ color: "rgba(200,185,160,0.65)", letterSpacing: "0.3px" }}
+            >
+              {s.label}
+            </span>
           </div>
-
-          <div className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
-            ⭐ 4.9 Rated Experiences
-          </div>
-
-          <div className="px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
-            🧭 Expert Local Guides
-          </div>
-
-        </div>
-
+        ))}
       </div>
     </section>
   )

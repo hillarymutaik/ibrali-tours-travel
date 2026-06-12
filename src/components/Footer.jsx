@@ -4,7 +4,9 @@ import { Link } from 'react-router-dom'
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
   { to: '/packages', label: 'Packages' },
-  { to: '/destinations', label: 'Destinations' },
+  { to: '/about', label: 'About Us' },
+  { to: '/contact', label: 'Contact Us' },
+  { to: '/my-bookings', label: 'My Trips' },
   { to: '/booking', label: 'Book a trip' },
 ]
 
@@ -176,7 +178,7 @@ export default function Footer() {
 
           {/* BRAND COLUMN */}
           <div>
-            <h3
+            <h1
               style={{
                 fontFamily: "'Playfair Display', serif",
                 fontSize: '26px',
@@ -186,8 +188,8 @@ export default function Footer() {
                 fontWeight: 700,
               }}
             >
-              Ibrali Tours
-            </h3>
+              Ibrali Tours &amp; Travel
+            </h1>
             <p
               style={{
                 fontSize: '13px',

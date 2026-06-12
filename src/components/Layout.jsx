@@ -3,7 +3,7 @@ import Footer from "./Footer"
 
 export default function Layout({ children }) {
     return (
-        <div className="min-h-screen bg-gradient-to-b from-white via-white to-blue-50 text-gray-900">
+        <div className="min-h-screen bg-[#F7F4EE] text-[#1C1A17]">
             <Navbar />
             <main className="pt-16 animate-fadeIn">
                 {children}
