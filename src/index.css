@@ -91,6 +91,11 @@ body {
   transition: background-color 0.25s, border-color 0.25s, color 0.25s, transform 0.25s;
   cursor: pointer;
 }
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
 .btn-gold {
   background: var(--color-gold);
   color: #0A0703;
@@ -98,6 +103,10 @@ body {
 .btn-gold:hover {
   background: var(--color-brand-300);
   transform: translateY(-1px);
+}
+.btn-gold:disabled:hover {
+  background: var(--color-gold);
+  transform: none;
 }
 .btn-dark {
   background: #0A0703;

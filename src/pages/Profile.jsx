@@ -5,7 +5,6 @@ import { isValidEmail, isValidPhone } from '../utils/helpers'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
-const serif = { fontFamily: "'Playfair Display', serif" }
 const gold = '#C4962A'
 
 /* Compact inline icon set */
@@ -89,16 +88,13 @@ export default function Profile() {
           />
           <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(10,7,3,0.4), #0A0703)' }} />
           <div className="relative max-w-7xl mx-auto flex items-end gap-6">
-            <div className="w-20 h-20 rounded-2xl flex items-center justify-center flex-shrink-0"
-              style={{ background: gold, color: '#0A0703', ...serif, fontWeight: 700, fontSize: '38px' }}>
+            <div className="heading w-20 h-20 rounded-2xl flex items-center justify-center flex-shrink-0"
+              style={{ background: gold, color: '#0A0703', fontSize: '38px' }}>
               {user.name?.charAt(0)?.toUpperCase()}
             </div>
             <div>
-              <div className="inline-flex items-center gap-2 mb-2">
-                <span className="w-6 h-px" style={{ background: gold }} />
-                <span className="text-[11px] font-medium uppercase" style={{ color: '#EDB84A', letterSpacing: '2.5px' }}>My Profile</span>
-              </div>
-              <h1 className="text-white leading-tight" style={{ ...serif, fontWeight: 700, fontSize: 'clamp(34px, 5vw, 50px)' }}>{user.name}</h1>
+              <div className="eyebrow eyebrow-light mb-2">My Profile</div>
+              <h1 className="heading text-white" style={{ fontSize: 'clamp(34px, 5vw, 50px)' }}>{user.name}</h1>
               <p className="text-white/50 text-sm mt-1">{user.email}</p>
             </div>
           </div>
@@ -110,7 +106,7 @@ export default function Profile() {
           {/* Info card */}
           <div className="md:col-span-2 bg-white rounded-2xl overflow-hidden" style={{ border: '0.5px solid #E3DCCD' }}>
             <div className="px-7 py-5 border-b border-[#F0EDE8]">
-              <h2 className="text-lg text-[#1C1A17]" style={{ ...serif, fontWeight: 700 }}>Account information</h2>
+              <h2 className="heading text-lg text-[#1C1A17]">Account information</h2>
             </div>
             <div className="px-7 py-6 space-y-5">
               {[
@@ -180,14 +176,9 @@ export default function Profile() {
         >
           <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(10,7,3,0.92), rgba(10,7,3,0.3) 60%, transparent)' }} />
           <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 mb-5">
-              <span className="w-7 h-px" style={{ background: gold }} />
-              <span className="text-[11px] font-medium uppercase" style={{ color: '#EDB84A', letterSpacing: '2.5px' }}>
-                Kenya's Premier Safari Company
-              </span>
-            </div>
-            <h2 className="text-white leading-tight mb-4" style={{ ...serif, fontWeight: 700, fontSize: 'clamp(36px, 4vw, 52px)' }}>
-              Every journey<br />begins with<br /><span style={{ fontStyle: 'italic', fontWeight: 400, color: '#EDB84A' }}>a first step.</span>
+            <div className="eyebrow eyebrow-light mb-5">Kenya's Premier Safari Company</div>
+            <h2 className="heading text-white mb-4" style={{ fontSize: 'clamp(36px, 4vw, 52px)' }}>
+              Every journey<br />begins with<br /><span className="heading-accent">a first step.</span>
             </h2>
             <p className="text-white/60 text-sm max-w-xs leading-relaxed">
               Create an account to save your bookings, manage trips, and unlock member-exclusive experiences.
@@ -217,7 +208,7 @@ export default function Profile() {
 
             <div className="bg-white rounded-2xl overflow-hidden" style={{ border: '0.5px solid #E3DCCD' }}>
               <div className="px-8 py-6 border-b border-[#F0EDE8]">
-                <h1 className="text-2xl text-[#1C1A17]" style={{ ...serif, fontWeight: 700 }}>
+                <h1 className="heading text-2xl text-[#1C1A17]">
                   {isLogin ? 'Welcome back' : 'Join Ibrali Tours'}
                 </h1>
                 <p className="text-[#9C9890] text-sm mt-1">
@@ -261,10 +252,7 @@ export default function Profile() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-4 rounded-xl font-medium text-sm tracking-wide transition-all duration-300 hover:scale-[1.01] disabled:opacity-50 disabled:cursor-not-allowed"
-                    style={{ background: gold, color: '#0A0703' }}
-                    onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.background = '#EDB84A' }}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = gold)}
+                    className="btn btn-gold w-full py-4 !rounded-xl tracking-wide"
                   >
                     {loading ? 'Please wait…' : isLogin ? 'Sign in →' : 'Create account →'}
                   </button>

@@ -3,8 +3,8 @@ import { TOUR_PACKAGES } from "../utils/constants"
 import Navbar from "../components/Navbar"
 import PackageCard from "../components/PackageCard"
 import Footer from "../components/Footer"
+import PageHero from "../components/PageHero"
 
-const serif = { fontFamily: "'Playfair Display', serif" }
 const gold = '#C4962A'
 
 export default function Packages() {
@@ -63,28 +63,14 @@ export default function Packages() {
       <Navbar />
 
       {/* ── HERO HEADER ───────────────────────────────────── */}
-      <section className="relative pt-28 pb-20 px-6 overflow-hidden" style={{ background: '#0A0703' }}>
-        <div className="absolute inset-0 opacity-20 bg-cover bg-center"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1400&q=60')" }}
-        />
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(10,7,3,0.6), #0A0703)' }} />
-
-        <div className="relative max-w-7xl mx-auto">
-          <div className="inline-flex items-center gap-2 mb-5">
-            <span className="w-7 h-px" style={{ background: gold }} />
-            <span className="text-[11px] font-medium uppercase" style={{ color: '#EDB84A', letterSpacing: '2.5px' }}>
-              Kenya Safari Packages
-            </span>
-          </div>
-          <h1 className="text-white leading-[1.0]" style={{ ...serif, fontWeight: 700, fontSize: 'clamp(40px, 7vw, 64px)' }}>
-            Find your<br />
-            <span style={{ fontStyle: 'italic', fontWeight: 400, color: '#EDB84A' }}>adventure</span>
-          </h1>
-          <p className="text-white/55 mt-5 text-base max-w-md leading-relaxed">
-            {TOUR_PACKAGES.length} curated experiences across Kenya's most extraordinary landscapes.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Kenya Safari Packages"
+        image="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1400&q=60"
+        subtitle={`${TOUR_PACKAGES.length} curated experiences across Kenya's most extraordinary landscapes.`}
+      >
+        Find your<br />
+        <span className="heading-accent">adventure</span>
+      </PageHero>
 
       {/* ── STICKY SEARCH + FILTER BAR ───────────────────── */}
       <section className="sticky top-16 z-40 bg-[#F5F0E8]/95 backdrop-blur-lg border-b border-[#E3DCCD]">
@@ -198,7 +184,7 @@ export default function Packages() {
       {/* ── RESULTS COUNT ─────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-6 pt-8 pb-2 flex items-center justify-between">
         <p className="text-sm text-[#6B6560] font-medium">
-          <span className="text-[#1C1A17] text-lg" style={{ ...serif, fontWeight: 700 }}>{packages.length}</span> experience{packages.length !== 1 ? "s" : ""} found
+          <span className="heading text-[#1C1A17] text-lg">{packages.length}</span> experience{packages.length !== 1 ? "s" : ""} found
         </p>
       </div>
 
@@ -219,16 +205,11 @@ export default function Packages() {
                 <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /><line x1="11" y1="8" x2="11" y2="14" /><line x1="8" y1="11" x2="14" y2="11" />
               </svg>
             </div>
-            <h3 className="text-2xl text-[#1C1A17] mb-2" style={{ ...serif, fontWeight: 700 }}>No experiences found</h3>
+            <h3 className="heading text-2xl text-[#1C1A17] mb-2">No experiences found</h3>
             <p className="text-[#6B6560] text-sm mb-8 max-w-xs">
               Try broadening your search or adjusting the filters to see more options.
             </p>
-            <button onClick={clearFilters}
-              className="inline-flex items-center gap-2 px-8 py-4 font-medium rounded-full transition text-sm"
-              style={{ background: '#0A0703', color: '#F5ECD8' }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = '#241B10')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = '#0A0703')}
-            >
+            <button onClick={clearFilters} className="btn btn-dark px-8 py-4">
               Reset all filters
             </button>
           </div>

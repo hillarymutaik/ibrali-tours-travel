@@ -86,8 +86,6 @@ export default function Home() {
     { icon: 'support', title: 'Always-on support', desc: 'Responsive assistance around the clock, wherever your journey takes you.' },
   ]
 
-  const serif = { fontFamily: "'Playfair Display', serif" }
-
   /* Reusable section eyebrow */
   const Eyebrow = ({ children, light }) => (
     <div className={`eyebrow mb-4 ${light ? 'eyebrow-light' : ''}`}>{children}</div>
@@ -123,11 +121,11 @@ export default function Home() {
             <div className="eyebrow eyebrow-light mb-5">Kenya's Premier Safari Company</div>
 
             <h1
-              className="text-white leading-[0.98] max-w-4xl"
-              style={{ ...serif, fontWeight: 700, fontSize: 'clamp(44px, 8vw, 92px)' }}
+              className="heading text-white max-w-4xl"
+              style={{ fontSize: 'clamp(44px, 8vw, 92px)', lineHeight: 0.98 }}
             >
               Where the<br />
-              <span style={{ fontStyle: 'italic', fontWeight: 400, color: '#EDB84A' }}>wild</span> begins.
+              <span className="heading-accent">wild</span> begins.
             </h1>
 
             <p className="text-white/70 text-lg mt-6 max-w-lg leading-relaxed">
@@ -152,7 +150,7 @@ export default function Home() {
                 { value: '40+', label: 'Destinations' },
               ].map((s) => (
                 <div key={s.label}>
-                  <p className="text-white" style={{ ...serif, fontWeight: 700, fontSize: '34px', color: '#EDB84A' }}>{s.value}</p>
+                  <p className="heading" style={{ fontSize: '34px', color: '#EDB84A' }}>{s.value}</p>
                   <p className="text-white/50 text-xs mt-1 tracking-wide uppercase">{s.label}</p>
                 </div>
               ))}
@@ -177,7 +175,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-16">
             <div>
               <Eyebrow>Handpicked for you</Eyebrow>
-              <h2 style={{ ...serif, fontWeight: 700, fontSize: 'clamp(34px, 5vw, 52px)', lineHeight: 1.05 }}>
+              <h2 className="heading" style={{ fontSize: 'clamp(34px, 5vw, 52px)', lineHeight: 1.05 }}>
                 Featured <span style={{ fontStyle: 'italic', fontWeight: 400, color: '#B07E1C' }}>adventures</span>
               </h2>
             </div>
@@ -207,7 +205,7 @@ export default function Home() {
 
             <div className="mb-16">
               <Eyebrow light>Explore Kenya</Eyebrow>
-              <h2 className="text-white" style={{ ...serif, fontWeight: 700, fontSize: 'clamp(34px, 5vw, 52px)', lineHeight: 1.05 }}>
+              <h2 className="heading text-white" style={{ fontSize: 'clamp(34px, 5vw, 52px)', lineHeight: 1.05 }}>
                 Top destinations
               </h2>
             </div>
@@ -240,7 +238,7 @@ export default function Home() {
               <div className="flex justify-center">
                 <Eyebrow>Our promise</Eyebrow>
               </div>
-              <h2 style={{ ...serif, fontWeight: 700, fontSize: 'clamp(34px, 5vw, 52px)', lineHeight: 1.1 }}>
+              <h2 className="heading" style={{ fontSize: 'clamp(34px, 5vw, 52px)', lineHeight: 1.1 }}>
                 Why travellers <span style={{ fontStyle: 'italic', fontWeight: 400, color: '#B07E1C' }}>choose us</span>
               </h2>
             </div>
@@ -279,7 +277,7 @@ export default function Home() {
 
             <div className="flex flex-col justify-center px-10 py-16 lg:px-16" style={{ background: '#0A0703' }}>
               <Eyebrow light>Ready to go?</Eyebrow>
-              <h2 className="text-white mb-6" style={{ ...serif, fontWeight: 700, fontSize: 'clamp(34px, 5vw, 52px)', lineHeight: 1.1 }}>
+              <h2 className="heading text-white mb-6" style={{ fontSize: 'clamp(34px, 5vw, 52px)', lineHeight: 1.1 }}>
                 Your next<br />
                 adventure<br />
                 <span style={{ fontStyle: 'italic', fontWeight: 400, color: '#EDB84A' }}>starts here.</span>

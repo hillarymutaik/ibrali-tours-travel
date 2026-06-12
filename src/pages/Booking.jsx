@@ -6,6 +6,7 @@ import { TOUR_PACKAGES } from '../utils/constants'
 import { formatCurrency, isValidEmail, isValidPhone, generateBookingId } from '../utils/helpers'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import PageHero from '../components/PageHero'
 
 const NEXT_STEPS = [
   { title: 'Review details', sub: 'We send a full summary to your email' },
@@ -14,8 +15,6 @@ const NEXT_STEPS = [
   { title: 'Pre-trip pack', sub: 'Itinerary & packing guide sent 7 days prior' },
   { title: 'Enjoy your adventure', sub: 'We handle everything from here' },
 ]
-
-const serif = { fontFamily: "'Playfair Display', serif" }
 
 /* Compact inline icon set */
 function TrustIcon({ name }) {
@@ -107,28 +106,14 @@ export default function Booking() {
       <Navbar />
 
       {/* ── HERO HEADER ─────────────────────────────────── */}
-      <section className="relative pt-28 pb-20 px-6 overflow-hidden" style={{ background: '#0A0703' }}>
-        <div
-          className="absolute inset-0 opacity-20 bg-cover bg-center"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1400&q=60')" }}
-        />
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(10,7,3,0.5), #0A0703)' }} />
-        <div className="relative max-w-7xl mx-auto">
-          <div className="inline-flex items-center gap-2 mb-5">
-            <span className="w-7 h-px" style={{ background: gold }} />
-            <span className="text-[11px] font-medium uppercase" style={{ color: '#EDB84A', letterSpacing: '2.5px' }}>
-              Reserve Your Safari
-            </span>
-          </div>
-          <h1 className="text-white leading-[1.0]" style={{ ...serif, fontWeight: 700, fontSize: 'clamp(40px, 7vw, 64px)' }}>
-            Book your<br />
-            <span style={{ fontStyle: 'italic', fontWeight: 400, color: '#EDB84A' }}>adventure</span>
-          </h1>
-          <p className="text-white/55 mt-5 text-base max-w-md leading-relaxed">
-            Fill in the details below and our team will confirm your booking within 24 hours.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Reserve Your Safari"
+        image="https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1400&q=60"
+        subtitle="Fill in the details below and our team will confirm your booking within 24 hours."
+      >
+        Book your<br />
+        <span className="heading-accent">adventure</span>
+      </PageHero>
 
       {/* ── MAIN CONTENT ────────────────────────────────── */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 -mt-6">
@@ -156,7 +141,7 @@ export default function Booking() {
               <form onSubmit={handleSubmit} className="bg-white rounded-2xl overflow-hidden" style={{ border: '0.5px solid #E3DCCD' }}>
 
                 <div className="px-8 py-6 border-b border-[#F0EDE8]">
-                  <h2 className="text-xl text-[#1C1A17]" style={{ ...serif, fontWeight: 700 }}>Booking details</h2>
+                  <h2 className="heading text-xl text-[#1C1A17]">Booking details</h2>
                   <p className="text-[#9C9890] text-sm mt-1">All fields marked <span style={{ color: gold }}>*</span> are required</p>
                 </div>
 
@@ -255,10 +240,7 @@ export default function Booking() {
                   <button
                     type="submit"
                     disabled={!selectedPackageId || loading}
-                    className="w-full py-4 rounded-xl font-medium text-sm tracking-wide transition-all duration-300 hover:scale-[1.01] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
-                    style={{ background: gold, color: '#0A0703' }}
-                    onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.background = '#EDB84A' }}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = gold)}
+                    className="btn btn-gold w-full py-4 !rounded-xl tracking-wide"
                   >
                     {loading ? (
                       <>
@@ -281,7 +263,7 @@ export default function Booking() {
               {selectedPackage ? (
                 <div className="rounded-2xl p-6 text-white animate-fadeIn" style={{ background: '#0A0703' }}>
                   <p className="text-white/40 text-[11px] font-medium uppercase tracking-[1.5px] mb-1">Booking summary</p>
-                  <h3 className="text-white text-lg mb-4 leading-snug" style={{ ...serif, fontWeight: 700 }}>{selectedPackage.title}</h3>
+                  <h3 className="heading text-white text-lg mb-4 leading-snug">{selectedPackage.title}</h3>
 
                   <div className="space-y-2.5 text-sm pb-4 mb-4" style={{ borderBottom: '0.5px solid rgba(196,150,42,0.2)' }}>
                     <div className="flex justify-between"><span className="text-white/50">Price per person</span><span className="font-medium">{formatCurrency(selectedPackage.price)}</span></div>
@@ -292,7 +274,7 @@ export default function Booking() {
 
                   <div className="flex justify-between items-end">
                     <span className="text-white/50 text-xs">Total (all taxes included)</span>
-                    <span style={{ ...serif, fontWeight: 700, fontSize: '30px', color: '#EDB84A' }}>{formatCurrency(totalPrice)}</span>
+                    <span className="heading" style={{ fontSize: '30px', color: '#EDB84A' }}>{formatCurrency(totalPrice)}</span>
                   </div>
                 </div>
               ) : (
