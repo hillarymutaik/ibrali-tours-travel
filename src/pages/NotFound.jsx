@@ -5,30 +5,44 @@ import Footer from '../components/Footer'
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[#F7F4EE] font-sans">
       <Navbar />
 
-      <div className="flex-1 flex items-center justify-center px-4">
-        <div className="text-center">
-          <div className="text-8xl font-bold text-blue-600 mb-4">404</div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Page Not Found</h1>
-          <p className="text-xl text-gray-600 mb-8">
-            The page you're looking for doesn't exist or has been moved.
+      <div className="flex-1 flex items-center justify-center px-6 py-28">
+        <div className="text-center max-w-lg">
+
+          {/* Large 404 */}
+          <p className="text-[140px] sm:text-[180px] font-black leading-none text-[#EAE6DF] select-none">
+            404
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              to="/"
-              className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold"
+
+          {/* Icon + message overlaid */}
+          <div className="-mt-10 relative z-10">
+            <div
+              className="inline-flex w-16 h-16 rounded-2xl items-center justify-center text-3xl mb-6 shadow-lg shadow-[#EBD9B0]/60"
+              style={{ background: 'var(--color-gold)' }}
             >
-              Back to Home
-            </Link>
-            <Link
-              to="/packages"
-              className="px-8 py-3 border-2 border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition font-semibold"
-            >
-              Browse Packages
-            </Link>
+              🧭
+            </div>
+
+            <h1 className="heading text-4xl text-[#1C1A17] mb-3">
+              Page not <span className="heading-accent">found</span>
+            </h1>
+            <p className="text-[#6B6560] text-sm leading-relaxed mb-8 max-w-sm mx-auto">
+              The page you're looking for might have moved, been deleted, or never existed.
+              Let's get you back to exploring amazing destinations.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link to="/" className="btn btn-dark px-8 py-3.5">
+                ← Go Home
+              </Link>
+              <Link to="/packages" className="btn btn-light px-8 py-3.5">
+                Explore Trips
+              </Link>
+            </div>
           </div>
+
         </div>
       </div>
 
