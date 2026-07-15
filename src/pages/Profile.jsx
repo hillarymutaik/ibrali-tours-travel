@@ -176,7 +176,7 @@ export default function Profile() {
         >
           <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(10,7,3,0.92), rgba(10,7,3,0.3) 60%, transparent)' }} />
           <div className="relative z-10">
-            <div className="eyebrow eyebrow-light mb-5">Kenya's Premier Safari Company</div>
+            <div className="eyebrow eyebrow-light mb-5">Safaris · Flights · Beach Escapes</div>
             <h2 className="heading text-white mb-4" style={{ fontSize: 'clamp(36px, 4vw, 52px)' }}>
               Every journey<br />begins with<br /><span className="heading-accent">a first step.</span>
             </h2>
@@ -240,7 +240,7 @@ export default function Profile() {
                   {!isLogin && (
                     <div>
                       <label className={labelCls}>Phone number</label>
-                      <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="+254 712 345 678" className={inputCls} />
+                      <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="+254 786 000 100" className={inputCls} />
                     </div>
                   )}
 

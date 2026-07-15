@@ -10,6 +10,7 @@ import MyBookings from "../pages/MyBookings";
 import Profile from "../pages/Profile";
 import About from "../pages/About";
 import Contact from "../pages/Contact";
+import Admin from "../pages/Admin";
 import NotFound from "../pages/NotFound";
 import PageTransition from "../components/PageTransition";
 import BackToTop from "../components/BackToTop";
@@ -35,6 +36,7 @@ function AppRoutes() {
           <Route path="/booking" element={<Booking />} />
           <Route path="/my-bookings" element={<MyBookings />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </PageTransition>

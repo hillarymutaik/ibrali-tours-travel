@@ -103,7 +103,7 @@ export default function Booking() {
       {/* ── HERO HEADER ─────────────────────────────────── */}
       <PageHero
         eyebrow="Reserve Your Safari"
-        image="https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1400&q=60"
+        image="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1400&q=60"
         subtitle="Fill in the details below and our team will confirm your booking within 24 hours."
       >
         Book your<br />
@@ -200,7 +200,7 @@ export default function Booking() {
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
                       <label className={labelCls}>Phone <span style={{ color: gold }}>*</span></label>
-                      <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+254 712 345 678" className={inputCls} />
+                      <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+254 786 000 100" className={inputCls} />
                     </div>
                     <div>
                       <label className={labelCls}>Start date <span style={{ color: gold }}>*</span></label>

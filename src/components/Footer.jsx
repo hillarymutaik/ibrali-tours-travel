@@ -11,8 +11,8 @@ const NAV_LINKS = [
 ]
 
 const CONTACT_ITEMS = [
-  { type: 'mail', label: 'info@ibrali-tours.com', href: 'mailto:info@ibrali-tours.com' },
-  { type: 'phone', label: '+254 712 345 678', href: 'tel:+254712345678' },
+  { type: 'mail', label: 'ibralitoureskenya@gmail.com', href: 'mailto:ibralitoureskenya@gmail.com' },
+  { type: 'phone', label: '+254 786 000 100', href: 'tel:+254786000100' },
   { type: 'pin', label: 'Nairobi, Kenya', href: null },
 ]
 
@@ -100,10 +100,10 @@ export default function Footer() {
               Ibrali Tours &amp; Travel
             </h2>
             <p className="text-[13px] text-[#7A6A55] leading-relaxed max-w-[240px] mb-5">
-              Crafting unforgettable African journeys — from the Maasai Mara to the Zanzibar coast.
+              Flights, safaris and coastal escapes — unforgettable African journeys from the Maasai Mara to the Zanzibar coast.
             </p>
             <div className="flex gap-2 flex-wrap">
-              {['Safari', 'Beach', 'Culture', 'Adventure'].map((tag) => (
+              {['Safari', 'Flights', 'Beach', 'Culture', 'Adventure'].map((tag) => (
                 <span
                   key={tag}
                   className="text-[11px] tracking-wide px-3 py-1 rounded-full text-[#9A8A74]"

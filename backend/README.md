@@ -9,6 +9,10 @@ PHP 8 + MySQL/MariaDB REST API for the React frontend.
 | DB password | set your own — see setup step 2 |
 | API base URL | `http://localhost/ibrali-api` |
 | Demo login | `demo@example.com` / `password123` |
+| Admin login | `ibralitoureskenya@gmail.com` / `admin2026` — local demo credential; change it if this backend ever faces the internet |
+
+Sign in with the admin account and open **/#/admin** on the site to manage
+bookings, packages, contact messages, subscribers and users.
 
 ## Setup (one time)
 
@@ -63,6 +67,7 @@ Authenticated calls send `Authorization: Bearer <token>` (token returned by logi
 | POST | `bookings.php?action=cancel` | Bearer | `{id: "IBR-…"}` — own pending/confirmed bookings only |
 | POST | `contact.php` | — | `{name, email, phone, message}` |
 | POST | `newsletter.php` | — | `{email}` (idempotent) |
+| GET/POST | `admin.php?action=…` | Bearer (admin role) | `stats`, `bookings`, `booking-status`, `messages`, `message-read`, `message-delete`, `subscribers`, `users`, `packages`, `package-save`, `package-toggle` |
 
 ## Tables
 

@@ -31,7 +31,7 @@ const mock = {
   loadUsers() {
     return (
       JSON.parse(localStorage.getItem('users')) || [
-        { id: 1, email: 'demo@example.com', password: 'password123', name: 'Demo User', phone: '+254712345678' },
+        { id: 1, email: 'demo@example.com', password: 'password123', name: 'Demo User', phone: '+254786000100' },
       ]
     )
   },

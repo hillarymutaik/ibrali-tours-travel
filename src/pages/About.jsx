@@ -65,7 +65,7 @@ export default function About() {
       <PageHero
         eyebrow="About Ibrali Tours"
         image="https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1500&q=70"
-        subtitle="Ibrali Tours & Travel creates thoughtful safari, beach, culture, and adventure experiences across Kenya and East Africa."
+        subtitle="Ibrali Tours & Travel creates thoughtful safari, air travel, beach, culture, and adventure experiences across Kenya and East Africa — including charter and scheduled flights to every destination we serve."
       >
         Travel led by<br />
         <span className="heading-accent">people who care</span>

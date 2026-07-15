@@ -16,7 +16,8 @@ export default function Navbar() {
   const hasDarkHero =
     darkHeroRoutes.includes(location.pathname) ||
     /^\/packages\/.+/.test(location.pathname) ||
-    (location.pathname === "/profile" && !!user);
+    (location.pathname === "/profile" && !!user) ||
+    (location.pathname === "/admin" && user?.role === "admin");
   const isTransparent = hasDarkHero && !scrolled && !isOpen;
 
   useEffect(() => {
@@ -104,6 +105,14 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-3">
             {user ? (
               <>
+                {user.role === "admin" && (
+                  <Link
+                    to="/admin"
+                    className={`text-sm font-medium transition-colors duration-300 ${location.pathname === "/admin" ? activeLink : linkBase}`}
+                  >
+                    Admin
+                  </Link>
+                )}
                 <Link
                   to="/my-bookings"
                   className={`text-sm font-medium transition-colors duration-300 ${linkBase}`}
@@ -200,6 +209,14 @@ export default function Navbar() {
             <div className="pt-3 mt-2 border-t border-[#E3DCCD] space-y-2">
               {user ? (
                 <>
+                  {user.role === "admin" && (
+                    <Link
+                      to="/admin"
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-[#4A4540] hover:bg-white/60 transition"
+                    >
+                      Admin Panel
+                    </Link>
+                  )}
                   <Link
                     to="/my-bookings"
                     className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-[#4A4540] hover:bg-white/60 transition"

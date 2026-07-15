@@ -108,6 +108,16 @@ function requireUser(): array
     return currentUser() ?? fail('Authentication required', 401);
 }
 
+/** Requires a signed-in user with the admin role. */
+function requireAdmin(): array
+{
+    $user = requireUser();
+    if (($user['role'] ?? '') !== 'admin') {
+        fail('Admin access required', 403);
+    }
+    return $user;
+}
+
 /** Issues a fresh token for a user and returns the raw value. */
 function issueToken(int $userId): string
 {

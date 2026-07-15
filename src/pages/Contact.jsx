@@ -65,8 +65,8 @@ export default function Contact() {
   }
 
   const contactItems = [
-    { icon: 'mail', title: 'Email', value: 'ibralitourskenya@gmail.com', href: 'mailto:ibralitourskenya@gmail.com' },
-    { icon: 'phone', title: 'Phone', value: '+254 712 345 678', href: 'tel:+254712345678' },
+    { icon: 'mail', title: 'Email', value: 'ibralitoureskenya@gmail.com', href: 'mailto:ibralitoureskenya@gmail.com' },
+    { icon: 'phone', title: 'Phone', value: '+254 786 000 100', href: 'tel:+254786000100' },
     { icon: 'pin', title: 'Office', value: 'Nairobi, Kenya', href: null },
   ]
 
@@ -152,7 +152,7 @@ export default function Contact() {
 
                 <div>
                   <label className="block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2.5">Phone</label>
-                  <input name="phone" value={formData.phone} onChange={handleChange} placeholder="+254 712 345 678" className={inputClass} />
+                  <input name="phone" value={formData.phone} onChange={handleChange} placeholder="+254 786 000 100" className={inputClass} />
                 </div>
 
                 <div>

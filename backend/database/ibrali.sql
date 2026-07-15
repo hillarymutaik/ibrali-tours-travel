@@ -110,10 +110,15 @@ CREATE TABLE IF NOT EXISTS newsletter_subscribers (
 -- ════════════════════════════════════════════════════════════════════
 
 -- Demo account: demo@example.com / password123
+-- Admin account: ibralitoureskenya@gmail.com / admin2026
+--   ⚠ Local-development credential. If this backend ever faces the
+--   internet, change the admin password first.
 INSERT INTO users (name, email, phone, password_hash, role) VALUES
-  ('Demo User', 'demo@example.com', '+254712345678',
-   '$2y$10$.MgXutHtIsk1DoRYl0vxxuEofDelP5DDgiJfSj3vEgRve0kzAu7G.', 'customer')
-ON DUPLICATE KEY UPDATE email = email;
+  ('Demo User', 'demo@example.com', '+254786000100',
+   '$2y$10$.MgXutHtIsk1DoRYl0vxxuEofDelP5DDgiJfSj3vEgRve0kzAu7G.', 'customer'),
+  ('Ibrali Admin', 'ibralitoureskenya@gmail.com', '+254786000100',
+   '$2y$10$DT3yAXYpyo2GHTf5AfLBRe1qhxMnZrhipxdMkaQHZdV/Kh/F5dn0G', 'admin')
+ON DUPLICATE KEY UPDATE email = VALUES(email);
 
 -- Tour packages (mirrors src/utils/constants.js)
 INSERT INTO packages

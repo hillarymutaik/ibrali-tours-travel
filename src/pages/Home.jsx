@@ -110,6 +110,7 @@ export default function Home() {
 
   const categories = [
     { label: 'Wildlife Safari',  img: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=500&h=700&fit=crop', count: '24 trips' },
+    { label: 'Air Travel',       img: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=500&h=700&fit=crop', count: 'Charter & scheduled' },
     { label: 'Beach Escapes',    img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&h=700&fit=crop', count: '12 trips' },
     { label: 'Mountain Treks',   img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=700&fit=crop', count: '8 trips' },
     { label: 'Cultural Tours',   img: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=500&h=700&fit=crop', count: '10 trips' },
@@ -122,7 +123,7 @@ export default function Home() {
     { name: 'Mount Kenya',  tag: 'Alpine Trek',        img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=380&fit=crop', count: '8 tours',  span: '' },
     { name: 'Nairobi',      tag: 'City Experience',   img: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=500&h=380&fit=crop', count: '6 tours',  span: '' },
     { name: 'Lake Nakuru',  tag: 'Flamingo Haven',    img: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=500&h=380&fit=crop', count: '5 tours',  span: '' },
-    { name: 'Samburu',      tag: 'Remote Adventure',  img: 'https://images.unsplash.com/photo-1547970827-f33b90fde688?w=1200&h=380&fit=crop', count: '4 tours',  span: 'col-span-2 md:col-span-3' },
+    { name: 'Samburu',      tag: 'Fly-in Safari',     img: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&h=380&fit=crop', count: '4 tours',  span: 'col-span-2 md:col-span-3' },
   ]
 
   const testimonials = [
@@ -161,7 +162,7 @@ export default function Home() {
 
   const galleryPhotos = [
     'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1547970827-f33b90fde688?w=400&h=400&fit=crop',
+    'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&h=400&fit=crop',
     'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=400&h=400&fit=crop',
     'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop',
     'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=400&fit=crop',
@@ -209,7 +210,7 @@ export default function Home() {
 
           <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
             <div className="pb-14 md:pb-16">
-              <div className="eyebrow eyebrow-light mb-5">Kenya's Premier Safari Company</div>
+              <div className="eyebrow eyebrow-light mb-5">Safaris · Flights · Beach Escapes</div>
               <h1
                 className="heading text-white max-w-4xl"
                 style={{ fontSize: 'clamp(44px, 8vw, 92px)', lineHeight: 0.98 }}
@@ -218,7 +219,7 @@ export default function Home() {
                 <span className="heading-accent">wild</span> begins.
               </h1>
               <p className="text-white/70 text-lg mt-6 max-w-xl leading-relaxed">
-                Handcrafted safaris and cultural journeys across Kenya's most extraordinary landscapes — designed for the curious, the bold, and the wanderful.
+                Handcrafted safaris, seamless air travel, and cultural journeys across Kenya's most extraordinary landscapes — we fly you there, guide you through, and bring you home inspired.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mt-10">
                 <Link to="/packages" className="btn btn-gold px-8 py-4">
@@ -368,7 +369,7 @@ export default function Home() {
               </p>
             </Reveal>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {categories.map((cat, i) => (
                 <Link
                   key={i}
@@ -406,7 +407,7 @@ export default function Home() {
         {/* ── MARQUEE STRIP ────────────────────────────────── */}
         <div className="py-3.5 overflow-hidden border-y" style={{ background: '#0A0703', borderColor: 'rgba(196,150,42,0.15)' }}>
           <div className="flex gap-12 animate-marquee whitespace-nowrap">
-            {Array(6).fill(['Masai Mara', 'Amboseli', 'Lake Nakuru', 'Samburu', 'Mombasa', 'Mount Kenya', 'Tsavo', 'Maasai Village']).flat().map((d, i) => (
+            {Array(6).fill(['Masai Mara', 'Charter Flights', 'Amboseli', 'Lake Nakuru', 'Samburu', 'Mombasa', 'Mount Kenya', 'Tsavo', 'Maasai Village']).flat().map((d, i) => (
               <span key={i} className="text-sm tracking-widest uppercase flex items-center gap-4" style={{ color: '#C9B99A' }}>
                 {d} <span style={{ color: 'rgba(196,150,42,0.45)' }}>✦</span>
               </span>
