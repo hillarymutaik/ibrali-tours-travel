@@ -9,8 +9,15 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const location = useLocation();
 
-  const isHome = location.pathname === "/";
-  const isTransparent = isHome && !scrolled;
+  // Routes that open with a dark hero get a transparent overlay navbar until
+  // scrolled; everything else (light background from the top, or unmatched
+  // 404s) keeps the solid navbar so the logo/links stay legible.
+  const darkHeroRoutes = ["/", "/packages", "/about", "/contact", "/booking", "/my-bookings"];
+  const hasDarkHero =
+    darkHeroRoutes.includes(location.pathname) ||
+    /^\/packages\/.+/.test(location.pathname) ||
+    (location.pathname === "/profile" && !!user);
+  const isTransparent = hasDarkHero && !scrolled && !isOpen;
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -32,7 +39,7 @@ export default function Navbar() {
 
   const headerBg = isTransparent
     ? "bg-transparent"
-    : "bg-[#F5F0E8]/95 backdrop-blur-xl border-b border-[#E3DCCD]";
+    : "bg-[#FAF7F1]/95 backdrop-blur-xl border-b border-[#E3DCCD] shadow-[0_8px_30px_-16px_rgba(28,26,23,0.25)]";
 
   const logoNameColor = isTransparent ? "text-white" : "text-[#1C1A17]";
   const logoTagColor = isTransparent ? "text-white/55" : "text-[#9C9890]";
@@ -171,7 +178,7 @@ export default function Navbar() {
         className={`md:hidden overflow-hidden transition-all duration-300 ${isOpen ? "max-h-[480px] opacity-100" : "max-h-0 opacity-0"
           }`}
       >
-        <div className="bg-[#F5F0E8] border-t border-[#E3DCCD]">
+        <div className="bg-[#FAF7F1] border-t border-[#E3DCCD]">
           <div className="p-4 space-y-1">
             {navItems.map((item) => (
               <Link

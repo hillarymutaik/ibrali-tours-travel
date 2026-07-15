@@ -1,93 +1,105 @@
-import { TOUR_PACKAGES } from '../utils/constants'
+import { API_URL } from '../utils/constants'
 
-// Mock authentication service - replace with real API calls
+/**
+ * Auth service backed by the PHP/MySQL API (backend/api on XAMPP).
+ * When the API is unreachable (e.g. the static GitHub Pages demo),
+ * it falls back to the original localStorage mock so the site still works.
+ */
+
+async function apiRequest(path, { method = 'GET', body, auth = false } = {}) {
+  const headers = { 'Content-Type': 'application/json' }
+  if (auth) {
+    const token = localStorage.getItem('authToken')
+    if (token) headers['Authorization'] = `Bearer ${token}`
+  }
+  const res = await fetch(`${API_URL}${path}`, {
+    method,
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
+  })
+  const json = await res.json().catch(() => ({}))
+  if (!res.ok || json.ok === false) {
+    const err = new Error(json.error || `Request failed (${res.status})`)
+    err.isApiError = true // reached the server; don't fall back to the mock
+    throw err
+  }
+  return json.data
+}
+
+/* ── localStorage mock (offline/demo fallback) ─────────────────────── */
+const mock = {
+  loadUsers() {
+    return (
+      JSON.parse(localStorage.getItem('users')) || [
+        { id: 1, email: 'demo@example.com', password: 'password123', name: 'Demo User', phone: '+254712345678' },
+      ]
+    )
+  },
+  register(userData) {
+    const users = this.loadUsers()
+    if (users.some(u => u.email === userData.email)) throw new Error('User already exists')
+    const newUser = { id: users.length + 1, ...userData, createdAt: new Date().toISOString() }
+    users.push(newUser)
+    localStorage.setItem('users', JSON.stringify(users))
+    const user = { ...newUser }
+    delete user.password
+    return { user, token: 'mock_token_' + Date.now() }
+  },
+  login(email, password) {
+    const found = this.loadUsers().find(u => u.email === email && u.password === password)
+    if (!found) throw new Error('Invalid email or password')
+    const user = { ...found }
+    delete user.password
+    return { user, token: 'mock_token_' + Date.now() }
+  },
+}
+
+function persistSession({ user, token }) {
+  localStorage.setItem('authToken', token)
+  localStorage.setItem('currentUser', JSON.stringify(user))
+  return { user, token }
+}
+
 class AuthService {
-  constructor() {
-    this.users = JSON.parse(localStorage.getItem('users')) || [
-      {
-        id: 1,
-        email: 'demo@example.com',
-        password: 'password123',
-        name: 'Demo User',
-        phone: '+254712345678'
-      }
-    ]
-  }
-
-  // Register user
   async register(userData) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const existingUser = this.users.find(u => u.email === userData.email)
-        if (existingUser) {
-          reject(new Error('User already exists'))
-          return
-        }
-
-        const newUser = {
-          id: this.users.length + 1,
-          ...userData,
-          createdAt: new Date()
-        }
-
-        this.users.push(newUser)
-        localStorage.setItem('users', JSON.stringify(this.users))
-
-        const { password, ...userWithoutPassword } = newUser
-        resolve({
-          user: userWithoutPassword,
-          token: 'mock_jwt_token_' + Date.now()
-        })
-      }, 1000)
-    })
+    try {
+      const data = await apiRequest('/auth.php?action=register', { method: 'POST', body: userData })
+      return persistSession(data)
+    } catch (err) {
+      if (err.isApiError) throw err
+      return persistSession(mock.register(userData)) // API unreachable → demo mode
+    }
   }
 
-  // Login user
   async login(email, password) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const user = this.users.find(u => u.email === email && u.password === password)
-        if (!user) {
-          reject(new Error('Invalid email or password'))
-          return
-        }
-
-        const { password: _, ...userWithoutPassword } = user
-        const token = 'mock_jwt_token_' + Date.now()
-        localStorage.setItem('authToken', token)
-        localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword))
-
-        resolve({
-          user: userWithoutPassword,
-          token
-        })
-      }, 1000)
-    })
+    try {
+      const data = await apiRequest('/auth.php?action=login', { method: 'POST', body: { email, password } })
+      return persistSession(data)
+    } catch (err) {
+      if (err.isApiError) throw err
+      return persistSession(mock.login(email, password)) // API unreachable → demo mode
+    }
   }
 
-  // Logout user
   async logout() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        localStorage.removeItem('authToken')
-        localStorage.removeItem('currentUser')
-        resolve()
-      }, 500)
-    })
+    try {
+      await apiRequest('/auth.php?action=logout', { method: 'POST', auth: true })
+    } catch {
+      // best-effort — clear the local session regardless
+    }
+    localStorage.removeItem('authToken')
+    localStorage.removeItem('currentUser')
   }
 
-  // Get current user
   getCurrentUser() {
     const user = localStorage.getItem('currentUser')
     return user ? JSON.parse(user) : null
   }
 
-  // Check if authenticated
   isAuthenticated() {
     return !!localStorage.getItem('authToken')
   }
 
-  // Get auth token
   getToken() {
     return localStorage.getItem('authToken')
   }

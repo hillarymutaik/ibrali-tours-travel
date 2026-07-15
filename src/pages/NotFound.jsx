@@ -5,7 +5,7 @@ import Footer from '../components/Footer'
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#F7F4EE] font-sans">
+    <div className="min-h-screen flex flex-col bg-[#FAF7F1] font-sans">
       <Navbar />
 
       <div className="flex-1 flex items-center justify-center px-6 py-28">

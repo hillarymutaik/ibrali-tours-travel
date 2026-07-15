@@ -78,13 +78,8 @@ export default function Booking() {
         createdAt: new Date().toISOString(),
       }
 
-      if (user) {
-        createBooking(bookingData)
-      } else {
-        const bookings = JSON.parse(localStorage.getItem('bookings') || '[]')
-        bookings.push(bookingData)
-        localStorage.setItem('bookings', JSON.stringify(bookings))
-      }
+      // Persists via the PHP/MySQL API; guests are stored as guest bookings
+      await createBooking(bookingData)
 
       setSubmitted(true)
       setFormData({ fullName: user?.name || '', email: user?.email || '', phone: user?.phone || '', travelers: 1, startDate: '', specialRequests: '' })
@@ -102,7 +97,7 @@ export default function Booking() {
   const gold = '#C4962A'
 
   return (
-    <div className="min-h-screen bg-[#F5F0E8] text-[#1C1A17] font-sans overflow-x-hidden">
+    <div className="min-h-screen bg-[#FAF7F1] text-[#1C1A17] font-sans overflow-x-hidden">
       <Navbar />
 
       {/* ── HERO HEADER ─────────────────────────────────── */}

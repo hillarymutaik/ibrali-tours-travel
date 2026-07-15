@@ -78,15 +78,15 @@ export default function Profile() {
   /* ── LOGGED-IN VIEW ─────────────────────────────────────── */
   if (user) {
     return (
-      <div className="min-h-screen bg-[#F5F0E8] font-sans">
+      <div className="min-h-screen bg-[#FAF7F1] font-sans">
         <Navbar />
 
         {/* Dark hero */}
         <section className="relative pt-28 pb-20 px-6 overflow-hidden" style={{ background: '#0A0703' }}>
-          <div className="absolute inset-0 opacity-15 bg-cover bg-center"
+          <div className="absolute inset-0 opacity-35 bg-cover bg-center"
             style={{ backgroundImage: "url('https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1400&q=60')" }}
           />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(10,7,3,0.4), #0A0703)' }} />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(10,7,3,0.25), rgba(10,7,3,0.92))' }} />
           <div className="relative max-w-7xl mx-auto flex items-end gap-6">
             <div className="heading w-20 h-20 rounded-2xl flex items-center justify-center flex-shrink-0"
               style={{ background: gold, color: '#0A0703', fontSize: '38px' }}>
@@ -164,7 +164,7 @@ export default function Profile() {
 
   /* ── AUTH FORM VIEW ─────────────────────────────────────── */
   return (
-    <div className="min-h-screen bg-[#F5F0E8] font-sans">
+    <div className="min-h-screen bg-[#FAF7F1] font-sans">
       <Navbar />
 
       <div className="min-h-screen grid lg:grid-cols-2">
@@ -187,7 +187,7 @@ export default function Profile() {
         </div>
 
         {/* Right — form */}
-        <div className="flex items-center justify-center px-6 py-20 bg-[#F5F0E8]">
+        <div className="flex items-center justify-center px-6 py-20 bg-[#FAF7F1]">
           <div className="w-full max-w-md">
 
             {/* Tab switcher */}

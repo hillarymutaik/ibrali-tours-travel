@@ -1,8 +1,8 @@
-import { API_BASE_URL } from '../utils/constants'
+import { API_URL } from '../utils/constants'
 
 class ApiService {
   constructor() {
-    this.baseURL = API_BASE_URL
+    this.baseURL = API_URL
   }
 
   // Generic request handler

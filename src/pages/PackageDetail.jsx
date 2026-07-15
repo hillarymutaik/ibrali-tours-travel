@@ -52,7 +52,7 @@ export default function PackageDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F5F0E8] flex items-center justify-center">
+      <div className="min-h-screen bg-[#FAF7F1] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="w-10 h-10 rounded-full border-4 border-t-transparent animate-spin" style={{ borderColor: gold, borderTopColor: 'transparent' }} />
           <p className="text-[#6B6560] text-sm font-medium">Loading experience…</p>
@@ -63,7 +63,7 @@ export default function PackageDetail() {
 
   if (!pkg) {
     return (
-      <div className="min-h-screen bg-[#F5F0E8]">
+      <div className="min-h-screen bg-[#FAF7F1]">
         <Navbar />
         <div className="max-w-4xl mx-auto text-center py-32 px-6">
           <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6" style={{ background: '#FAF3E4', border: '0.5px solid #EBD9B0' }}>
@@ -85,7 +85,7 @@ export default function PackageDetail() {
   const tabs = ["overview", "highlights", "inclusions"]
 
   return (
-    <div className="min-h-screen bg-[#F5F0E8] text-[#1C1A17] font-sans overflow-x-hidden">
+    <div className="min-h-screen bg-[#FAF7F1] text-[#1C1A17] font-sans overflow-x-hidden">
       <Navbar />
 
       {/* ── HERO ────────────────────────────────────────────── */}
@@ -96,7 +96,7 @@ export default function PackageDetail() {
           className="w-full h-full object-cover scale-[1.04] transition-transform duration-[8s] hover:scale-100"
         />
 
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(10,7,3,0.92), rgba(10,7,3,0.3) 55%, transparent)' }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(10,7,3,0.85), rgba(10,7,3,0.2) 55%, transparent)' }} />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(10,7,3,0.4), transparent)' }} />
 
         {/* Back nav */}

@@ -5,9 +5,9 @@ import { useBooking } from '../hooks/useBooking'
 import { formatCurrency, formatDate } from '../utils/helpers'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import PageHero from '../components/PageHero'
 
 const serif = { fontFamily: "'Playfair Display', serif" }
-const gold = '#C4962A'
 
 const STATUS_STYLE = {
   confirmed: 'bg-emerald-50 text-emerald-700 border-emerald-200',
@@ -22,36 +22,14 @@ const STATUS_DOT = {
   pending: 'bg-[#C4962A]',
 }
 
-function HeroHeader({ children, subtitle }) {
-  return (
-    <section className="relative pt-28 pb-20 px-6 overflow-hidden" style={{ background: '#0A0703' }}>
-      <div className="absolute inset-0 opacity-15 bg-cover bg-center"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1400&q=60')" }}
-      />
-      <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(10,7,3,0.5), #0A0703)' }} />
-      <div className="relative max-w-7xl mx-auto">{children}</div>
-    </section>
-  )
-}
-
-function Eyebrow({ children }) {
-  return (
-    <div className="inline-flex items-center gap-2 mb-5">
-      <span className="w-7 h-px" style={{ background: gold }} />
-      <span className="text-[11px] font-medium uppercase" style={{ color: '#EDB84A', letterSpacing: '2.5px' }}>{children}</span>
-    </div>
-  )
-}
-
 /* ── NOT SIGNED IN ─────────────────────────────────────────── */
 function GuestView() {
   return (
-    <div className="min-h-screen bg-[#F5F0E8] font-sans">
+    <div className="min-h-screen bg-[#FAF7F1] font-sans">
       <Navbar />
-      <HeroHeader>
-        <Eyebrow>My Trips</Eyebrow>
-        <h1 className="text-white leading-[1.0]" style={{ ...serif, fontWeight: 700, fontSize: 'clamp(40px, 7vw, 60px)' }}>Your adventures</h1>
-      </HeroHeader>
+      <PageHero eyebrow="My Trips" image="https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1400&q=60">
+        Your <span className="heading-accent">adventures</span>
+      </PageHero>
 
       <div className="max-w-2xl mx-auto px-6 py-24 text-center">
         <div className="bg-white rounded-2xl p-12" style={{ border: '0.5px solid #E3DCCD' }}>
@@ -93,25 +71,20 @@ export default function MyBookings() {
     : userBookings.filter(b => b.status === activeStatus)
 
   return (
-    <div className="min-h-screen bg-[#F5F0E8] font-sans text-[#1C1A17]">
+    <div className="min-h-screen bg-[#FAF7F1] font-sans text-[#1C1A17]">
       <Navbar />
 
-      <HeroHeader>
-        <div className="flex flex-col sm:flex-row sm:items-end gap-4 justify-between">
-          <div>
-            <Eyebrow>My Trips</Eyebrow>
-            <h1 className="text-white leading-[1.0]" style={{ ...serif, fontWeight: 700, fontSize: 'clamp(40px, 7vw, 64px)' }}>
-              Your adventures
-            </h1>
-            <p className="text-white/50 mt-3 text-sm">
-              {userBookings.length} booking{userBookings.length !== 1 ? 's' : ''} on record
-            </p>
-          </div>
-          <Link to="/booking" className="btn btn-gold self-start sm:self-auto px-6 py-3">
+      <PageHero
+        eyebrow="My Trips"
+        subtitle={`${userBookings.length} booking${userBookings.length !== 1 ? 's' : ''} on record`}
+        actions={
+          <Link to="/booking" className="btn btn-gold px-6 py-3">
             + New booking
           </Link>
-        </div>
-      </HeroHeader>
+        }
+      >
+        Your <span className="heading-accent">adventures</span>
+      </PageHero>
 
       <section className="max-w-7xl mx-auto px-6 py-12">
 

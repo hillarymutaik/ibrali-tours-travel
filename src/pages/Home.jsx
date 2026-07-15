@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { TOUR_PACKAGES } from '../utils/constants'
+import { TOUR_PACKAGES, API_URL } from '../utils/constants'
 import Navbar from '../components/Navbar'
 import PackageCard from '../components/PackageCard'
 import Footer from '../components/Footer'
-import PageTransition from '../components/PageTransition'
+import Reveal from '../components/Reveal'
 
 function Icon({ name, size = 20 }) {
   const p = {
@@ -62,7 +62,33 @@ export default function Home() {
   const [activeTab, setActiveTab]     = useState('all')
   const [statsVisible, setStatsVisible] = useState(false)
   const [heroSearch, setHeroSearch]   = useState({ destination: '', duration: '', guests: '2' })
+  const [newsletterEmail, setNewsletterEmail] = useState('')
+  const [newsletterState, setNewsletterState] = useState('idle') // idle | sending | done | error
   const statsRef = useRef(null)
+
+  const handleNewsletterSubmit = async (e) => {
+    e.preventDefault()
+    if (!newsletterEmail) return
+    setNewsletterState('sending')
+    try {
+      const res = await fetch(`${API_URL}/newsletter.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: newsletterEmail }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok || json.ok === false) {
+        setNewsletterState('error')
+        return
+      }
+      setNewsletterState('done')
+      setNewsletterEmail('')
+    } catch {
+      // API unreachable (static demo) — treat as subscribed
+      setNewsletterState('done')
+      setNewsletterEmail('')
+    }
+  }
 
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -162,8 +188,7 @@ export default function Home() {
   )
 
   return (
-    <PageTransition>
-      <div className="min-h-screen bg-[#F5F0E8] text-[#1C1A17] overflow-x-hidden font-sans">
+      <div className="min-h-screen bg-[#FAF7F1] text-[#1C1A17] overflow-x-hidden font-sans">
         <Navbar />
 
         {/* ── HERO ─────────────────────────────────────────── */}
@@ -174,7 +199,7 @@ export default function Home() {
           />
           <div
             className="absolute inset-0"
-            style={{ background: 'linear-gradient(to top, rgba(10,7,3,0.96) 0%, rgba(10,7,3,0.55) 45%, rgba(10,7,3,0.18) 100%)' }}
+            style={{ background: 'linear-gradient(to top, rgba(10,7,3,0.88) 0%, rgba(10,7,3,0.42) 45%, rgba(10,7,3,0.06) 100%)' }}
           />
 
           <div className="absolute top-24 right-6 hidden md:flex items-center gap-2 bg-white/8 backdrop-blur-md border border-white/15 text-white/90 text-xs px-4 py-2 rounded-full">
@@ -333,7 +358,7 @@ export default function Home() {
         {/* ── EXPERIENCE CATEGORIES ──────────────────────── */}
         <section className="py-24 px-6">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-14">
+            <Reveal className="text-center mb-14">
               <Eyebrow>Explore by type</Eyebrow>
               <h2 className="heading" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.1 }}>
                 Find your perfect <span className="heading-accent">adventure</span>
@@ -341,7 +366,7 @@ export default function Home() {
               <p className="text-[#7A7268] text-base mt-4 max-w-lg mx-auto leading-relaxed">
                 Whether you dream of tracking lions at dawn or unwinding on pristine shores, Kenya has it all.
               </p>
-            </div>
+            </Reveal>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {categories.map((cat, i) => (
@@ -357,7 +382,7 @@ export default function Home() {
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(10,7,3,0.88) 0%, rgba(10,7,3,0.1) 60%, transparent 100%)' }} />
+                  <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(10,7,3,0.78) 0%, rgba(10,7,3,0.06) 60%, transparent 100%)' }} />
 
                   <div className="absolute bottom-0 left-0 p-4 w-full">
                     <p className="text-white font-semibold text-sm leading-snug" style={{ fontFamily: "'Playfair Display', serif" }}>{cat.label}</p>
@@ -392,23 +417,17 @@ export default function Home() {
         {/* ── FEATURED PACKAGES ────────────────────────────── */}
         <section className="py-24 px-6">
           <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <Reveal className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
               <div>
                 <Eyebrow>Handpicked for you</Eyebrow>
                 <h2 className="heading" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.1 }}>
                   Featured <span className="heading-accent">adventures</span>
                 </h2>
               </div>
-              <Link
-                to="/packages"
-                className="self-start md:self-auto inline-flex items-center gap-2 text-sm font-medium pb-1 transition-colors"
-                style={{ color: '#1C1A17', borderBottom: '1.5px solid #C4962A' }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#B07E1C')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#1C1A17')}
-              >
+              <Link to="/packages" className="link-underline self-start md:self-auto">
                 View all packages →
               </Link>
-            </div>
+            </Reveal>
 
             {/* Tab Filter */}
             <div className="flex flex-wrap gap-2 mb-10">
@@ -443,14 +462,14 @@ export default function Home() {
             className="absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: "url('https://images.unsplash.com/photo-1547970827-f33b90fde688?w=1800&q=80')" }}
           />
-          <div className="absolute inset-0" style={{ background: 'rgba(10,7,3,0.84)' }} />
+          <div className="absolute inset-0" style={{ background: 'rgba(10,7,3,0.72)' }} />
           <div className="relative z-10 max-w-7xl mx-auto px-6">
-            <div className="text-center mb-16">
+            <Reveal className="text-center mb-16">
               <Eyebrow light>Our legacy</Eyebrow>
               <h2 className="heading text-white" style={{ fontSize: 'clamp(28px, 5vw, 48px)' }}>
                 Numbers that <span className="heading-accent">speak</span>
               </h2>
-            </div>
+            </Reveal>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
               {[
                 { end: 500, suffix: '+', label: 'Safaris Completed',    iconName: 'compass' },
@@ -467,23 +486,17 @@ export default function Home() {
         {/* ── DESTINATIONS GRID ────────────────────────────── */}
         <section className="py-24 px-6">
           <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-14">
+            <Reveal className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-14">
               <div>
                 <Eyebrow>Kenya awaits</Eyebrow>
                 <h2 className="heading" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.1 }}>
                   Top <span className="heading-accent">destinations</span>
                 </h2>
               </div>
-              <Link
-                to="/packages"
-                className="self-start md:self-auto inline-flex items-center gap-2 text-sm font-medium pb-1"
-                style={{ color: '#1C1A17', borderBottom: '1.5px solid #C4962A' }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = '#B07E1C')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = '#1C1A17')}
-              >
+              <Link to="/packages" className="link-underline self-start md:self-auto">
                 View all destinations →
               </Link>
-            </div>
+            </Reveal>
 
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4" style={{ gridAutoRows: 'minmax(180px, auto)' }}>
               {destinations.map((dest, i) => (
@@ -499,7 +512,7 @@ export default function Home() {
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(10,7,3,0.88) 0%, rgba(10,7,3,0.05) 60%, transparent 100%)' }} />
+                  <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(10,7,3,0.78) 0%, rgba(10,7,3,0.03) 60%, transparent 100%)' }} />
                   <div className="absolute bottom-0 left-0 p-5 w-full flex items-end justify-between">
                     <div>
                       <span
@@ -534,7 +547,7 @@ export default function Home() {
         {/* ── HOW IT WORKS ─────────────────────────────────── */}
         <section className="py-24" style={{ background: '#0A0703' }}>
           <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center mb-16">
+            <Reveal className="text-center mb-16">
               <Eyebrow light>Simple process</Eyebrow>
               <h2 className="heading text-white" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.1 }}>
                 How it <span className="heading-accent">works</span>
@@ -542,37 +555,38 @@ export default function Home() {
               <p className="text-white/45 text-base mt-4 max-w-md mx-auto leading-relaxed">
                 From your first click to your last sunset, we take care of everything.
               </p>
-            </div>
+            </Reveal>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
               {howItWorks.map((step, i) => (
-                <div
-                  key={i}
-                  className="relative p-8 rounded-2xl"
-                  style={{ background: 'rgba(255,255,255,0.03)', border: '0.5px solid rgba(196,150,42,0.14)' }}
-                >
-                  {i < howItWorks.length - 1 && (
-                    <div className="hidden lg:block absolute top-12 right-0 translate-x-1/2 z-10">
-                      <svg width="28" height="10" viewBox="0 0 28 10" fill="none">
-                        <path d="M0 5H24M24 5L20 1M24 5L20 9" stroke="rgba(196,150,42,0.3)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
-                  )}
-                  <p
-                    className="mb-4 leading-none select-none"
-                    style={{ fontFamily: "'Playfair Display', serif", fontSize: '42px', fontWeight: 700, color: 'rgba(196,150,42,0.18)' }}
-                  >
-                    {step.step}
-                  </p>
+                <Reveal key={i} delay={i * 0.08} className="relative">
                   <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
-                    style={{ background: 'rgba(196,150,42,0.14)', color: '#EDB84A' }}
+                    className="relative p-8 rounded-2xl h-full"
+                    style={{ background: 'rgba(255,255,255,0.06)', border: '0.5px solid rgba(196,150,42,0.14)' }}
                   >
-                    <Icon name={step.icon} size={18} />
+                    {i < howItWorks.length - 1 && (
+                      <div className="hidden lg:block absolute top-12 right-0 translate-x-1/2 z-10">
+                        <svg width="28" height="10" viewBox="0 0 28 10" fill="none">
+                          <path d="M0 5H24M24 5L20 1M24 5L20 9" stroke="rgba(196,150,42,0.3)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
+                    )}
+                    <p
+                      className="mb-4 leading-none select-none"
+                      style={{ fontFamily: "'Playfair Display', serif", fontSize: '42px', fontWeight: 700, color: 'rgba(196,150,42,0.18)' }}
+                    >
+                      {step.step}
+                    </p>
+                    <div
+                      className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
+                      style={{ background: 'rgba(196,150,42,0.14)', color: '#EDB84A' }}
+                    >
+                      <Icon name={step.icon} size={18} />
+                    </div>
+                    <h3 className="text-white font-medium text-base mb-2">{step.title}</h3>
+                    <p className="text-white/40 text-sm leading-relaxed">{step.desc}</p>
                   </div>
-                  <h3 className="text-white font-medium text-base mb-2">{step.title}</h3>
-                  <p className="text-white/40 text-sm leading-relaxed">{step.desc}</p>
-                </div>
+                </Reveal>
               ))}
             </div>
 
@@ -587,7 +601,7 @@ export default function Home() {
         {/* ── WHY CHOOSE US ────────────────────────────────── */}
         <section className="py-24 px-6">
           <div className="max-w-7xl mx-auto">
-            <div className="mb-14 text-center">
+            <Reveal className="mb-14 text-center">
               <div className="flex justify-center"><Eyebrow>Our promise</Eyebrow></div>
               <h2 className="heading" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.1 }}>
                 Why travellers <span className="heading-accent">choose us</span>
@@ -595,15 +609,12 @@ export default function Home() {
               <p className="text-[#7A7268] text-base mt-4 max-w-lg mx-auto leading-relaxed">
                 12 years of crafting extraordinary experiences has taught us what truly matters.
               </p>
-            </div>
+            </Reveal>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {features.map((f, i) => (
                 <div
                   key={i}
-                  className="group p-8 rounded-2xl bg-white transition-all duration-500 hover:-translate-y-1"
-                  style={{ border: '0.5px solid #E3DCCD' }}
-                  onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#C4962A')}
-                  onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#E3DCCD')}
+                  className="group card-surface p-8 !rounded-2xl transition-transform duration-500 hover:-translate-y-1"
                 >
                   <div
                     className="w-11 h-11 rounded-xl flex items-center justify-center mb-5"
@@ -620,18 +631,18 @@ export default function Home() {
         </section>
 
         {/* ── TESTIMONIALS ─────────────────────────────────── */}
-        <section className="py-24 px-6" style={{ background: '#F0EBE0' }}>
+        <section className="py-24 px-6" style={{ background: '#F5EFE3' }}>
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-14">
+            <Reveal className="text-center mb-14">
               <Eyebrow>Real experiences</Eyebrow>
               <h2 className="heading" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.1 }}>
                 Stories from our <span className="heading-accent">travellers</span>
               </h2>
-            </div>
+            </Reveal>
 
             <div className="grid gap-6 md:grid-cols-3">
               {testimonials.map((t, i) => (
-                <div key={i} className="bg-white rounded-2xl p-8 relative flex flex-col" style={{ border: '0.5px solid #E3DCCD' }}>
+                <div key={i} className="card-surface !rounded-2xl p-8 relative flex flex-col">
                   <div className="flex items-center gap-0.5 mb-5">
                     {[...Array(t.rating)].map((_, j) => (
                       <svg key={j} className="w-4 h-4" fill="#EDB84A" viewBox="0 0 20 20">
@@ -683,23 +694,17 @@ export default function Home() {
         {/* ── PHOTO GALLERY ────────────────────────────────── */}
         <section className="py-24 px-6" style={{ background: '#0A0703' }}>
           <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
+            <Reveal className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
               <div>
                 <Eyebrow light>Kenya in photos</Eyebrow>
                 <h2 className="heading text-white" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.1 }}>
                   Life through the <span className="heading-accent">lens</span>
                 </h2>
               </div>
-              <a
-                href="#"
-                className="self-start md:self-auto inline-flex items-center gap-2 text-sm font-medium pb-1 transition-colors"
-                style={{ color: 'rgba(255,255,255,0.45)', borderBottom: '1px solid rgba(196,150,42,0.35)' }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.85)')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.45)')}
-              >
+              <a href="#" className="link-underline link-underline-light self-start md:self-auto">
                 Follow on Instagram →
               </a>
-            </div>
+            </Reveal>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
               {galleryPhotos.map((photo, i) => (
@@ -728,7 +733,7 @@ export default function Home() {
 
         {/* ── NEWSLETTER ──────────────────────────────────── */}
         <section className="py-20 px-6">
-          <div className="max-w-2xl mx-auto text-center">
+          <Reveal className="max-w-2xl mx-auto text-center">
             <Eyebrow>Travel inspiration</Eyebrow>
             <h2 className="heading mb-4" style={{ fontSize: 'clamp(26px, 4vw, 40px)', lineHeight: 1.15 }}>
               Get Kenya travel <span className="heading-accent">insider tips</span>
@@ -736,21 +741,28 @@ export default function Home() {
             <p className="text-[#7A7268] text-base mb-8 leading-relaxed max-w-lg mx-auto">
               Monthly itinerary ideas, off-the-beaten-path destinations, and exclusive early-bird deals — delivered to your inbox.
             </p>
-            <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onSubmit={e => e.preventDefault()}>
+            <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onSubmit={handleNewsletterSubmit}>
               <input
                 type="email"
+                required
+                value={newsletterEmail}
+                onChange={e => setNewsletterEmail(e.target.value)}
                 placeholder="Your email address"
-                className="flex-1 px-5 py-3.5 rounded-full text-sm bg-white text-[#1C1A17] placeholder:text-[#9C9890] focus:outline-none"
+                className="input-safari flex-1 px-5 py-3.5 rounded-full text-sm bg-white text-[#1C1A17] placeholder:text-[#9C9890]"
                 style={{ border: '0.5px solid #E3DCCD' }}
-                onFocus={(e) => (e.target.style.borderColor = '#C4962A')}
-                onBlur={(e) => (e.target.style.borderColor = '#E3DCCD')}
               />
-              <button type="submit" className="btn btn-gold px-7 py-3.5 whitespace-nowrap">
-                Subscribe free →
+              <button type="submit" disabled={newsletterState === 'sending'} className="btn btn-gold px-7 py-3.5 whitespace-nowrap">
+                {newsletterState === 'sending' ? 'Subscribing…' : 'Subscribe free →'}
               </button>
             </form>
-            <p className="text-[#9C9890] text-xs mt-4">No spam. Unsubscribe any time.</p>
-          </div>
+            {newsletterState === 'done' ? (
+              <p className="text-emerald-700 text-xs mt-4 font-medium">You're in! Watch your inbox for travel inspiration.</p>
+            ) : newsletterState === 'error' ? (
+              <p className="text-red-600 text-xs mt-4">That email doesn't look right — please try again.</p>
+            ) : (
+              <p className="text-[#9C9890] text-xs mt-4">No spam. Unsubscribe any time.</p>
+            )}
+          </Reveal>
         </section>
 
         {/* ── SPLIT CTA ────────────────────────────────────── */}
@@ -760,7 +772,7 @@ export default function Home() {
               className="min-h-[50vh] lg:min-h-[580px] bg-cover bg-center"
               style={{ backgroundImage: "url('https://images.unsplash.com/photo-1547970827-f33b90fde688?w=960&q=85')" }}
             />
-            <div className="flex flex-col justify-center px-10 py-16 lg:px-16" style={{ background: '#0A0703' }}>
+            <Reveal className="flex flex-col justify-center px-10 py-16 lg:px-16 h-full bg-[#0A0703]">
               <Eyebrow light>Ready to go?</Eyebrow>
               <h2 className="heading text-white mb-6" style={{ fontSize: 'clamp(30px, 5vw, 50px)', lineHeight: 1.1 }}>
                 Your next<br />
@@ -792,12 +804,11 @@ export default function Home() {
                   Join <span className="text-white/70 font-medium">5,000+</span> happy travellers
                 </p>
               </div>
-            </div>
+            </Reveal>
           </div>
         </section>
 
         <Footer />
       </div>
-    </PageTransition>
   )
 }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { API_URL } from '../utils/constants'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import PageHero from '../components/PageHero'
@@ -34,10 +35,33 @@ export default function Contact() {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (event) => {
+  const [sendError, setSendError] = useState('')
+  const [sending, setSending] = useState(false)
+
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    setSubmitted(true)
-    setFormData({ name: '', email: '', phone: '', message: '' })
+    setSendError('')
+    setSending(true)
+    try {
+      const res = await fetch(`${API_URL}/contact.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok || json.ok === false) {
+        setSendError(json.error || 'Something went wrong. Please try again.')
+        return
+      }
+      setSubmitted(true)
+      setFormData({ name: '', email: '', phone: '', message: '' })
+    } catch {
+      // API unreachable (static demo) — accept the message locally
+      setSubmitted(true)
+      setFormData({ name: '', email: '', phone: '', message: '' })
+    } finally {
+      setSending(false)
+    }
   }
 
   const contactItems = [
@@ -49,7 +73,7 @@ export default function Contact() {
   const inputClass = 'w-full px-4 py-3.5 bg-white border border-[#E3DCCD] rounded-xl text-sm text-[#1C1A17] placeholder-[#B0A99E] focus:outline-none focus:border-[#C4962A]'
 
   return (
-    <div className="min-h-screen bg-[#F5F0E8] text-[#1C1A17] overflow-x-hidden font-sans">
+    <div className="min-h-screen bg-[#FAF7F1] text-[#1C1A17] overflow-x-hidden font-sans">
       <Navbar />
 
       <PageHero
@@ -109,6 +133,12 @@ export default function Contact() {
                   </div>
                 )}
 
+                {sendError && (
+                  <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
+                    {sendError}
+                  </div>
+                )}
+
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2.5">Name</label>
@@ -130,8 +160,8 @@ export default function Contact() {
                   <textarea name="message" value={formData.message} onChange={handleChange} required rows={5} placeholder="Tell us about your dream trip, dates, group size, or budget..." className={`${inputClass} resize-none`} />
                 </div>
 
-                <button type="submit" className="btn btn-gold w-full py-4 !rounded-xl">
-                  Send message
+                <button type="submit" disabled={sending} className="btn btn-gold w-full py-4 !rounded-xl">
+                  {sending ? 'Sending…' : 'Send message'}
                 </button>
               </div>
             </form>

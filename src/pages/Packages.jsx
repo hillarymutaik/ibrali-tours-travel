@@ -59,7 +59,7 @@ export default function Packages() {
       : "bg-white text-[#6B6560] border-[#E3DCCD] hover:border-[#0A0703]"
 
   return (
-    <div className="min-h-screen bg-[#F5F0E8] text-[#1C1A17] overflow-x-hidden font-sans">
+    <div className="min-h-screen bg-[#FAF7F1] text-[#1C1A17] overflow-x-hidden font-sans">
       <Navbar />
 
       {/* ── HERO HEADER ───────────────────────────────────── */}
@@ -73,7 +73,7 @@ export default function Packages() {
       </PageHero>
 
       {/* ── STICKY SEARCH + FILTER BAR ───────────────────── */}
-      <section className="sticky top-16 z-40 bg-[#F5F0E8]/95 backdrop-blur-lg border-b border-[#E3DCCD]">
+      <section className="sticky top-16 z-40 bg-[#FAF7F1]/95 backdrop-blur-lg border-b border-[#E3DCCD]">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
 

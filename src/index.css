@@ -3,7 +3,7 @@
 
 /* ── Brand theme — drawn from the Ibrali Tours logo (warm gold + earth) ── */
 @theme {
-  --color-sand:    #F7F4EE;  /* page background — light cream */
+  --color-sand:    #FAF7F1;  /* page background — light cream */
   --color-ebony:   #1C1A17;  /* primary dark — near-black earth */
   --color-bark:    #0F0C07;  /* deepest brown (footer) */
   --color-gold:    #C4962A;  /* logo gold */
@@ -17,11 +17,12 @@
   --color-brand-700: #835f18;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* Tailwind's preflight (part of `@import "tailwindcss"` above) already
+   resets margin, padding and box-sizing on every element via @layer base
+   — do not re-add a plain unlayered `* { margin: 0; padding: 0 }` rule
+   here. Unlayered CSS always wins over layered CSS regardless of
+   specificity, so a rule like that silently zeroes every padding and
+   margin utility class site-wide. */
 
 html {
   scroll-behavior: smooth;
@@ -43,6 +44,13 @@ body {
 
 /* Text selection */
 ::selection { background-color: #F59E0B; color: #1C1A17; }
+
+/* Keyboard focus — visible gold ring on every interactive element */
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
 
 /* Line clamp utilities */
 .line-clamp-2 {
@@ -77,6 +85,10 @@ body {
   font-weight: 400;
   color: var(--color-brand-300);
 }
+/* Heading scale — replaces the repeated inline clamp() font sizes */
+.heading-xl { font-size: clamp(40px, 7vw, 72px); }   /* page-hero H1 */
+.heading-lg { font-size: clamp(28px, 5vw, 48px); }   /* section H2 */
+.heading-md { font-size: clamp(22px, 3vw, 30px); }   /* card / panel H2 */
 
 /* Buttons — hover handled in CSS so pages no longer need JS mouse handlers */
 .btn {
@@ -103,6 +115,7 @@ body {
 .btn-gold:hover {
   background: var(--color-brand-300);
   transform: translateY(-1px);
+  box-shadow: 0 10px 28px -10px rgba(196, 150, 42, 0.55);
 }
 .btn-gold:disabled:hover {
   background: var(--color-gold);
@@ -162,10 +175,35 @@ body {
   background: #fff;
   border: 0.5px solid #E3DCCD;
   border-radius: 1rem;
-  transition: border-color 0.4s, transform 0.4s;
+  transition: border-color 0.4s, transform 0.4s, box-shadow 0.4s;
 }
 .card-surface:hover {
   border-color: var(--color-gold);
+  box-shadow: 0 18px 40px -18px rgba(28, 26, 23, 0.22);
+}
+
+/* Inline "View all →" link — gold underline, darkens on hover (no JS handlers) */
+.link-underline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding-bottom: 0.25rem;
+  color: var(--color-ebony);
+  border-bottom: 1.5px solid var(--color-gold);
+  transition: color 0.25s;
+}
+.link-underline:hover {
+  color: var(--color-brand-600);
+}
+.link-underline-light {
+  color: rgba(255, 255, 255, 0.45);
+  border-bottom-width: 1px;
+  border-bottom-color: rgba(196, 150, 42, 0.35);
+}
+.link-underline-light:hover {
+  color: rgba(255, 255, 255, 0.85);
 }
 
 /* Input focus — amber ring override */

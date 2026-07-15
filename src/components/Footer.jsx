@@ -10,13 +10,14 @@ const NAV_LINKS = [
   { to: '/booking', label: 'Book a trip' },
 ]
 
-const CONTACT_INFO = [
-  { icon: '✉', label: 'info@ibrali-tours.com' },
-  { icon: '📞', label: '+254 712 345 678' },
-  { icon: '📍', label: 'Nairobi, Kenya' },
+const CONTACT_ITEMS = [
+  { type: 'mail', label: 'info@ibrali-tours.com', href: 'mailto:info@ibrali-tours.com' },
+  { type: 'phone', label: '+254 712 345 678', href: 'tel:+254712345678' },
+  { type: 'pin', label: 'Nairobi, Kenya', href: null },
 ]
 
 const SOCIAL_LINKS = [
+  { label: 'TikTok', href: 'https://www.tiktok.com/@ibralitours', icon: 'tt' },
   { label: 'Facebook', href: '#', icon: 'fb' },
   { label: 'Instagram', href: '#', icon: 'ig' },
   { label: 'Twitter / X', href: '#', icon: 'tw' },
@@ -26,27 +27,21 @@ const SOCIAL_LINKS = [
 function SocialIcon({ icon }) {
   const paths = {
     fb: 'M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z',
-    ig: 'M22 16a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6V8a6 6 0 0 1 6-6h8a6 6 0 0 1 6 6zm-6-9h.01M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z',
     tw: 'M4 4l16 16M4 20 20 4',
     wa: 'M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21',
+    tt: 'M14.5 3v10.75a3.75 3.75 0 1 1-3.75-3.75M14.5 3c.35 2.4 2 4.3 4.5 4.7',
   }
   return (
     <svg
-      width="15"
-      height="15"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#7A6A55"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      width="15" height="15" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
       aria-hidden="true"
     >
       {icon === 'ig' ? (
         <>
           <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
           <circle cx="12" cy="12" r="3.5" />
-          <circle cx="17.5" cy="6.5" r="0.5" fill="#7A6A55" />
+          <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" />
         </>
       ) : (
         <path d={paths[icon]} />
@@ -56,164 +51,63 @@ function SocialIcon({ icon }) {
 }
 
 function ContactIcon({ type }) {
-  const icons = {
-    mail: (
-      <path
-        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm16 2l-8 5-8-5"
-        stroke="#C4962A"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-    ),
-    phone: (
-      <path
-        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.72 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.63 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.04z"
-        stroke="#C4962A"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-    ),
+  const paths = {
+    mail: <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm16 2l-8 5-8-5" />,
+    phone: <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.72 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.63 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.04z" />,
     pin: (
       <>
-        <path
-          d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
-          stroke="#C4962A"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          fill="none"
-        />
-        <circle
-          cx="12"
-          cy="10"
-          r="3"
-          stroke="#C4962A"
-          strokeWidth="1.8"
-          fill="none"
-        />
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+        <circle cx="12" cy="10" r="3" />
       </>
     ),
   }
-
-  const key = type === 'mail' ? 'mail' : type === 'phone' ? 'phone' : 'pin'
   return (
     <svg
-      width="15"
-      height="15"
-      viewBox="0 0 24 24"
+      width="15" height="15" viewBox="0 0 24 24" fill="none"
+      stroke="#C4962A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
       aria-hidden="true"
     >
-      {icons[key]}
+      {paths[type]}
     </svg>
   )
 }
+
+const columnTitle = 'text-[11px] font-medium uppercase tracking-[1.5px] text-[#7A6A55] mb-5'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer
-      style={{
-        background: '#0F0C07',
-        color: '#C9B99A',
-        fontFamily: "'Inter', sans-serif",
-        paddingTop: '64px',
-      }}
-    >
-      <div
-        style={{
-          maxWidth: '1100px',
-          margin: '0 auto',
-          padding: '0 32px',
-        }}
-      >
+    <footer className="pt-16 font-sans" style={{ background: '#0F0C07', color: '#C9B99A' }}>
+      <div className="max-w-6xl mx-auto px-6 sm:px-8">
 
         {/* STATUS PILL */}
-        <div style={{ marginBottom: '32px' }}>
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              border: '0.5px solid #2A2216',
-              borderRadius: '100px',
-              padding: '6px 16px',
-              background: '#1A1610',
-            }}
-          >
-            <div
-              style={{
-                width: '7px',
-                height: '7px',
-                borderRadius: '50%',
-                background: '#2DB563',
-                flexShrink: 0,
-              }}
-            />
-            <span
-              style={{
-                fontSize: '11px',
-                color: '#7A6A55',
-                letterSpacing: '0.3px',
-              }}
-            >
+        <div className="mb-8">
+          <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5" style={{ background: '#1A1610', border: '0.5px solid #2A2216' }}>
+            <span className="w-[7px] h-[7px] rounded-full flex-shrink-0" style={{ background: '#2DB563' }} />
+            <span className="text-[11px] tracking-wide text-[#7A6A55]">
               Booking open · Kenya, Tanzania &amp; beyond
             </span>
           </div>
         </div>
 
         {/* MAIN GRID */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1.6fr 1fr 1fr 1fr',
-            gap: '40px',
-            marginBottom: '56px',
-          }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr] gap-10 mb-14">
 
           {/* BRAND COLUMN */}
           <div>
-            <h1
-              style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: '26px',
-                color: '#F2E2C4',
-                letterSpacing: '-0.5px',
-                margin: '0 0 10px',
-                fontWeight: 700,
-              }}
-            >
+            <h2 className="heading text-[26px] text-[#F2E2C4] mb-2.5">
               Ibrali Tours &amp; Travel
-            </h1>
-            <p
-              style={{
-                fontSize: '13px',
-                color: '#7A6A55',
-                lineHeight: '1.7',
-                maxWidth: '240px',
-                margin: '0 0 20px',
-              }}
-            >
+            </h2>
+            <p className="text-[13px] text-[#7A6A55] leading-relaxed max-w-[240px] mb-5">
               Crafting unforgettable African journeys — from the Maasai Mara to the Zanzibar coast.
             </p>
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            <div className="flex gap-2 flex-wrap">
               {['Safari', 'Beach', 'Culture', 'Adventure'].map((tag) => (
                 <span
                   key={tag}
-                  style={{
-                    background: '#1E1810',
-                    border: '0.5px solid #2E2418',
-                    color: '#9A8A74',
-                    fontSize: '11px',
-                    padding: '4px 12px',
-                    borderRadius: '100px',
-                    letterSpacing: '0.5px',
-                  }}
+                  className="text-[11px] tracking-wide px-3 py-1 rounded-full text-[#9A8A74]"
+                  style={{ background: '#1E1810', border: '0.5px solid #2E2418' }}
                 >
                   {tag}
                 </span>
@@ -222,214 +116,89 @@ export default function Footer() {
           </div>
 
           {/* NAV COLUMN */}
-          <div>
-            <p
-              style={{
-                fontSize: '11px',
-                fontWeight: 500,
-                color: '#7A6A55',
-                letterSpacing: '1.5px',
-                textTransform: 'uppercase',
-                margin: '0 0 20px',
-              }}
-            >
-              Explore
-            </p>
+          <nav aria-label="Footer">
+            <p className={columnTitle}>Explore</p>
             {NAV_LINKS.map((item) => (
               <Link
                 key={item.to}
                 to={item.to}
-                style={{
-                  display: 'block',
-                  fontSize: '13.5px',
-                  color: '#9A8A74',
-                  textDecoration: 'none',
-                  marginBottom: '12px',
-                  transition: 'color 0.2s',
-                }}
-                onMouseEnter={(e) => (e.target.style.color = '#F2E2C4')}
-                onMouseLeave={(e) => (e.target.style.color = '#9A8A74')}
+                className="block text-[13.5px] text-[#9A8A74] hover:text-[#F2E2C4] transition-colors mb-3"
               >
-                <span style={{ fontSize: '11px', marginRight: '8px', color: '#C4962A' }}>→</span>
+                <span className="text-[11px] mr-2" style={{ color: '#C4962A' }}>→</span>
                 {item.label}
               </Link>
             ))}
-          </div>
+          </nav>
 
           {/* CONTACT COLUMN */}
           <div>
-            <p
-              style={{
-                fontSize: '11px',
-                fontWeight: 500,
-                color: '#7A6A55',
-                letterSpacing: '1.5px',
-                textTransform: 'uppercase',
-                margin: '0 0 20px',
-              }}
-            >
-              Get in touch
-            </p>
-            {[
-              { type: 'mail', label: 'info@ibrali-tours.com' },
-              { type: 'phone', label: '+254 712 345 678' },
-              { type: 'pin', label: 'Nairobi, Kenya' },
-            ].map(({ type, label }) => (
-              <div
-                key={type}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  marginBottom: '14px',
-                }}
-              >
-                <div
-                  style={{
-                    width: '32px',
-                    height: '32px',
-                    background: '#1A1610',
-                    border: '0.5px solid #2A2216',
-                    borderRadius: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0,
-                  }}
-                >
-                  <ContactIcon type={type} />
+            <p className={columnTitle}>Get in touch</p>
+            {CONTACT_ITEMS.map(({ type, label, href }) => {
+              const inner = (
+                <>
+                  <span
+                    className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{ background: '#1A1610', border: '0.5px solid #2A2216' }}
+                  >
+                    <ContactIcon type={type} />
+                  </span>
+                  <span className="text-[13px] leading-snug">{label}</span>
+                </>
+              )
+              return href ? (
+                <a key={type} href={href} className="flex items-center gap-2.5 mb-3.5 text-[#9A8A74] hover:text-[#F2E2C4] transition-colors">
+                  {inner}
+                </a>
+              ) : (
+                <div key={type} className="flex items-center gap-2.5 mb-3.5 text-[#9A8A74]">
+                  {inner}
                 </div>
-                <span style={{ fontSize: '13px', color: '#9A8A74', lineHeight: '1.4' }}>
-                  {label}
-                </span>
-              </div>
-            ))}
+              )
+            })}
           </div>
 
           {/* SOCIAL COLUMN */}
           <div>
-            <p
-              style={{
-                fontSize: '11px',
-                fontWeight: 500,
-                color: '#7A6A55',
-                letterSpacing: '1.5px',
-                textTransform: 'uppercase',
-                margin: '0 0 20px',
-              }}
-            >
-              Follow us
-            </p>
+            <p className={columnTitle}>Follow us</p>
             {SOCIAL_LINKS.map(({ label, href, icon }) => (
               <a
                 key={label}
                 href={href}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  marginBottom: '10px',
-                  textDecoration: 'none',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.querySelector('.social-icon-box').style.borderColor = '#C4962A'
-                  e.currentTarget.querySelector('.social-label').style.color = '#F2E2C4'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.querySelector('.social-icon-box').style.borderColor = '#2A2216'
-                  e.currentTarget.querySelector('.social-label').style.color = '#7A6A55'
-                }}
+                className="group flex items-center gap-2.5 mb-2.5 text-[#7A6A55] hover:text-[#F2E2C4] transition-colors"
               >
-                <div
-                  className="social-icon-box"
-                  style={{
-                    width: '34px',
-                    height: '34px',
-                    border: '0.5px solid #2A2216',
-                    borderRadius: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    background: '#1A1610',
-                    transition: 'border-color 0.2s',
-                    flexShrink: 0,
-                  }}
+                <span
+                  className="w-[34px] h-[34px] rounded-lg flex items-center justify-center flex-shrink-0 text-[#7A6A55] border-[0.5px] border-[#2A2216] transition-colors group-hover:border-[#C4962A] group-hover:text-[#C4962A]"
+                  style={{ background: '#1A1610' }}
                 >
                   <SocialIcon icon={icon} />
-                </div>
-                <span
-                  className="social-label"
-                  style={{
-                    fontSize: '13px',
-                    color: '#7A6A55',
-                    transition: 'color 0.2s',
-                  }}
-                >
-                  {label}
                 </span>
+                <span className="text-[13px]">{label}</span>
               </a>
             ))}
           </div>
         </div>
 
         {/* ORNAMENT DIVIDER */}
-        <div style={{ position: 'relative', marginBottom: '28px' }}>
-          <div style={{ width: '100%', height: '0.5px', background: '#2A2216' }} />
+        <div className="relative mb-7">
+          <div className="w-full h-px" style={{ background: '#2A2216' }} />
           <div
-            style={{
-              position: 'absolute',
-              left: '50%',
-              top: '-5px',
-              transform: 'translateX(-50%)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              background: '#0F0C07',
-              padding: '0 16px',
-            }}
+            className="absolute left-1/2 -top-[5px] -translate-x-1/2 flex items-center gap-2.5 px-4"
+            style={{ background: '#0F0C07' }}
           >
-            <div style={{ width: '40px', height: '0.5px', background: '#C4962A', opacity: 0.4 }} />
-            <div
-              style={{
-                width: '5px',
-                height: '5px',
-                borderRadius: '50%',
-                background: '#C4962A',
-              }}
-            />
-            <div style={{ width: '40px', height: '0.5px', background: '#C4962A', opacity: 0.4 }} />
+            <span className="w-10 h-px opacity-40" style={{ background: '#C4962A' }} />
+            <span className="w-[5px] h-[5px] rounded-full" style={{ background: '#C4962A' }} />
+            <span className="w-10 h-px opacity-40" style={{ background: '#C4962A' }} />
           </div>
         </div>
 
         {/* BOTTOM BAR */}
-        <div
-          style={{
-            padding: '20px 0 28px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '16px',
-          }}
-        >
-          <p style={{ fontSize: '12px', color: '#4A3E2E', margin: 0 }}>
-            © {currentYear}{' '}
-            <span style={{ color: '#7A6A55' }}>Ibrali Tours &amp; Travel</span>. All rights reserved.
+        <div className="py-5 pb-7 flex items-center justify-between flex-wrap gap-4">
+          <p className="text-xs text-[#4A3E2E]">
+            © {currentYear} <span className="text-[#7A6A55]">Ibrali Tours &amp; Travel</span>. All rights reserved.
           </p>
-          <div style={{ display: 'flex', gap: '20px' }}>
+          <div className="flex gap-5">
             {['Privacy', 'Terms', 'Support'].map((item) => (
-              <a
-                key={item}
-                href="#"
-                style={{
-                  fontSize: '12px',
-                  color: '#4A3E2E',
-                  textDecoration: 'none',
-                  transition: 'color 0.2s',
-                }}
-                onMouseEnter={(e) => (e.target.style.color = '#9A8A74')}
-                onMouseLeave={(e) => (e.target.style.color = '#4A3E2E')}
-              >
+              <a key={item} href="#" className="text-xs text-[#4A3E2E] hover:text-[#9A8A74] transition-colors">
                 {item}
               </a>
             ))}

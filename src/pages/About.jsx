@@ -59,7 +59,7 @@ export default function About() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#F5F0E8] text-[#1C1A17] overflow-x-hidden font-sans">
+    <div className="min-h-screen bg-[#FAF7F1] text-[#1C1A17] overflow-x-hidden font-sans">
       <Navbar />
 
       <PageHero
