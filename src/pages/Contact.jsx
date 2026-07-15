@@ -65,7 +65,7 @@ export default function Contact() {
   }
 
   const contactItems = [
-    { icon: 'mail', title: 'Email', value: '@ibralitourskenya@gmail.com', href: 'mailto:@ibralitourskenya@gmail.com' },
+    { icon: 'mail', title: 'Email', value: 'ibralitourskenya@gmail.com', href: 'mailto:ibralitourskenya@gmail.com' },
     { icon: 'phone', title: 'Phone', value: '+254 712 345 678', href: 'tel:+254712345678' },
     { icon: 'pin', title: 'Office', value: 'Nairobi, Kenya', href: null },
   ]
