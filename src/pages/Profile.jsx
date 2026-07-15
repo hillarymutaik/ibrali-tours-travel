@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { isValidEmail, isValidPhone } from '../utils/helpers'
+import authService from '../services/authService'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
@@ -14,6 +15,7 @@ function Icon({ name }) {
     user: <><circle cx="12" cy="8" r="4" /><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1" /></>,
     mail: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></>,
     phone: <><rect x="7" y="2" width="10" height="20" rx="2" /><line x1="11" y1="18" x2="13" y2="18" /></>,
+    lock: <><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></>,
   }
   return <svg {...common}>{paths[name]}</svg>
 }
@@ -28,17 +30,81 @@ function ActionIcon({ name }) {
   return <svg {...common}>{paths[name]}</svg>
 }
 
+const labelCls = "block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2"
+const inputCls = "w-full px-4 py-3.5 bg-white border border-[#E3DCCD] rounded-xl text-sm text-[#1C1A17] placeholder-[#B0A99E] input-safari"
+
+/* ── Change password card (logged-in view) ─────────────────────────── */
+function ChangePasswordCard() {
+  const [form, setForm] = useState({ current: '', next: '', confirm: '' })
+  const [state, setState] = useState({ error: '', done: false, busy: false })
+
+  const submit = async (e) => {
+    e.preventDefault()
+    if (form.next.length < 6) {
+      setState({ error: 'New password must be at least 6 characters', done: false, busy: false }); return
+    }
+    if (form.next !== form.confirm) {
+      setState({ error: 'New passwords do not match', done: false, busy: false }); return
+    }
+    setState({ error: '', done: false, busy: true })
+    try {
+      await authService.changePassword(form.current, form.next)
+      setForm({ current: '', next: '', confirm: '' })
+      setState({ error: '', done: true, busy: false })
+    } catch (err) {
+      setState({ error: err.message, done: false, busy: false })
+    }
+  }
+
+  return (
+    <div className="md:col-span-3 bg-white rounded-2xl overflow-hidden" style={{ border: '0.5px solid #E3DCCD' }}>
+      <div className="px-7 py-5 border-b border-[#F0EDE8] flex items-center gap-3">
+        <span className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: '#FAF3E4', border: '0.5px solid #EBD9B0' }}>
+          <Icon name="lock" />
+        </span>
+        <div>
+          <h2 className="heading text-lg text-[#1C1A17]">Change password</h2>
+          <p className="text-xs text-[#9C9890]">Updating your password signs out your other devices.</p>
+        </div>
+      </div>
+      <form onSubmit={submit} className="px-7 py-6 grid sm:grid-cols-3 gap-4">
+        <div>
+          <label className={labelCls}>Current password</label>
+          <input type="password" value={form.current} onChange={e => setForm(f => ({ ...f, current: e.target.value }))} required placeholder="••••••••" className={inputCls} />
+        </div>
+        <div>
+          <label className={labelCls}>New password</label>
+          <input type="password" value={form.next} onChange={e => setForm(f => ({ ...f, next: e.target.value }))} required placeholder="Min. 6 characters" className={inputCls} />
+        </div>
+        <div>
+          <label className={labelCls}>Confirm new password</label>
+          <input type="password" value={form.confirm} onChange={e => setForm(f => ({ ...f, confirm: e.target.value }))} required placeholder="Repeat new password" className={inputCls} />
+        </div>
+        {state.error && <p className="sm:col-span-3 text-sm text-red-600">{state.error}</p>}
+        {state.done && <p className="sm:col-span-3 text-sm text-emerald-700">Password updated successfully.</p>}
+        <div className="sm:col-span-3">
+          <button type="submit" disabled={state.busy} className="btn btn-gold px-8 py-3 !rounded-xl">
+            {state.busy ? 'Updating…' : 'Update password'}
+          </button>
+        </div>
+      </form>
+    </div>
+  )
+}
+
 export default function Profile() {
   const navigate = useNavigate()
   const { user, login, register, logout } = useAuth()
-  const [isLogin, setIsLogin] = useState(true)
+  const [mode, setMode] = useState('login') // login | register | forgot | reset
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [notice, setNotice] = useState('')
   const [formData, setFormData] = useState({
-    email: 'demo@example.com',
-    password: 'password123',
+    email: '',
+    password: '',
     name: '',
     phone: '',
+    code: '',
   })
 
   const handleInputChange = (e) => {
@@ -47,33 +113,53 @@ export default function Profile() {
     setError('')
   }
 
+  const switchMode = (next) => {
+    setMode(next)
+    setError('')
+    setNotice('')
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
+    setNotice('')
     setLoading(true)
     try {
-      if (isLogin) {
+      if (mode === 'login') {
         if (!formData.email || !formData.password) { setError('Email and password are required'); return }
         if (!isValidEmail(formData.email)) { setError('Invalid email format'); return }
         await login(formData.email, formData.password)
-      } else {
+        navigate('/')
+      } else if (mode === 'register') {
         if (!formData.name || !formData.email || !formData.password || !formData.phone) {
           setError('All fields are required'); return
         }
         if (!isValidEmail(formData.email)) { setError('Invalid email format'); return }
         if (!isValidPhone(formData.phone)) { setError('Invalid phone number'); return }
         await register(formData)
+        navigate('/')
+      } else if (mode === 'forgot') {
+        if (!isValidEmail(formData.email)) { setError('Enter the email you registered with'); return }
+        const data = await authService.forgotPassword(formData.email)
+        setFormData(prev => ({ ...prev, code: data?.resetCode || '', password: '' }))
+        setNotice(data?.resetCode
+          ? `Your reset code is ${data.resetCode} (valid 15 minutes). In production this would be emailed to you.`
+          : 'If that account exists, a reset code has been sent.')
+        setMode('reset')
+      } else if (mode === 'reset') {
+        if (!formData.code) { setError('Enter the reset code'); return }
+        if (formData.password.length < 6) { setError('New password must be at least 6 characters'); return }
+        await authService.resetPassword(formData.email, formData.code, formData.password)
+        setNotice('Password reset. Sign in with your new password.')
+        setFormData(prev => ({ ...prev, password: '', code: '' }))
+        setMode('login')
       }
-      navigate('/')
     } catch (err) {
       setError(err.message)
     } finally {
       setLoading(false)
     }
   }
-
-  const labelCls = "block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2"
-  const inputCls = "w-full px-4 py-3.5 bg-white border border-[#E3DCCD] rounded-xl text-sm text-[#1C1A17] placeholder-[#B0A99E] input-safari"
 
   /* ── LOGGED-IN VIEW ─────────────────────────────────────── */
   if (user) {
@@ -155,6 +241,9 @@ export default function Profile() {
             </button>
           </div>
 
+          {/* Change password */}
+          <ChangePasswordCard />
+
         </section>
 
         <Footer />
@@ -162,7 +251,14 @@ export default function Profile() {
     )
   }
 
-  /* ── AUTH FORM VIEW ─────────────────────────────────────── */
+  /* ── AUTH VIEW ──────────────────────────────────────────── */
+  const heading = {
+    login: ['Welcome back', 'Sign in to your account to continue'],
+    register: ['Join Ibrali Tours', 'Create your account in seconds'],
+    forgot: ['Reset your password', "Enter your account email and we'll issue a reset code"],
+    reset: ['Enter your reset code', 'Use the code to set a new password'],
+  }[mode]
+
   return (
     <div className="min-h-screen bg-[#FAF7F1] font-sans">
       <Navbar />
@@ -191,29 +287,27 @@ export default function Profile() {
           <div className="w-full max-w-md">
 
             {/* Tab switcher */}
-            <div className="flex gap-1 p-1 bg-white rounded-xl mb-8 w-fit" style={{ border: '0.5px solid #E3DCCD' }}>
-              {['Sign in', 'Create account'].map((label, i) => (
-                <button
-                  key={label}
-                  onClick={() => { setIsLogin(i === 0); setError('') }}
-                  className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${isLogin === (i === 0)
-                    ? 'bg-[#0A0703] text-white'
-                    : 'text-[#6B6560] hover:text-[#1C1A17]'
-                    }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
+            {(mode === 'login' || mode === 'register') && (
+              <div className="flex gap-1 p-1 bg-white rounded-xl mb-8 w-fit" style={{ border: '0.5px solid #E3DCCD' }}>
+                {[['login', 'Sign in'], ['register', 'Create account']].map(([m, label]) => (
+                  <button
+                    key={m}
+                    onClick={() => switchMode(m)}
+                    className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${mode === m
+                      ? 'bg-[#0A0703] text-white'
+                      : 'text-[#6B6560] hover:text-[#1C1A17]'
+                      }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            )}
 
             <div className="bg-white rounded-2xl overflow-hidden" style={{ border: '0.5px solid #E3DCCD' }}>
               <div className="px-8 py-6 border-b border-[#F0EDE8]">
-                <h1 className="heading text-2xl text-[#1C1A17]">
-                  {isLogin ? 'Welcome back' : 'Join Ibrali Tours'}
-                </h1>
-                <p className="text-[#9C9890] text-sm mt-1">
-                  {isLogin ? 'Sign in to your account to continue' : 'Create your account in seconds'}
-                </p>
+                <h1 className="heading text-2xl text-[#1C1A17]">{heading[0]}</h1>
+                <p className="text-[#9C9890] text-sm mt-1">{heading[1]}</p>
               </div>
 
               <div className="px-8 py-7">
@@ -224,8 +318,14 @@ export default function Profile() {
                   </div>
                 )}
 
+                {notice && (
+                  <div className="mb-5 p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-700 text-sm animate-fadeIn">
+                    {notice}
+                  </div>
+                )}
+
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  {!isLogin && (
+                  {mode === 'register' && (
                     <div>
                       <label className={labelCls}>Full name</label>
                       <input type="text" name="name" value={formData.name} onChange={handleInputChange} placeholder="Jane Doe" className={inputCls} />
@@ -234,47 +334,66 @@ export default function Profile() {
 
                   <div>
                     <label className={labelCls}>Email address</label>
-                    <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="jane@example.com" className={inputCls} />
+                    <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="you@example.com" className={inputCls} readOnly={mode === 'reset'} />
                   </div>
 
-                  {!isLogin && (
+                  {mode === 'register' && (
                     <div>
                       <label className={labelCls}>Phone number</label>
                       <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="+254 786 000 100" className={inputCls} />
                     </div>
                   )}
 
-                  <div>
-                    <label className={labelCls}>Password</label>
-                    <input type="password" name="password" value={formData.password} onChange={handleInputChange} placeholder="••••••••" className={inputCls} />
-                  </div>
+                  {mode === 'reset' && (
+                    <div>
+                      <label className={labelCls}>Reset code</label>
+                      <input type="text" name="code" value={formData.code} onChange={handleInputChange} placeholder="6-digit code" className={`${inputCls} font-mono tracking-[4px]`} maxLength={6} />
+                    </div>
+                  )}
+
+                  {mode !== 'forgot' && (
+                    <div>
+                      <label className={labelCls}>{mode === 'reset' ? 'New password' : 'Password'}</label>
+                      <input type="password" name="password" value={formData.password} onChange={handleInputChange} placeholder={mode === 'reset' ? 'Min. 6 characters' : '••••••••'} className={inputCls} />
+                    </div>
+                  )}
+
+                  {mode === 'login' && (
+                    <div className="text-right">
+                      <button type="button" onClick={() => switchMode('forgot')} className="text-xs font-medium text-[#6B6560] hover:text-[#B07E1C] transition-colors">
+                        Forgot password?
+                      </button>
+                    </div>
+                  )}
 
                   <button
                     type="submit"
                     disabled={loading}
                     className="btn btn-gold w-full py-4 !rounded-xl tracking-wide"
                   >
-                    {loading ? 'Please wait…' : isLogin ? 'Sign in →' : 'Create account →'}
+                    {loading ? 'Please wait…' : {
+                      login: 'Sign in →',
+                      register: 'Create account →',
+                      forgot: 'Send reset code →',
+                      reset: 'Set new password →',
+                    }[mode]}
                   </button>
                 </form>
 
-                {/* Demo credentials */}
-                {isLogin && (
-                  <div className="mt-6 p-4 rounded-xl" style={{ background: '#FAF3E4', border: '0.5px solid #EBD9B0' }}>
-                    <p className="text-xs font-medium uppercase tracking-wide mb-1.5" style={{ color: '#B07E1C' }}>Demo credentials</p>
-                    <p className="text-xs font-mono" style={{ color: '#8A6418' }}>demo@example.com</p>
-                    <p className="text-xs font-mono" style={{ color: '#8A6418' }}>password123</p>
-                  </div>
-                )}
-
                 <p className="text-center text-xs text-[#9C9890] mt-5">
-                  {isLogin ? "Don't have an account? " : 'Already have an account? '}
-                  <button
-                    onClick={() => { setIsLogin(!isLogin); setError('') }}
-                    className="text-[#1C1A17] font-medium hover:text-[#B07E1C] transition-colors"
-                  >
-                    {isLogin ? 'Sign up' : 'Sign in'}
-                  </button>
+                  {mode === 'login' && (
+                    <>Don't have an account?{' '}
+                      <button onClick={() => switchMode('register')} className="text-[#1C1A17] font-medium hover:text-[#B07E1C] transition-colors">Sign up</button>
+                    </>
+                  )}
+                  {mode === 'register' && (
+                    <>Already have an account?{' '}
+                      <button onClick={() => switchMode('login')} className="text-[#1C1A17] font-medium hover:text-[#B07E1C] transition-colors">Sign in</button>
+                    </>
+                  )}
+                  {(mode === 'forgot' || mode === 'reset') && (
+                    <button onClick={() => switchMode('login')} className="text-[#1C1A17] font-medium hover:text-[#B07E1C] transition-colors">← Back to sign in</button>
+                  )}
                 </p>
               </div>
             </div>

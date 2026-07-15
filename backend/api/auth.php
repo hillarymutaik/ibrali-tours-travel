@@ -1,10 +1,16 @@
 <?php
 /**
  * Auth endpoints:
- *   POST auth.php?action=register  {name, email, phone, password}
- *   POST auth.php?action=login     {email, password}
- *   POST auth.php?action=logout    (Bearer token)
- *   GET  auth.php?action=me        (Bearer token)
+ *   POST auth.php?action=register         {name, email, phone, password}
+ *   POST auth.php?action=login            {email, password}
+ *   POST auth.php?action=logout           (Bearer token)
+ *   GET  auth.php?action=me               (Bearer token)
+ *   POST auth.php?action=change-password  (Bearer) {currentPassword, newPassword}
+ *   POST auth.php?action=forgot-password  {email} → issues a 6-digit reset code
+ *   POST auth.php?action=reset-password   {email, code, newPassword}
+ *
+ * Local XAMPP has no mail server, so forgot-password returns the reset
+ * code in the response (a production deployment would email it instead).
  */
 
 require __DIR__ . '/config.php';
@@ -81,6 +87,81 @@ switch ($action) {
     case 'me':
         ok(['user' => requireUser()]);
 
+    case 'change-password':
+        $user = requireUser();
+        $b = body();
+        $current = (string)($b['currentPassword'] ?? '');
+        $new     = (string)($b['newPassword'] ?? '');
+        if (strlen($new) < 6) {
+            fail('New password must be at least 6 characters');
+        }
+
+        $stmt = db()->prepare('SELECT password_hash FROM users WHERE id = ?');
+        $stmt->execute([$user['id']]);
+        $hash = $stmt->fetchColumn();
+        if (!$hash || !password_verify($current, $hash)) {
+            fail('Current password is incorrect', 401);
+        }
+
+        db()->prepare('UPDATE users SET password_hash = ? WHERE id = ?')
+            ->execute([password_hash($new, PASSWORD_DEFAULT), $user['id']]);
+
+        // Revoke every other session; keep the one making this request
+        db()->prepare('DELETE FROM auth_tokens WHERE user_id = ? AND token_hash <> ?')
+            ->execute([$user['id'], hash('sha256', bearerToken())]);
+
+        ok(['changed' => true]);
+
+    case 'forgot-password':
+        $email = strtolower(trim(body()['email'] ?? ''));
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            fail('Invalid email address');
+        }
+
+        $stmt = db()->prepare('SELECT id FROM users WHERE email = ?');
+        $stmt->execute([$email]);
+        if (!$stmt->fetch()) {
+            // Do not reveal whether the account exists
+            ok(['sent' => true]);
+        }
+
+        $code = str_pad((string)random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        db()->prepare('DELETE FROM password_resets WHERE email = ?')->execute([$email]);
+        db()->prepare(
+            'INSERT INTO password_resets (email, token_hash, expires_at)
+             VALUES (?, ?, DATE_ADD(NOW(), INTERVAL 15 MINUTE))'
+        )->execute([$email, hash('sha256', $code)]);
+
+        // No mail server on local XAMPP — return the code so the flow works.
+        ok(['sent' => true, 'resetCode' => $code, 'expiresInMinutes' => 15]);
+
+    case 'reset-password':
+        $b = body();
+        $email = strtolower(trim($b['email'] ?? ''));
+        $code  = trim($b['code'] ?? '');
+        $new   = (string)($b['newPassword'] ?? '');
+        if (strlen($new) < 6) {
+            fail('New password must be at least 6 characters');
+        }
+
+        $stmt = db()->prepare(
+            'SELECT id FROM password_resets
+              WHERE email = ? AND token_hash = ? AND expires_at > NOW()'
+        );
+        $stmt->execute([$email, hash('sha256', $code)]);
+        if (!$stmt->fetch()) {
+            fail('Invalid or expired reset code', 401);
+        }
+
+        db()->prepare('UPDATE users SET password_hash = ? WHERE email = ?')
+            ->execute([password_hash($new, PASSWORD_DEFAULT), $email]);
+        db()->prepare('DELETE FROM password_resets WHERE email = ?')->execute([$email]);
+        db()->prepare(
+            'DELETE t FROM auth_tokens t JOIN users u ON u.id = t.user_id WHERE u.email = ?'
+        )->execute([$email]);
+
+        ok(['reset' => true]);
+
     default:
-        fail('Unknown action. Use register, login, logout or me.', 404);
+        fail('Unknown action. Use register, login, logout, me, change-password, forgot-password or reset-password.', 404);
 }

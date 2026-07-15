@@ -87,6 +87,16 @@ CREATE TABLE IF NOT EXISTS bookings (
     REFERENCES packages(id)
 ) ENGINE=InnoDB;
 
+-- ── PASSWORD RESETS ──────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS password_resets (
+  id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  email      VARCHAR(190) NOT NULL,
+  token_hash CHAR(64)     NOT NULL,   -- sha256 of the reset code
+  expires_at DATETIME     NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_resets_email (email)
+) ENGINE=InnoDB;
+
 -- ── CONTACT MESSAGES ─────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS contact_messages (
   id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,

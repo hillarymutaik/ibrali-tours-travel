@@ -11,8 +11,10 @@ PHP 8 + MySQL/MariaDB REST API for the React frontend.
 | Demo login | `demo@example.com` / `password123` |
 | Admin login | `ibralitoureskenya@gmail.com` / `admin2026` — local demo credential; change it if this backend ever faces the internet |
 
-Sign in with the admin account and open **/#/admin** on the site to manage
-bookings, packages, contact messages, subscribers and users.
+The admin dashboard is a standalone app at **/#/admin** — it has its own
+login screen and its own session, completely separate from the public
+website. Use it to manage bookings, packages, contact messages,
+subscribers and user roles.
 
 ## Setup (one time)
 
@@ -60,6 +62,9 @@ Authenticated calls send `Authorization: Bearer <token>` (token returned by logi
 | POST | `auth.php?action=login` | — | `{email, password}` → user + token |
 | POST | `auth.php?action=logout` | Bearer | revokes the token |
 | GET | `auth.php?action=me` | Bearer | current user |
+| POST | `auth.php?action=change-password` | Bearer | `{currentPassword, newPassword}` — revokes other sessions |
+| POST | `auth.php?action=forgot-password` | — | `{email}` → 6-digit reset code, 15-min expiry (returned in the response locally; emailed in production) |
+| POST | `auth.php?action=reset-password` | — | `{email, code, newPassword}` |
 | GET | `packages.php` | — | all active packages |
 | GET | `packages.php?id=1` | — | one package |
 | GET | `bookings.php` | Bearer | the signed-in user's bookings |

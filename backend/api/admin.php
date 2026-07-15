@@ -6,6 +6,8 @@
  *   GET  admin.php?action=stats            dashboard counters
  *   GET  admin.php?action=bookings         all bookings, newest first
  *   POST admin.php?action=booking-status   {id, status}
+ *   POST admin.php?action=booking-delete   {id}
+ *   POST admin.php?action=user-role        {id, role: customer|admin}
  *   GET  admin.php?action=messages         all contact messages
  *   POST admin.php?action=message-read     {id}
  *   POST admin.php?action=message-delete   {id}
@@ -69,6 +71,12 @@ switch ($action) {
         $stmt->execute([$status, $ref]);
         $stmt->rowCount() ? ok(['id' => $ref, 'status' => $status]) : fail('Booking not found', 404);
 
+    case 'booking-delete':
+        $ref  = trim(body()['id'] ?? '');
+        $stmt = db()->prepare('DELETE FROM bookings WHERE booking_ref = ?');
+        $stmt->execute([$ref]);
+        $stmt->rowCount() ? ok(['deleted' => $ref]) : fail('Booking not found', 404);
+
     /* ── Contact messages ─────────────────────────────────────────── */
     case 'messages':
         $rows = db()->query('SELECT * FROM contact_messages ORDER BY created_at DESC')->fetchAll();
@@ -114,6 +122,21 @@ switch ($action) {
             'role'      => $r['role'],
             'createdAt' => $r['created_at'],
         ], $rows));
+
+    case 'user-role':
+        $me   = currentUser();
+        $b    = body();
+        $id   = (int)($b['id'] ?? 0);
+        $role = $b['role'] ?? '';
+        if (!in_array($role, ['customer', 'admin'], true)) {
+            fail('Invalid role');
+        }
+        if ($id === (int)$me['id']) {
+            fail('You cannot change your own role');
+        }
+        $stmt = db()->prepare('UPDATE users SET role = ? WHERE id = ?');
+        $stmt->execute([$role, $id]);
+        $stmt->rowCount() ? ok(['id' => $id, 'role' => $role]) : fail('User not found', 404);
 
     /* ── Packages ─────────────────────────────────────────────────── */
     case 'packages':

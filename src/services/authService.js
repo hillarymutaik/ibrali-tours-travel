@@ -91,6 +91,27 @@ class AuthService {
     localStorage.removeItem('currentUser')
   }
 
+  /* Password management — requires the live backend (no offline mock). */
+
+  changePassword(currentPassword, newPassword) {
+    return apiRequest('/auth.php?action=change-password', {
+      method: 'POST',
+      auth: true,
+      body: { currentPassword, newPassword },
+    })
+  }
+
+  forgotPassword(email) {
+    return apiRequest('/auth.php?action=forgot-password', { method: 'POST', body: { email } })
+  }
+
+  resetPassword(email, code, newPassword) {
+    return apiRequest('/auth.php?action=reset-password', {
+      method: 'POST',
+      body: { email, code, newPassword },
+    })
+  }
+
   getCurrentUser() {
     const user = localStorage.getItem('currentUser')
     return user ? JSON.parse(user) : null
