@@ -29,10 +29,10 @@ export default function Navbar() {
 
   const navItems = [
     { path: "/", label: "Home" },
+     { path: "/about", label: "About Us" },
     { path: "/packages", label: "Packages" },
-    { path: "/about", label: "About" },
-    { path: "/contact", label: "Contact" },
     { path: "/booking", label: "Book Safari" },
+     { path: "/contact", label: "Contact Us" },
   ];
 
   const isActive = (path) => location.pathname === path;

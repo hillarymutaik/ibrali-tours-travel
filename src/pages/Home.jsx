@@ -203,14 +203,9 @@ export default function Home() {
             style={{ background: 'linear-gradient(to top, rgba(10,7,3,0.88) 0%, rgba(10,7,3,0.42) 45%, rgba(10,7,3,0.06) 100%)' }}
           />
 
-          <div className="absolute top-24 right-6 hidden md:flex items-center gap-2 bg-white/8 backdrop-blur-md border border-white/15 text-white/90 text-xs px-4 py-2 rounded-full">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            Booking open · 2025 season
-          </div>
-
           <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
             <div className="pb-14 md:pb-16">
-              <div className="eyebrow eyebrow-light mb-5">Safaris · Flights · Beach Escapes</div>
+              <div className="eyebrow eyebrow-light mb-5 mt-24 md:mt-32">Safaris · Flights · Beach Escapes</div>
               <h1
                 className="heading text-white max-w-4xl"
                 style={{ fontSize: 'clamp(44px, 8vw, 92px)', lineHeight: 0.98 }}
