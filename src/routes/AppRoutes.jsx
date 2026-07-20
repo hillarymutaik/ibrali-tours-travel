@@ -9,6 +9,7 @@ import Booking from "../pages/Booking";
 import MyBookings from "../pages/MyBookings";
 import Profile from "../pages/Profile";
 import About from "../pages/About";
+import Careers from "../pages/Careers";
 import Contact from "../pages/Contact";
 import Admin from "../pages/Admin";
 import NotFound from "../pages/NotFound";
@@ -32,6 +33,7 @@ function AppRoutes() {
           <Route path="/packages" element={<Packages />} />
           <Route path="/packages/:id" element={<PackageDetail />} />
           <Route path="/about" element={<About />} />
+          <Route path="/careers" element={<Careers />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/my-bookings" element={<MyBookings />} />

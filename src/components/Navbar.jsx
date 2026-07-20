@@ -12,7 +12,7 @@ export default function Navbar() {
   // Routes that open with a dark hero get a transparent overlay navbar until
   // scrolled; everything else (light background from the top, or unmatched
   // 404s) keeps the solid navbar so the logo/links stay legible.
-  const darkHeroRoutes = ["/", "/packages", "/about", "/contact", "/booking", "/my-bookings"];
+  const darkHeroRoutes = ["/", "/packages", "/about", "/careers", "/contact", "/booking", "/my-bookings"];
   const hasDarkHero =
     darkHeroRoutes.includes(location.pathname) ||
     /^\/packages\/.+/.test(location.pathname) ||
@@ -29,10 +29,11 @@ export default function Navbar() {
 
   const navItems = [
     { path: "/", label: "Home" },
-     { path: "/about", label: "About Us" },
+    { path: "/about", label: "About Us" },
     { path: "/packages", label: "Packages" },
     { path: "/booking", label: "Book Safari" },
-     { path: "/contact", label: "Contact Us" },
+    { path: "/careers", label: "Careers" },
+    { path: "/contact", label: "Contact Us" },
   ];
 
   const isActive = (path) => location.pathname === path;
