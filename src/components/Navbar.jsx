@@ -76,7 +76,7 @@ export default function Navbar() {
                 Ibrali Tours & Travel
               </h1>
               <p className={`text-[10px] tracking-[1.5px] uppercase mt-1 transition-colors duration-300 ${logoTagColor}`}>
-                Explore Beyond Limits
+                Explore. Discover. Connect
               </p>
             </div>
           </Link>

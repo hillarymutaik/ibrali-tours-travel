@@ -65,9 +65,10 @@ export default function Contact() {
   }
 
   const contactItems = [
-    { icon: 'mail', title: 'Email', value: 'ibralitoureskenya@gmail.com', href: 'mailto:ibralitoureskenya@gmail.com' },
-    { icon: 'phone', title: 'Phone', value: '+254 786 000 100', href: 'tel:+254786000100' },
-    { icon: 'pin', title: 'Office', value: 'Nairobi, Kenya', href: null },
+    { icon: 'mail', title: 'Email', value: 'info@ibralitravels.com', href: 'mailto:info@ibralitravels.com' },
+    { icon: 'phone', title: 'Mobile', value: '+254 786 000 100', href: 'tel:+254786000100' },
+    { icon: 'phone', title: 'Landline', value: '+254 20 527 0005', href: 'tel:+254205270005' },
+    { icon: 'pin', title: 'Office', value: 'Kayahwe & Galana Rd, Kilimani — P.O. Box 24646-00100, Nairobi, Kenya', href: null },
   ]
 
   const inputClass = 'w-full px-4 py-3.5 bg-white border border-[#E3DCCD] rounded-xl text-sm text-[#1C1A17] placeholder-[#B0A99E] focus:outline-none focus:border-[#C4962A]'

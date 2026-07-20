@@ -11,17 +11,20 @@ const NAV_LINKS = [
 ]
 
 const CONTACT_ITEMS = [
-  { type: 'mail', label: 'ibralitoureskenya@gmail.com', href: 'mailto:ibralitoureskenya@gmail.com' },
+  { type: 'mail', label: 'info@ibralitravels.com', href: 'mailto:info@ibralitravels.com' },
   { type: 'phone', label: '+254 786 000 100', href: 'tel:+254786000100' },
-  { type: 'pin', label: 'Nairobi, Kenya', href: null },
+  { type: 'phone', label: '+254 20 527 0005', href: 'tel:+254205270005' },
+  { type: 'pin', label: 'Kayahwe & Galana Rd, Kilimani — P.O. Box 24646-00100, Nairobi, Kenya', href: null },
 ]
 
 const SOCIAL_LINKS = [
+  { label: 'Instagram', href: 'https://www.instagram.com/ibralitravels', icon: 'ig' },
+  { label: 'X (Twitter)', href: 'https://x.com/ibralitravels', icon: 'tw' },
+  { label: 'Facebook', href: 'https://www.facebook.com/ibralitravels', icon: 'fb' },
+  { label: 'YouTube', href: 'https://www.youtube.com/@ibralitravels', icon: 'yt' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/ibrali-travels', icon: 'in' },
   { label: 'TikTok', href: 'https://www.tiktok.com/@ibralitours', icon: 'tt' },
-  { label: 'Facebook', href: '#', icon: 'fb' },
-  { label: 'Instagram', href: '#', icon: 'ig' },
-  { label: 'Twitter / X', href: '#', icon: 'tw' },
-  { label: 'WhatsApp', href: '#', icon: 'wa' },
+  { label: 'WhatsApp', href: 'https://wa.me/254786000100', icon: 'wa' },
 ]
 
 function SocialIcon({ icon }) {
@@ -31,21 +34,37 @@ function SocialIcon({ icon }) {
     wa: 'M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21',
     tt: 'M14.5 3v10.75a3.75 3.75 0 1 1-3.75-3.75M14.5 3c.35 2.4 2 4.3 4.5 4.7',
   }
+  const compound = {
+    ig: (
+      <>
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+        <circle cx="12" cy="12" r="3.5" />
+        <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" />
+      </>
+    ),
+    yt: (
+      <>
+        <rect x="2" y="5" width="20" height="14" rx="4" />
+        <path d="M10 9.5l4.5 2.5L10 14.5z" />
+      </>
+    ),
+    in: (
+      <>
+        <rect x="2" y="2" width="20" height="20" rx="3" />
+        <line x1="7" y1="10.5" x2="7" y2="17" />
+        <line x1="7" y1="7" x2="7" y2="7.01" />
+        <path d="M11 17v-3.5a2.5 2.5 0 0 1 5 0V17" />
+        <line x1="11" y1="10.5" x2="11" y2="17" />
+      </>
+    ),
+  }
   return (
     <svg
       width="15" height="15" viewBox="0 0 24 24" fill="none"
       stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
       aria-hidden="true"
     >
-      {icon === 'ig' ? (
-        <>
-          <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-          <circle cx="12" cy="12" r="3.5" />
-          <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" />
-        </>
-      ) : (
-        <path d={paths[icon]} />
-      )}
+      {compound[icon] ?? <path d={paths[icon]} />}
     </svg>
   )
 }
@@ -86,7 +105,7 @@ export default function Footer() {
           <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5" style={{ background: '#1A1610', border: '0.5px solid #2A2216' }}>
             <span className="w-[7px] h-[7px] rounded-full flex-shrink-0" style={{ background: '#2DB563' }} />
             <span className="text-[11px] tracking-wide text-[#7A6A55]">
-              Booking open · Kenya, Tanzania &amp; beyond
+              Booking open · Kenya · East Africa · Worldwide
             </span>
           </div>
         </div>
@@ -99,11 +118,14 @@ export default function Footer() {
             <h2 className="heading text-[26px] text-[#F2E2C4] mb-2.5">
               Ibrali Tours &amp; Travel
             </h2>
-            <p className="text-[13px] text-[#7A6A55] leading-relaxed max-w-[240px] mb-5">
-              Flights, safaris and coastal escapes — unforgettable African journeys from the Maasai Mara to the Zanzibar coast.
+            <p className="text-[13px] italic text-[#C9B99A] mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>
+              “Exploring the World, Protecting Its Wonders.”
+            </p>
+            <p className="text-[13px] text-[#7A6A55] leading-relaxed max-w-[260px] mb-5">
+              A premier travel and tourism company based in Nairobi, Kenya — delivering exceptional local and international travel experiences with professionalism, integrity, and innovation.
             </p>
             <div className="flex gap-2 flex-wrap">
-              {['Safari', 'Flights', 'Beach', 'Culture', 'Adventure'].map((tag) => (
+              {['Safaris', 'Air Travel', 'Hotels', 'Business Tourism', 'Excursions', 'Ticketing'].map((tag) => (
                 <span
                   key={tag}
                   className="text-[11px] tracking-wide px-3 py-1 rounded-full text-[#9A8A74]"
@@ -146,11 +168,11 @@ export default function Footer() {
                 </>
               )
               return href ? (
-                <a key={type} href={href} className="flex items-center gap-2.5 mb-3.5 text-[#9A8A74] hover:text-[#F2E2C4] transition-colors">
+                <a key={label} href={href} className="flex items-center gap-2.5 mb-3.5 text-[#9A8A74] hover:text-[#F2E2C4] transition-colors">
                   {inner}
                 </a>
               ) : (
-                <div key={type} className="flex items-center gap-2.5 mb-3.5 text-[#9A8A74]">
+                <div key={label} className="flex items-center gap-2.5 mb-3.5 text-[#9A8A74]">
                   {inner}
                 </div>
               )
