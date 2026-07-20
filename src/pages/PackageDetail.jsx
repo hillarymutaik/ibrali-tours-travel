@@ -96,8 +96,8 @@ export default function PackageDetail() {
           className="w-full h-full object-cover scale-[1.04] transition-transform duration-[8s] hover:scale-100"
         />
 
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(10,7,3,0.85), rgba(10,7,3,0.2) 55%, transparent)' }} />
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(10,7,3,0.4), transparent)' }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(56,44,28,0.85), rgba(56,44,28,0.2) 55%, transparent)' }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(56,44,28,0.4), transparent)' }} />
 
         {/* Back nav */}
         <button
@@ -117,7 +117,7 @@ export default function PackageDetail() {
         <div className="absolute bottom-0 left-0 right-0">
           <div className="max-w-7xl mx-auto px-6 md:px-10 pb-12">
             <div className="flex flex-wrap gap-2 mb-4">
-              <span className="px-3 py-1 rounded-full text-xs font-medium" style={{ background: gold, color: '#0A0703' }}>
+              <span className="px-3 py-1 rounded-full text-xs font-medium" style={{ background: gold, color: '#382C1C' }}>
                 {pkg.category}
               </span>
               <span className={`px-3 py-1 rounded-full text-xs font-medium ${difficultyStyle[pkg.difficulty] || "bg-white/20 text-white"}`}>
@@ -171,7 +171,7 @@ export default function PackageDetail() {
                   key={t}
                   onClick={() => setActiveTab(t)}
                   className={`px-5 py-2 rounded-lg text-xs font-medium capitalize transition-all duration-200 ${activeTab === t
-                    ? "bg-[#0A0703] text-white"
+                    ? "bg-[#382C1C] text-white"
                     : "text-[#6B6560] hover:text-[#1C1A17]"
                     }`}
                 >
@@ -234,7 +234,7 @@ export default function PackageDetail() {
           <div className="sticky top-24 space-y-4">
 
             {/* Main booking card */}
-            <div className="rounded-2xl p-7 text-white" style={{ background: '#0A0703' }}>
+            <div className="rounded-2xl p-7 text-white" style={{ background: '#382C1C' }}>
 
               <p className="text-white/50 text-[11px] font-medium uppercase tracking-[1.5px] mb-1">Price per person</p>
               <p className="mb-1" style={{ ...serif, fontWeight: 700, fontSize: '40px', color: '#EDB84A' }}>

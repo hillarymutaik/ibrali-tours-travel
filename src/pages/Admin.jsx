@@ -91,7 +91,7 @@ function AdminLogin({ onLogin }) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-6 font-sans" style={{ background: '#0A0703' }}>
+    <div className="min-h-screen flex items-center justify-center px-6 font-sans" style={{ background: '#382C1C' }}>
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <img
@@ -212,8 +212,8 @@ function Bookings({ bookings, onStatus, onDelete }) {
           {['all', 'pending', 'confirmed', 'completed', 'cancelled'].map(s => (
             <button key={s} onClick={() => setStatus(s)}
               className={`px-3.5 py-2 rounded-full text-xs font-medium border capitalize transition ${status === s
-                ? 'bg-[#0A0703] text-white border-[#0A0703]'
-                : 'bg-white text-[#6B6560] border-[#E3DCCD] hover:border-[#0A0703]'
+                ? 'bg-[#382C1C] text-white border-[#382C1C]'
+                : 'bg-white text-[#6B6560] border-[#E3DCCD] hover:border-[#382C1C]'
                 }`}
             >
               {s}
@@ -375,7 +375,7 @@ function PackageEditor({ pkg, onSave, onCancel }) {
           Visible on the site
         </label>
         <div className="flex gap-2">
-          <button onClick={onCancel} className="px-5 py-2 rounded-lg border border-[#E3DCCD] bg-white text-sm text-[#6B6560] hover:border-[#0A0703] transition">
+          <button onClick={onCancel} className="px-5 py-2 rounded-lg border border-[#E3DCCD] bg-white text-sm text-[#6B6560] hover:border-[#382C1C] transition">
             Cancel
           </button>
           <button onClick={() => onSave({ ...form, id: pkg?.id })} className="btn btn-gold px-6 py-2 !rounded-lg text-sm">
@@ -505,7 +505,7 @@ function NavItem({ icon, label, active, badge, onClick }) {
     <button
       onClick={onClick}
       className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm transition-all duration-200 ${active
-        ? 'text-[#0A0703] font-medium'
+        ? 'text-[#382C1C] font-medium'
         : 'text-white/55 hover:text-white/90'
         }`}
       style={active ? { background: '#C4962A' } : undefined}
@@ -513,7 +513,7 @@ function NavItem({ icon, label, active, badge, onClick }) {
       <span className="w-4 flex-shrink-0">{icon}</span>
       <span className="flex-1 text-left">{label}</span>
       {badge > 0 && (
-        <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${active ? 'bg-[#0A0703] text-[#EDB84A]' : 'bg-[#C4962A] text-[#0A0703]'}`}>
+        <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${active ? 'bg-[#382C1C] text-[#EDB84A]' : 'bg-[#C4962A] text-[#382C1C]'}`}>
           {badge}
         </span>
       )}
@@ -607,7 +607,7 @@ export default function Admin() {
     <div className="min-h-screen flex font-sans" style={{ background: '#F2EDE3' }}>
 
       {/* Sidebar */}
-      <aside className="hidden lg:flex flex-col w-60 flex-shrink-0 p-5 sticky top-0 h-screen" style={{ background: '#0A0703' }}>
+      <aside className="hidden lg:flex flex-col w-60 flex-shrink-0 p-5 sticky top-0 h-screen" style={{ background: '#382C1C' }}>
         <div className="flex items-center gap-3 px-2 mb-10">
           <img
             src="/ibrali-tours-travel/logo-dark.jpeg"
@@ -629,7 +629,7 @@ export default function Admin() {
 
         <div className="pt-5 space-y-3" style={{ borderTop: '0.5px solid rgba(255,255,255,0.1)' }}>
           <div className="flex items-center gap-2.5 px-2">
-            <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style={{ background: '#C4962A', color: '#0A0703' }}>
+            <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style={{ background: '#C4962A', color: '#382C1C' }}>
               {admin.name?.charAt(0)?.toUpperCase()}
             </div>
             <div className="min-w-0">
@@ -649,7 +649,7 @@ export default function Admin() {
         <header className="sticky top-0 z-20 px-6 py-4 flex items-center justify-between gap-4 backdrop-blur-lg" style={{ background: 'rgba(242,237,227,0.92)', borderBottom: '0.5px solid #E3DCCD' }}>
           <h1 className="text-xl text-[#1C1A17]" style={{ ...serif, fontWeight: 700 }}>{titles[tab]}</h1>
           <div className="flex items-center gap-3">
-            <button onClick={loadAll} className="px-4 py-2 rounded-full text-xs font-medium border border-[#E3DCCD] bg-white text-[#6B6560] hover:border-[#0A0703] transition">
+            <button onClick={loadAll} className="px-4 py-2 rounded-full text-xs font-medium border border-[#E3DCCD] bg-white text-[#6B6560] hover:border-[#382C1C] transition">
               ↻ Refresh
             </button>
             <button onClick={signOut} className="lg:hidden px-4 py-2 rounded-full text-xs font-medium border border-[#E3DCCD] bg-white text-[#6B6560] hover:text-red-600 hover:border-red-200 transition">
@@ -663,7 +663,7 @@ export default function Admin() {
           {nav.map(n => (
             <button key={n.id} onClick={() => setTab(n.id)}
               className={`px-3.5 py-2 rounded-full text-xs font-medium border transition ${tab === n.id
-                ? 'bg-[#0A0703] text-white border-[#0A0703]'
+                ? 'bg-[#382C1C] text-white border-[#382C1C]'
                 : 'bg-white text-[#6B6560] border-[#E3DCCD]'
                 }`}
             >

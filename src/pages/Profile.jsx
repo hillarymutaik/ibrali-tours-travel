@@ -168,14 +168,14 @@ export default function Profile() {
         <Navbar />
 
         {/* Dark hero */}
-        <section className="relative pt-28 pb-20 px-6 overflow-hidden" style={{ background: '#0A0703' }}>
+        <section className="relative pt-28 pb-20 px-6 overflow-hidden" style={{ background: '#382C1C' }}>
           <div className="absolute inset-0 opacity-35 bg-cover bg-center"
             style={{ backgroundImage: "url('https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1400&q=60')" }}
           />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(10,7,3,0.25), rgba(10,7,3,0.92))' }} />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(56,44,28,0.25), rgba(56,44,28,0.92))' }} />
           <div className="relative max-w-7xl mx-auto flex items-end gap-6">
             <div className="heading w-20 h-20 rounded-2xl flex items-center justify-center flex-shrink-0"
-              style={{ background: gold, color: '#0A0703', fontSize: '38px' }}>
+              style={{ background: gold, color: '#382C1C', fontSize: '38px' }}>
               {user.name?.charAt(0)?.toUpperCase()}
             </div>
             <div>
@@ -215,7 +215,7 @@ export default function Profile() {
 
           {/* Quick actions */}
           <div className="space-y-4">
-            <div className="rounded-2xl p-6 text-white" style={{ background: '#0A0703' }}>
+            <div className="rounded-2xl p-6 text-white" style={{ background: '#382C1C' }}>
               <p className="text-white/40 text-[11px] font-medium uppercase tracking-[1.5px] mb-3">Quick actions</p>
               {[
                 { to: '/my-bookings', label: 'My trips', icon: 'trips', border: true },
@@ -270,7 +270,7 @@ export default function Profile() {
           className="hidden lg:flex flex-col justify-end p-14 relative overflow-hidden bg-cover bg-center"
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1547970827-f33b90fde688?w=900&q=80')" }}
         >
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(10,7,3,0.92), rgba(10,7,3,0.3) 60%, transparent)' }} />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(56,44,28,0.92), rgba(56,44,28,0.3) 60%, transparent)' }} />
           <div className="relative z-10">
             <div className="eyebrow eyebrow-light mb-5">Safaris · Flights · Beach Escapes</div>
             <h2 className="heading text-white mb-4" style={{ fontSize: 'clamp(36px, 4vw, 52px)' }}>
@@ -294,7 +294,7 @@ export default function Profile() {
                     key={m}
                     onClick={() => switchMode(m)}
                     className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${mode === m
-                      ? 'bg-[#0A0703] text-white'
+                      ? 'bg-[#382C1C] text-white'
                       : 'text-[#6B6560] hover:text-[#1C1A17]'
                       }`}
                   >

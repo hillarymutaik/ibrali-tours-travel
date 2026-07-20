@@ -5,7 +5,7 @@
 @theme {
   --color-sand:    #FAF7F1;  /* page background — light cream */
   --color-ebony:   #1C1A17;  /* primary dark — near-black earth */
-  --color-bark:    #0F0C07;  /* deepest brown (footer) */
+  --color-bark:    #382C1C;  /* deepest brown (footer) */
   --color-gold:    #C4962A;  /* logo gold */
   --color-brand-50:  #FBF6EC;
   --color-brand-100: #F5E8CC;
@@ -39,7 +39,7 @@ body {
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #F7F4EE; }
-::-webkit-scrollbar-thumb { background: #C9B99A; border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: #E3D4B4; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #C4962A; }
 
 /* Text selection */
@@ -110,7 +110,7 @@ body {
 }
 .btn-gold {
   background: var(--color-gold);
-  color: #0A0703;
+  color: #382C1C;
 }
 .btn-gold:hover {
   background: var(--color-brand-300);
@@ -122,11 +122,11 @@ body {
   transform: none;
 }
 .btn-dark {
-  background: #0A0703;
+  background: #382C1C;
   color: #F5ECD8;
 }
 .btn-dark:hover {
-  background: var(--color-ebony);
+  background: #463823;
   transform: translateY(-1px);
 }
 .btn-light {

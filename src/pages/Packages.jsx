@@ -55,8 +55,8 @@ export default function Packages() {
 
   const pill = (active) =>
     active
-      ? "bg-[#0A0703] text-white border-[#0A0703]"
-      : "bg-white text-[#6B6560] border-[#E3DCCD] hover:border-[#0A0703]"
+      ? "bg-[#382C1C] text-white border-[#382C1C]"
+      : "bg-white text-[#6B6560] border-[#E3DCCD] hover:border-[#382C1C]"
 
   return (
     <div className="min-h-screen bg-[#FAF7F1] text-[#1C1A17] overflow-x-hidden font-sans">
@@ -104,7 +104,7 @@ export default function Packages() {
               </svg>
               Filters
               {activeFilterCount > 0 && (
-                <span className="w-5 h-5 rounded-full text-xs font-medium flex items-center justify-center" style={{ background: gold, color: '#0A0703' }}>
+                <span className="w-5 h-5 rounded-full text-xs font-medium flex items-center justify-center" style={{ background: gold, color: '#382C1C' }}>
                   {activeFilterCount}
                 </span>
               )}
@@ -113,7 +113,7 @@ export default function Packages() {
             {activeFilterCount > 0 && (
               <button
                 onClick={clearFilters}
-                className="px-5 py-3 rounded-xl border border-[#E3DCCD] bg-white text-sm font-medium text-[#6B6560] hover:text-[#1C1A17] hover:border-[#0A0703] transition"
+                className="px-5 py-3 rounded-xl border border-[#E3DCCD] bg-white text-sm font-medium text-[#6B6560] hover:text-[#1C1A17] hover:border-[#382C1C] transition"
               >
                 Clear all
               </button>
@@ -144,10 +144,10 @@ export default function Packages() {
                   {difficulties.map(d => (
                     <button key={d} onClick={() => setFilters({ ...filters, difficulty: d })}
                       className={`px-3 py-1.5 rounded-full text-xs font-medium border transition ${filters.difficulty === d
-                        ? "bg-[#0A0703] text-white border-[#0A0703]"
+                        ? "bg-[#382C1C] text-white border-[#382C1C]"
                         : d !== "all"
                           ? `${difficultyColour[d]} hover:border-current`
-                          : "bg-white text-[#6B6560] border-[#E3DCCD] hover:border-[#0A0703]"
+                          : "bg-white text-[#6B6560] border-[#E3DCCD] hover:border-[#382C1C]"
                         }`}>
                       {d === "all" ? "All levels" : d}
                     </button>

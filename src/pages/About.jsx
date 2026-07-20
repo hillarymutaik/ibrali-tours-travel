@@ -141,7 +141,7 @@ export default function About() {
                 className="min-h-[170px] rounded-2xl bg-cover bg-center"
                 style={{ backgroundImage: "url('https://images.unsplash.com/photo-1523805009345-7448845a9e53?w=700&q=75')" }}
               />
-              <div className="rounded-2xl p-6 text-white" style={{ background: '#0A0703' }}>
+              <div className="rounded-2xl p-6 text-white" style={{ background: '#382C1C' }}>
                 <p style={{ ...serif, fontWeight: 700, fontSize: '38px', color: '#EDB84A' }}>10+</p>
                 <p className="text-white/50 text-xs uppercase tracking-[1.5px] mt-1">Years of industry expertise</p>
               </div>
@@ -166,10 +166,10 @@ export default function About() {
             </p>
           </div>
 
-          <div className="rounded-2xl p-9 text-white" style={{ background: '#0A0703', border: '0.5px solid rgba(196,150,42,0.25)' }}>
+          <div className="rounded-2xl p-9 text-white" style={{ background: '#382C1C', border: '0.5px solid rgba(196,150,42,0.25)' }}>
             <div
               className="w-12 h-12 rounded-xl flex items-center justify-center mb-6"
-              style={{ background: '#1A1610', color: '#EDB84A', border: '0.5px solid rgba(196,150,42,0.25)' }}
+              style={{ background: '#463823', color: '#EDB84A', border: '0.5px solid rgba(196,150,42,0.25)' }}
             >
               <Icon name="eye" />
             </div>
@@ -182,7 +182,7 @@ export default function About() {
       </section>
 
       {/* Core values */}
-      <section className="px-6 py-20" style={{ background: '#0A0703' }}>
+      <section className="px-6 py-20" style={{ background: '#382C1C' }}>
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
             <div className="eyebrow eyebrow-light mb-4">Our core values</div>
@@ -194,7 +194,7 @@ export default function About() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((item) => (
               <div key={item.title} className="p-7 rounded-2xl" style={{ background: 'rgba(255,255,255,0.04)', border: '0.5px solid rgba(196,150,42,0.2)' }}>
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style={{ background: '#1A1610', color: '#EDB84A', border: '0.5px solid rgba(196,150,42,0.25)' }}>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style={{ background: '#463823', color: '#EDB84A', border: '0.5px solid rgba(196,150,42,0.25)' }}>
                   <Icon name={item.icon} />
                 </div>
                 <h3 className="text-white text-lg font-medium mb-3">{item.title}</h3>

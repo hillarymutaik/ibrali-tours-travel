@@ -111,7 +111,7 @@ export default function Contact() {
               )
             })}
 
-            <div className="rounded-2xl p-7 text-white" style={{ background: '#0A0703' }}>
+            <div className="rounded-2xl p-7 text-white" style={{ background: '#382C1C' }}>
               <p className="text-[11px] uppercase tracking-[1.5px] text-white/40 font-medium mb-3">Response time</p>
               <h2 style={{ ...serif, fontWeight: 700, fontSize: '30px', color: '#EDB84A' }}>Within 24 hours</h2>
               <p className="text-white/55 text-sm leading-relaxed mt-3">

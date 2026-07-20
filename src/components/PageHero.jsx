@@ -13,7 +13,7 @@ import React from 'react'
  */
 export default function PageHero({ eyebrow, image, subtitle, actions, children }) {
   return (
-    <section className="relative pt-28 pb-20 px-6 overflow-hidden" style={{ background: '#0A0703' }}>
+    <section className="relative pt-28 pb-20 px-6 overflow-hidden" style={{ background: '#382C1C' }}>
       {image && (
         <div
           className="absolute inset-0 opacity-45 bg-cover bg-center"
@@ -22,7 +22,7 @@ export default function PageHero({ eyebrow, image, subtitle, actions, children }
       )}
       <div
         className="absolute inset-0"
-        style={{ background: 'linear-gradient(to bottom, rgba(10,7,3,0.25), rgba(10,7,3,0.92))' }}
+        style={{ background: 'linear-gradient(to bottom, rgba(56,44,28,0.25), rgba(56,44,28,0.92))' }}
       />
       <div className={`relative max-w-7xl mx-auto ${actions ? 'flex flex-col sm:flex-row sm:items-end justify-between gap-6' : ''}`}>
         <div>

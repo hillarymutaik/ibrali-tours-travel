@@ -110,8 +110,8 @@ export default function MyBookings() {
               {statuses.map(s => (
                 <button key={s} onClick={() => setActiveStatus(s)}
                   className={`px-4 py-2 rounded-full text-xs font-medium border capitalize transition-all duration-200 ${activeStatus === s
-                    ? 'bg-[#0A0703] text-white border-[#0A0703]'
-                    : 'bg-white text-[#6B6560] border-[#E3DCCD] hover:border-[#0A0703]'
+                    ? 'bg-[#382C1C] text-white border-[#382C1C]'
+                    : 'bg-white text-[#6B6560] border-[#E3DCCD] hover:border-[#382C1C]'
                     }`}
                 >
                   {s === 'all' ? `All (${userBookings.length})` : s}

@@ -19,7 +19,7 @@ export default function BackToTop() {
       }`}
       style={{
         background: '#C4962A',
-        color: '#0A0703',
+        color: '#382C1C',
         boxShadow: '0 10px 28px -10px rgba(196,150,42,0.6)',
       }}
     >

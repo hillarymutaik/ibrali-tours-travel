@@ -227,7 +227,7 @@ export default function Home() {
           />
           <div
             className="absolute inset-0"
-            style={{ background: 'linear-gradient(to top, rgba(10,7,3,0.88) 0%, rgba(10,7,3,0.42) 45%, rgba(10,7,3,0.06) 100%)' }}
+            style={{ background: 'linear-gradient(to top, rgba(56,44,28,0.88) 0%, rgba(56,44,28,0.42) 45%, rgba(56,44,28,0.06) 100%)' }}
           />
 
           <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
@@ -270,7 +270,7 @@ export default function Home() {
             {/* Search widget — sits at the bottom of the hero, anchored to trust bar */}
             <div
               className="rounded-t-3xl px-6 md:px-8 py-6"
-              style={{ background: 'rgba(12,9,4,0.88)', backdropFilter: 'blur(28px)', border: '0.5px solid rgba(196,150,42,0.22)', borderBottom: 'none' }}
+              style={{ background: 'rgba(56,44,28,0.92)', backdropFilter: 'blur(28px)', border: '0.5px solid rgba(196,150,42,0.22)', borderBottom: 'none' }}
             >
               <p className="text-[10px] tracking-widest uppercase mb-4" style={{ color: 'rgba(255,255,255,0.35)' }}>Find your perfect trip</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
@@ -322,7 +322,7 @@ export default function Home() {
         </section>
 
         {/* ── TRUST BAR ────────────────────────────────────── */}
-        <div style={{ background: '#0A0703', borderBottom: '0.5px solid rgba(196,150,42,0.12)' }}>
+        <div style={{ background: '#382C1C', borderBottom: '0.5px solid rgba(196,150,42,0.12)' }}>
           <div className="max-w-7xl mx-auto px-6 py-5 flex flex-wrap items-center justify-between gap-6">
             <div className="flex flex-wrap items-center gap-6 md:gap-8">
               {/* TripAdvisor */}
@@ -405,7 +405,7 @@ export default function Home() {
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(10,7,3,0.78) 0%, rgba(10,7,3,0.06) 60%, transparent 100%)' }} />
+                  <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(56,44,28,0.78) 0%, rgba(56,44,28,0.06) 60%, transparent 100%)' }} />
 
                   <div className="absolute bottom-0 left-0 p-4 w-full">
                     <p className="text-white font-semibold text-sm leading-snug" style={{ fontFamily: "'Playfair Display', serif" }}>{cat.label}</p>
@@ -416,7 +416,7 @@ export default function Home() {
                     className="absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100"
                     style={{ background: 'rgba(196,150,42,0.92)' }}
                   >
-                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#0A0703" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#382C1C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="9 18 15 12 9 6" />
                     </svg>
                   </div>
@@ -477,10 +477,10 @@ export default function Home() {
         </section>
 
         {/* ── MARQUEE STRIP ────────────────────────────────── */}
-        <div className="py-3.5 overflow-hidden border-y" style={{ background: '#0A0703', borderColor: 'rgba(196,150,42,0.15)' }}>
+        <div className="py-3.5 overflow-hidden border-y" style={{ background: '#382C1C', borderColor: 'rgba(196,150,42,0.15)' }}>
           <div className="flex gap-12 animate-marquee whitespace-nowrap">
             {Array(6).fill(['Masai Mara', 'Charter Flights', 'Amboseli', 'Lake Nakuru', 'Samburu', 'Mombasa', 'Mount Kenya', 'Tsavo', 'Maasai Village']).flat().map((d, i) => (
-              <span key={i} className="text-sm tracking-widest uppercase flex items-center gap-4" style={{ color: '#C9B99A' }}>
+              <span key={i} className="text-sm tracking-widest uppercase flex items-center gap-4" style={{ color: '#E3D4B4' }}>
                 {d} <span style={{ color: 'rgba(196,150,42,0.45)' }}>✦</span>
               </span>
             ))}
@@ -510,7 +510,7 @@ export default function Home() {
                   onClick={() => setActiveTab(tab)}
                   className="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 capitalize"
                   style={activeTab === tab
-                    ? { background: '#C4962A', color: '#0A0703' }
+                    ? { background: '#C4962A', color: '#382C1C' }
                     : { background: '#fff', color: '#7A7268', border: '0.5px solid #E3DCCD' }
                   }
                 >
@@ -535,7 +535,7 @@ export default function Home() {
             className="absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: "url('https://images.unsplash.com/photo-1547970827-f33b90fde688?w=1800&q=80')" }}
           />
-          <div className="absolute inset-0" style={{ background: 'rgba(10,7,3,0.72)' }} />
+          <div className="absolute inset-0" style={{ background: 'rgba(56,44,28,0.72)' }} />
           <div className="relative z-10 max-w-7xl mx-auto px-6">
             <Reveal className="text-center mb-16">
               <Eyebrow light>Our legacy</Eyebrow>
@@ -585,7 +585,7 @@ export default function Home() {
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(10,7,3,0.78) 0%, rgba(10,7,3,0.03) 60%, transparent 100%)' }} />
+                  <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(56,44,28,0.78) 0%, rgba(56,44,28,0.03) 60%, transparent 100%)' }} />
                   <div className="absolute bottom-0 left-0 p-5 w-full flex items-end justify-between">
                     <div>
                       <span
@@ -606,7 +606,7 @@ export default function Home() {
                       className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0"
                       style={{ background: '#C4962A' }}
                     >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0A0703" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#382C1C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="9 18 15 12 9 6" />
                       </svg>
                     </div>
@@ -618,7 +618,7 @@ export default function Home() {
         </section>
 
         {/* ── HOW IT WORKS ─────────────────────────────────── */}
-        <section className="py-24" style={{ background: '#0A0703' }}>
+        <section className="py-24" style={{ background: '#382C1C' }}>
           <div className="max-w-7xl mx-auto px-6">
             <Reveal className="text-center mb-16">
               <Eyebrow light>Simple process</Eyebrow>
@@ -782,7 +782,7 @@ export default function Home() {
         </section>
 
         {/* ── PHOTO GALLERY ────────────────────────────────── */}
-        <section className="py-24 px-6" style={{ background: '#0A0703' }}>
+        <section className="py-24 px-6" style={{ background: '#382C1C' }}>
           <div className="max-w-7xl mx-auto">
             <Reveal className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
               <div>
@@ -862,7 +862,7 @@ export default function Home() {
               className="min-h-[50vh] lg:min-h-[580px] bg-cover bg-center"
               style={{ backgroundImage: "url('https://images.unsplash.com/photo-1547970827-f33b90fde688?w=960&q=85')" }}
             />
-            <Reveal className="flex flex-col justify-center px-10 py-16 lg:px-16 h-full bg-[#0A0703]">
+            <Reveal className="flex flex-col justify-center px-10 py-16 lg:px-16 h-full bg-[#382C1C]">
               <Eyebrow light>Ready to go?</Eyebrow>
               <h2 className="heading text-white mb-6" style={{ fontSize: 'clamp(30px, 5vw, 50px)', lineHeight: 1.1 }}>
                 Your next<br />
@@ -887,7 +887,7 @@ export default function Home() {
                     'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face',
                     'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face',
                   ].map((src, i) => (
-                    <img key={i} src={src} alt="Traveller" className="w-8 h-8 rounded-full object-cover" style={{ border: '2px solid #0A0703' }} />
+                    <img key={i} src={src} alt="Traveller" className="w-8 h-8 rounded-full object-cover" style={{ border: '2px solid #382C1C' }} />
                   ))}
                 </div>
                 <p className="text-white/40 text-sm">

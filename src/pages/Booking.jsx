@@ -256,7 +256,7 @@ export default function Booking() {
             <div className="lg:col-span-2 space-y-5">
 
               {selectedPackage ? (
-                <div className="rounded-2xl p-6 text-white animate-fadeIn" style={{ background: '#0A0703' }}>
+                <div className="rounded-2xl p-6 text-white animate-fadeIn" style={{ background: '#382C1C' }}>
                   <p className="text-white/40 text-[11px] font-medium uppercase tracking-[1.5px] mb-1">Booking summary</p>
                   <h3 className="heading text-white text-lg mb-4 leading-snug">{selectedPackage.title}</h3>
 

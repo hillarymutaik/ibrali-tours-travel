@@ -119,7 +119,7 @@ export default function Navbar() {
                 >
                   <div
                     className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium"
-                    style={{ background: "#C4962A", color: "#0A0703" }}
+                    style={{ background: "#C4962A", color: "#382C1C" }}
                   >
                     {user.name?.charAt(0)?.toUpperCase()}
                   </div>
@@ -146,7 +146,7 @@ export default function Navbar() {
                 <Link
                   to="/booking"
                   className="px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 hover:-translate-y-0.5"
-                  style={{ background: "#C4962A", color: "#0A0703" }}
+                  style={{ background: "#C4962A", color: "#382C1C" }}
                   onMouseEnter={(e) => (e.currentTarget.style.background = "#EDB84A")}
                   onMouseLeave={(e) => (e.currentTarget.style.background = "#C4962A")}
                 >
@@ -213,7 +213,7 @@ export default function Navbar() {
                   >
                     <div
                       className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0"
-                      style={{ background: "#C4962A", color: "#0A0703" }}
+                      style={{ background: "#C4962A", color: "#382C1C" }}
                     >
                       {user.name?.charAt(0)?.toUpperCase()}
                     </div>
@@ -237,7 +237,7 @@ export default function Navbar() {
                   <Link
                     to="/booking"
                     className="block text-center px-4 py-3 rounded-xl text-sm font-medium"
-                    style={{ background: "#C4962A", color: "#0A0703" }}
+                    style={{ background: "#C4962A", color: "#382C1C" }}
                   >
                     Book Safari Now
                   </Link>

@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom'
 import { formatCurrency } from '../utils/helpers'
 
 const CATEGORY_STYLES = {
-  safari: 'bg-[#C4962A] text-[#0A0703]',
+  safari: 'bg-[#C4962A] text-[#382C1C]',
   beach: 'bg-[#2E7D7A] text-white',
   trekking: 'bg-[#5C6B3C] text-white',
-  city: 'bg-[#7A6A55] text-white',
+  city: 'bg-[#A8916C] text-white',
   wildlife: 'bg-[#B5651D] text-white',
   cultural: 'bg-[#A8451F] text-white',
   adventure: 'bg-[#8A5A1A] text-white',
@@ -35,7 +35,7 @@ export default function PackageCard({ package: pkg }) {
         />
         <div
           className="absolute inset-0"
-          style={{ background: 'linear-gradient(to top, rgba(10,7,3,0.78) 0%, rgba(10,7,3,0.1) 55%, transparent 100%)' }}
+          style={{ background: 'linear-gradient(to top, rgba(56,44,28,0.78) 0%, rgba(56,44,28,0.1) 55%, transparent 100%)' }}
         />
 
         {/* Top badges */}
@@ -45,7 +45,7 @@ export default function PackageCard({ package: pkg }) {
           </span>
           <span
             className="px-2.5 py-1 rounded-full text-sm font-medium backdrop-blur-sm"
-            style={{ background: 'rgba(10,7,3,0.7)', color: '#EDB84A' }}
+            style={{ background: 'rgba(56,44,28,0.7)', color: '#EDB84A' }}
           >
             {formatCurrency(pkg.price)}
           </span>

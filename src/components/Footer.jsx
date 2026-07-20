@@ -91,20 +91,20 @@ function ContactIcon({ type }) {
   )
 }
 
-const columnTitle = 'text-[11px] font-medium uppercase tracking-[1.5px] text-[#7A6A55] mb-5'
+const columnTitle = 'text-[11px] font-medium uppercase tracking-[1.5px] text-[#A8916C] mb-5'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="pt-16 font-sans" style={{ background: '#0F0C07', color: '#C9B99A' }}>
+    <footer className="pt-16 font-sans" style={{ background: '#382C1C', color: '#E3D4B4' }}>
       <div className="max-w-6xl mx-auto px-6 sm:px-8">
 
         {/* STATUS PILL */}
         <div className="mb-8">
-          <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5" style={{ background: '#1A1610', border: '0.5px solid #2A2216' }}>
+          <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5" style={{ background: '#463823', border: '0.5px solid #5A4930' }}>
             <span className="w-[7px] h-[7px] rounded-full flex-shrink-0" style={{ background: '#2DB563' }} />
-            <span className="text-[11px] tracking-wide text-[#7A6A55]">
+            <span className="text-[11px] tracking-wide text-[#A8916C]">
               Booking open · Kenya · East Africa · Worldwide
             </span>
           </div>
@@ -118,18 +118,18 @@ export default function Footer() {
             <h2 className="heading text-[26px] text-[#F2E2C4] mb-2.5">
               Ibrali Tours &amp; Travel
             </h2>
-            <p className="text-[13px] italic text-[#C9B99A] mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>
+            <p className="text-[13px] italic text-[#E3D4B4] mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>
               “Exploring the World, Protecting Its Wonders.”
             </p>
-            <p className="text-[13px] text-[#7A6A55] leading-relaxed max-w-[260px] mb-5">
+            <p className="text-[13px] text-[#A8916C] leading-relaxed max-w-[260px] mb-5">
               A premier travel and tourism company based in Nairobi, Kenya — delivering exceptional local and international travel experiences with professionalism, integrity, and innovation.
             </p>
             <div className="flex gap-2 flex-wrap">
               {['Safaris', 'Air Travel', 'Hotels', 'Business Tourism', 'Excursions', 'Ticketing'].map((tag) => (
                 <span
                   key={tag}
-                  className="text-[11px] tracking-wide px-3 py-1 rounded-full text-[#9A8A74]"
-                  style={{ background: '#1E1810', border: '0.5px solid #2E2418' }}
+                  className="text-[11px] tracking-wide px-3 py-1 rounded-full text-[#C7B28D]"
+                  style={{ background: '#463823', border: '0.5px solid #5A4930' }}
                 >
                   {tag}
                 </span>
@@ -144,7 +144,7 @@ export default function Footer() {
               <Link
                 key={item.to}
                 to={item.to}
-                className="block text-[13.5px] text-[#9A8A74] hover:text-[#F2E2C4] transition-colors mb-3"
+                className="block text-[13.5px] text-[#C7B28D] hover:text-[#F2E2C4] transition-colors mb-3"
               >
                 <span className="text-[11px] mr-2" style={{ color: '#C4962A' }}>→</span>
                 {item.label}
@@ -160,7 +160,7 @@ export default function Footer() {
                 <>
                   <span
                     className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                    style={{ background: '#1A1610', border: '0.5px solid #2A2216' }}
+                    style={{ background: '#463823', border: '0.5px solid #5A4930' }}
                   >
                     <ContactIcon type={type} />
                   </span>
@@ -168,11 +168,11 @@ export default function Footer() {
                 </>
               )
               return href ? (
-                <a key={label} href={href} className="flex items-center gap-2.5 mb-3.5 text-[#9A8A74] hover:text-[#F2E2C4] transition-colors">
+                <a key={label} href={href} className="flex items-center gap-2.5 mb-3.5 text-[#C7B28D] hover:text-[#F2E2C4] transition-colors">
                   {inner}
                 </a>
               ) : (
-                <div key={label} className="flex items-center gap-2.5 mb-3.5 text-[#9A8A74]">
+                <div key={label} className="flex items-center gap-2.5 mb-3.5 text-[#C7B28D]">
                   {inner}
                 </div>
               )
@@ -186,11 +186,11 @@ export default function Footer() {
               <a
                 key={label}
                 href={href}
-                className="group flex items-center gap-2.5 mb-2.5 text-[#7A6A55] hover:text-[#F2E2C4] transition-colors"
+                className="group flex items-center gap-2.5 mb-2.5 text-[#A8916C] hover:text-[#F2E2C4] transition-colors"
               >
                 <span
-                  className="w-[34px] h-[34px] rounded-lg flex items-center justify-center flex-shrink-0 text-[#7A6A55] border-[0.5px] border-[#2A2216] transition-colors group-hover:border-[#C4962A] group-hover:text-[#C4962A]"
-                  style={{ background: '#1A1610' }}
+                  className="w-[34px] h-[34px] rounded-lg flex items-center justify-center flex-shrink-0 text-[#A8916C] border-[0.5px] border-[#5A4930] transition-colors group-hover:border-[#C4962A] group-hover:text-[#C4962A]"
+                  style={{ background: '#463823' }}
                 >
                   <SocialIcon icon={icon} />
                 </span>
@@ -202,10 +202,10 @@ export default function Footer() {
 
         {/* ORNAMENT DIVIDER */}
         <div className="relative mb-7">
-          <div className="w-full h-px" style={{ background: '#2A2216' }} />
+          <div className="w-full h-px" style={{ background: '#5A4930' }} />
           <div
             className="absolute left-1/2 -top-[5px] -translate-x-1/2 flex items-center gap-2.5 px-4"
-            style={{ background: '#0F0C07' }}
+            style={{ background: '#382C1C' }}
           >
             <span className="w-10 h-px opacity-40" style={{ background: '#C4962A' }} />
             <span className="w-[5px] h-[5px] rounded-full" style={{ background: '#C4962A' }} />
@@ -215,12 +215,12 @@ export default function Footer() {
 
         {/* BOTTOM BAR */}
         <div className="py-5 pb-7 flex items-center justify-between flex-wrap gap-4">
-          <p className="text-xs text-[#4A3E2E]">
-            © {currentYear} <span className="text-[#7A6A55]">Ibrali Tours &amp; Travel</span>. All rights reserved.
+          <p className="text-xs text-[#8F7C5D]">
+            © {currentYear} <span className="text-[#A8916C]">Ibrali Tours &amp; Travel</span>. All rights reserved.
           </p>
           <div className="flex gap-5">
             {['Privacy', 'Terms', 'Support'].map((item) => (
-              <a key={item} href="#" className="text-xs text-[#4A3E2E] hover:text-[#9A8A74] transition-colors">
+              <a key={item} href="#" className="text-xs text-[#8F7C5D] hover:text-[#C7B28D] transition-colors">
                 {item}
               </a>
             ))}
