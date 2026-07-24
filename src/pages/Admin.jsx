@@ -16,7 +16,7 @@ const STATUS_STYLE = {
   confirmed: 'bg-emerald-50 text-emerald-700 border-emerald-200',
   cancelled: 'bg-red-50 text-red-700 border-red-200',
   completed: 'bg-[#F2EDE5] text-[#6B6560] border-[#E3DCCD]',
-  pending: 'bg-[#FAF3E4] text-[#B07E1C] border-[#EBD9B0]',
+  pending: 'bg-[#FFF4ED] text-[#C2470A] border-[#FFD9B3]',
 }
 
 const getAdminToken = () => localStorage.getItem('adminToken')
@@ -49,7 +49,7 @@ function StatCard({ label, value, accent }) {
   return (
     <div className="bg-white rounded-2xl p-5" style={panelStyle}>
       <p className={labelCls}>{label}</p>
-      <p className="mt-2" style={{ ...serif, fontWeight: 700, fontSize: '28px', color: accent ? '#B07E1C' : '#1C1A17' }}>
+      <p className="mt-2" style={{ ...serif, fontWeight: 700, fontSize: '28px', color: accent ? '#C2470A' : '#1C1A17' }}>
         {value}
       </p>
     </div>
@@ -98,15 +98,15 @@ function AdminLogin({ onLogin }) {
             src="/ibrali-tours-travel/logo-dark.jpeg"
             alt="Ibrali Tours & Travel"
             className="w-24 h-24 rounded-full mx-auto mb-5 object-cover"
-            style={{ border: '1.5px solid rgba(196,150,42,0.4)' }}
+            style={{ border: '1.5px solid rgba(231, 90, 8,0.4)' }}
           />
           <h1 className="text-white text-2xl" style={{ ...serif, fontWeight: 700 }}>
-            Ibrali <span style={{ color: '#EDB84A', fontStyle: 'italic', fontWeight: 400 }}>Admin</span>
+            Ibrali <span style={{ color: '#F2843A', fontStyle: 'italic', fontWeight: 400 }}>Admin</span>
           </h1>
           <p className="text-white/40 text-xs mt-2 tracking-widest uppercase">Staff access only</p>
         </div>
 
-        <form onSubmit={submit} className="rounded-2xl p-7 space-y-4" style={{ background: 'rgba(255,255,255,0.05)', border: '0.5px solid rgba(196,150,42,0.25)' }}>
+        <form onSubmit={submit} className="rounded-2xl p-7 space-y-4" style={{ background: 'rgba(255,255,255,0.05)', border: '0.5px solid rgba(231, 90, 8,0.25)' }}>
           {error && (
             <div className="p-3 rounded-xl text-sm text-red-300" style={{ background: 'rgba(220,60,60,0.12)', border: '0.5px solid rgba(220,60,60,0.35)' }}>
               {error}
@@ -173,7 +173,7 @@ function Overview({ stats, bookings }) {
               <p className="text-xs text-[#9C9890] font-mono mt-0.5">{b.id}</p>
             </div>
             <div className="flex items-center gap-3 flex-shrink-0">
-              <span className="font-medium" style={{ color: '#B07E1C' }}>{formatCurrency(b.totalPrice)}</span>
+              <span className="font-medium" style={{ color: '#C2470A' }}>{formatCurrency(b.totalPrice)}</span>
               <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-medium border capitalize ${STATUS_STYLE[b.status]}`}>{b.status}</span>
             </div>
           </div>
@@ -243,7 +243,7 @@ function Bookings({ bookings, onStatus, onDelete }) {
                   <td className="px-4 py-3 text-[#4A4540]">{b.packageTitle}</td>
                   <td className="px-4 py-3 text-[#4A4540] whitespace-nowrap">{b.startDate}</td>
                   <td className="px-4 py-3 text-[#4A4540]">{b.travelers}</td>
-                  <td className="px-4 py-3 font-medium whitespace-nowrap" style={{ color: '#B07E1C' }}>{formatCurrency(b.totalPrice)}</td>
+                  <td className="px-4 py-3 font-medium whitespace-nowrap" style={{ color: '#C2470A' }}>{formatCurrency(b.totalPrice)}</td>
                   <td className="px-4 py-3">
                     <select
                       value={b.status}
@@ -278,19 +278,19 @@ function Messages({ messages, onRead, onDelete }) {
   return (
     <div className="space-y-4">
       {messages.map(m => (
-        <div key={m.id} className={`${panelCls} p-5`} style={m.isRead ? panelStyle : { border: '0.5px solid #C4962A' }}>
+        <div key={m.id} className={`${panelCls} p-5`} style={m.isRead ? panelStyle : { border: '0.5px solid #E75A08' }}>
           <div className="flex items-start justify-between gap-3 mb-2">
             <div>
               <p className="font-medium text-[#1C1A17] text-sm">
                 {m.name}
-                {!m.isRead && <span className="ml-2 px-2 py-0.5 rounded-full text-[10px] font-medium" style={{ background: '#FAF3E4', color: '#B07E1C', border: '0.5px solid #EBD9B0' }}>NEW</span>}
+                {!m.isRead && <span className="ml-2 px-2 py-0.5 rounded-full text-[10px] font-medium" style={{ background: '#FFF4ED', color: '#C2470A', border: '0.5px solid #FFD9B3' }}>NEW</span>}
               </p>
               <p className="text-xs text-[#9C9890] mt-0.5">{m.email}{m.phone ? ` · ${m.phone}` : ''} · {formatDate(m.createdAt)}</p>
             </div>
             <div className="flex gap-3 flex-shrink-0">
-              <a href={`mailto:${m.email}`} className="text-xs font-medium text-[#1C1A17] hover:text-[#B07E1C] transition-colors">Reply</a>
+              <a href={`mailto:${m.email}`} className="text-xs font-medium text-[#1C1A17] hover:text-[#C2470A] transition-colors">Reply</a>
               {!m.isRead && (
-                <button onClick={() => onRead(m.id)} className="text-xs font-medium text-[#1C1A17] hover:text-[#B07E1C] transition-colors">
+                <button onClick={() => onRead(m.id)} className="text-xs font-medium text-[#1C1A17] hover:text-[#C2470A] transition-colors">
                   Mark read
                 </button>
               )}
@@ -371,7 +371,7 @@ function PackageEditor({ pkg, onSave, onCancel }) {
       </div>
       <div className="sm:col-span-2 xl:col-span-4 flex items-center justify-between gap-3">
         <label className="flex items-center gap-2 text-sm text-[#4A4540]">
-          <input type="checkbox" checked={form.isActive} onChange={set('isActive')} style={{ accentColor: '#C4962A' }} />
+          <input type="checkbox" checked={form.isActive} onChange={set('isActive')} style={{ accentColor: '#E75A08' }} />
           Visible on the site
         </label>
         <div className="flex gap-2">
@@ -424,13 +424,13 @@ function Packages({ packages, onSave, onToggle }) {
                 </div>
               </div>
               <div className="flex items-center gap-4 flex-shrink-0">
-                <span className="font-medium text-sm" style={{ color: '#B07E1C' }}>{formatCurrency(p.price)}</span>
+                <span className="font-medium text-sm" style={{ color: '#C2470A' }}>{formatCurrency(p.price)}</span>
                 <button onClick={() => onToggle(p.id)} className="text-xs font-medium text-[#6B6560] hover:text-[#1C1A17] transition-colors">
                   {p.isActive ? 'Hide' : 'Show'}
                 </button>
                 <button
                   onClick={() => setEditingId(editingId === p.id ? null : p.id)}
-                  className="text-xs font-medium text-[#1C1A17] hover:text-[#B07E1C] transition-colors"
+                  className="text-xs font-medium text-[#1C1A17] hover:text-[#C2470A] transition-colors"
                 >
                   {editingId === p.id ? 'Close' : 'Edit'}
                 </button>
@@ -465,7 +465,7 @@ function Audience({ subscribers, users, me, onRole }) {
               <p className="text-xs text-[#9C9890]">{u.email}{u.phone ? ` · ${u.phone}` : ''}</p>
             </div>
             <div className="flex items-center gap-3 flex-shrink-0">
-              <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-medium border capitalize ${u.role === 'admin' ? 'bg-[#FAF3E4] text-[#B07E1C] border-[#EBD9B0]' : 'bg-[#F2EDE5] text-[#6B6560] border-[#E3DCCD]'}`}>
+              <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-medium border capitalize ${u.role === 'admin' ? 'bg-[#FFF4ED] text-[#C2470A] border-[#FFD9B3]' : 'bg-[#F2EDE5] text-[#6B6560] border-[#E3DCCD]'}`}>
                 {u.role}
               </span>
               {u.id !== me?.id && (
@@ -508,12 +508,12 @@ function NavItem({ icon, label, active, badge, onClick }) {
         ? 'text-[#382C1C] font-medium'
         : 'text-white/55 hover:text-white/90'
         }`}
-      style={active ? { background: '#C4962A' } : undefined}
+      style={active ? { background: '#E75A08' } : undefined}
     >
       <span className="w-4 flex-shrink-0">{icon}</span>
       <span className="flex-1 text-left">{label}</span>
       {badge > 0 && (
-        <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${active ? 'bg-[#382C1C] text-[#EDB84A]' : 'bg-[#C4962A] text-[#382C1C]'}`}>
+        <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${active ? 'bg-[#382C1C] text-[#F2843A]' : 'bg-[#E75A08] text-white'}`}>
           {badge}
         </span>
       )}
@@ -613,7 +613,7 @@ export default function Admin() {
             src="/ibrali-tours-travel/logo-dark.jpeg"
             alt="Ibrali Tours & Travel"
             className="w-10 h-10 rounded-full object-cover flex-shrink-0"
-            style={{ border: '1px solid rgba(196,150,42,0.4)' }}
+            style={{ border: '1px solid rgba(231, 90, 8,0.4)' }}
           />
           <div>
             <p className="text-white text-sm leading-none" style={{ ...serif, fontWeight: 700 }}>Ibrali Admin</p>
@@ -629,7 +629,7 @@ export default function Admin() {
 
         <div className="pt-5 space-y-3" style={{ borderTop: '0.5px solid rgba(255,255,255,0.1)' }}>
           <div className="flex items-center gap-2.5 px-2">
-            <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style={{ background: '#C4962A', color: '#382C1C' }}>
+            <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style={{ background: '#E75A08', color: '#fff' }}>
               {admin.name?.charAt(0)?.toUpperCase()}
             </div>
             <div className="min-w-0">

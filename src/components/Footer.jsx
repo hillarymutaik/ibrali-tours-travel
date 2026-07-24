@@ -6,6 +6,7 @@ const NAV_LINKS = [
   { to: '/packages', label: 'Packages' },
   { to: '/about', label: 'About Us' },
   { to: '/careers', label: 'Careers' },
+  { to: '/blog', label: 'Blog' },
   { to: '/contact', label: 'Contact Us' },
   { to: '/my-bookings', label: 'My Trips' },
   { to: '/booking', label: 'Book a trip' },
@@ -84,7 +85,7 @@ function ContactIcon({ type }) {
   return (
     <svg
       width="15" height="15" viewBox="0 0 24 24" fill="none"
-      stroke="#C4962A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
+      stroke="#C2470A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
       aria-hidden="true"
     >
       {paths[type]}
@@ -92,45 +93,35 @@ function ContactIcon({ type }) {
   )
 }
 
-const columnTitle = 'text-[11px] font-medium uppercase tracking-[1.5px] text-[#A8916C] mb-5'
+const columnTitle = 'text-[11px] font-medium uppercase tracking-[1.5px] text-[#9C9890] mb-5'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="pt-16 font-sans" style={{ background: '#382C1C', color: '#E3D4B4' }}>
+    <footer className="pt-16 font-sans" style={{ background: '#FFF1E6', color: '#6B6560', borderTop: '3px solid #E75A08' }}>
       <div className="max-w-6xl mx-auto px-6 sm:px-8">
-
-        {/* STATUS PILL */}
-        <div className="mb-8">
-          <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5" style={{ background: '#463823', border: '0.5px solid #5A4930' }}>
-            <span className="w-[7px] h-[7px] rounded-full flex-shrink-0" style={{ background: '#2DB563' }} />
-            <span className="text-[11px] tracking-wide text-[#A8916C]">
-              Booking open · Kenya · East Africa · Worldwide
-            </span>
-          </div>
-        </div>
 
         {/* MAIN GRID */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr] gap-10 mb-14">
 
           {/* BRAND COLUMN */}
           <div>
-            <h2 className="heading text-[26px] text-[#F2E2C4] mb-2.5">
+            <h2 className="heading text-[26px] text-[#1C1A17] mb-2.5">
               Ibrali Tours &amp; Travel
             </h2>
-            <p className="text-[13px] italic text-[#E3D4B4] mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>
+            <p className="text-[13px] italic text-[#E75A08] mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>
               “Exploring the World, Protecting Its Wonders.”
             </p>
-            <p className="text-[13px] text-[#A8916C] leading-relaxed max-w-[260px] mb-5">
+            <p className="text-[13px] text-[#6B6560] leading-relaxed max-w-[260px] mb-5">
               A premier travel and tourism company based in Nairobi, Kenya — delivering exceptional local and international travel experiences with professionalism, integrity, and innovation.
             </p>
             <div className="flex gap-2 flex-wrap">
               {['Safaris', 'Air Travel', 'Hotels', 'Business Tourism', 'Excursions', 'Ticketing'].map((tag) => (
                 <span
                   key={tag}
-                  className="text-[11px] tracking-wide px-3 py-1 rounded-full text-[#C7B28D]"
-                  style={{ background: '#463823', border: '0.5px solid #5A4930' }}
+                  className="text-[11px] tracking-wide px-3 py-1 rounded-full text-[#C2470A]"
+                  style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3' }}
                 >
                   {tag}
                 </span>
@@ -145,9 +136,9 @@ export default function Footer() {
               <Link
                 key={item.to}
                 to={item.to}
-                className="block text-[13.5px] text-[#C7B28D] hover:text-[#F2E2C4] transition-colors mb-3"
+                className="block text-[13.5px] text-[#4A4540] hover:text-[#1C1A17] transition-colors mb-3"
               >
-                <span className="text-[11px] mr-2" style={{ color: '#C4962A' }}>→</span>
+                <span className="text-[11px] mr-2" style={{ color: '#E75A08' }}>→</span>
                 {item.label}
               </Link>
             ))}
@@ -161,7 +152,7 @@ export default function Footer() {
                 <>
                   <span
                     className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                    style={{ background: '#463823', border: '0.5px solid #5A4930' }}
+                    style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3' }}
                   >
                     <ContactIcon type={type} />
                   </span>
@@ -169,11 +160,11 @@ export default function Footer() {
                 </>
               )
               return href ? (
-                <a key={label} href={href} className="flex items-center gap-2.5 mb-3.5 text-[#C7B28D] hover:text-[#F2E2C4] transition-colors">
+                <a key={label} href={href} className="flex items-center gap-2.5 mb-3.5 text-[#4A4540] hover:text-[#1C1A17] transition-colors">
                   {inner}
                 </a>
               ) : (
-                <div key={label} className="flex items-center gap-2.5 mb-3.5 text-[#C7B28D]">
+                <div key={label} className="flex items-center gap-2.5 mb-3.5 text-[#4A4540]">
                   {inner}
                 </div>
               )
@@ -187,11 +178,10 @@ export default function Footer() {
               <a
                 key={label}
                 href={href}
-                className="group flex items-center gap-2.5 mb-2.5 text-[#A8916C] hover:text-[#F2E2C4] transition-colors"
+                className="group flex items-center gap-2.5 mb-2.5 text-[#6B6560] hover:text-[#1C1A17] transition-colors"
               >
                 <span
-                  className="w-[34px] h-[34px] rounded-lg flex items-center justify-center flex-shrink-0 text-[#A8916C] border-[0.5px] border-[#5A4930] transition-colors group-hover:border-[#C4962A] group-hover:text-[#C4962A]"
-                  style={{ background: '#463823' }}
+                  className="w-[34px] h-[34px] rounded-lg flex items-center justify-center flex-shrink-0 text-[#C2470A] border-[0.5px] border-[#FFD9B3] transition-colors group-hover:border-[#E75A08] group-hover:text-[#E75A08] bg-white"
                 >
                   <SocialIcon icon={icon} />
                 </span>
@@ -203,25 +193,25 @@ export default function Footer() {
 
         {/* ORNAMENT DIVIDER */}
         <div className="relative mb-7">
-          <div className="w-full h-px" style={{ background: '#5A4930' }} />
+          <div className="w-full h-px" style={{ background: '#EBD9C4' }} />
           <div
             className="absolute left-1/2 -top-[5px] -translate-x-1/2 flex items-center gap-2.5 px-4"
-            style={{ background: '#382C1C' }}
+            style={{ background: '#FFF1E6' }}
           >
-            <span className="w-10 h-px opacity-40" style={{ background: '#C4962A' }} />
-            <span className="w-[5px] h-[5px] rounded-full" style={{ background: '#C4962A' }} />
-            <span className="w-10 h-px opacity-40" style={{ background: '#C4962A' }} />
+            <span className="w-10 h-px opacity-50" style={{ background: '#E75A08' }} />
+            <span className="w-[5px] h-[5px] rounded-full" style={{ background: '#E75A08' }} />
+            <span className="w-10 h-px opacity-50" style={{ background: '#E75A08' }} />
           </div>
         </div>
 
         {/* BOTTOM BAR */}
         <div className="py-5 pb-7 flex items-center justify-between flex-wrap gap-4">
-          <p className="text-xs text-[#8F7C5D]">
-            © {currentYear} <span className="text-[#A8916C]">Ibrali Tours &amp; Travel</span>. All rights reserved.
+          <p className="text-xs text-[#9C9890]">
+            © {currentYear} <span className="text-[#6B6560]">Ibrali Tours &amp; Travel</span>. All rights reserved.
           </p>
           <div className="flex gap-5">
             {['Privacy', 'Terms', 'Support'].map((item) => (
-              <a key={item} href="#" className="text-xs text-[#8F7C5D] hover:text-[#C7B28D] transition-colors">
+              <a key={item} href="#" className="text-xs text-[#9C9890] hover:text-[#1C1A17] transition-colors">
                 {item}
               </a>
             ))}

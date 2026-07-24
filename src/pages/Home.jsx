@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { TOUR_PACKAGES, API_URL } from '../utils/constants'
 import Navbar from '../components/Navbar'
 import PackageCard from '../components/PackageCard'
 import Footer from '../components/Footer'
 import Reveal from '../components/Reveal'
+import useSeo from '../hooks/useSeo'
 
 function Icon({ name, size = 20 }) {
   const p = {
@@ -30,6 +32,7 @@ function Icon({ name, size = 20 }) {
     car:     (<><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" /><circle cx="7" cy="17" r="2" /><circle cx="17" cy="17" r="2" /><path d="M9 17h6" /></>),
     rescue:  (<><circle cx="12" cy="12" r="9" /><line x1="12" y1="8" x2="12" y2="16" /><line x1="8" y1="12" x2="16" y2="12" /></>),
     presentation: (<><path d="M2 3h20" /><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3" /><path d="m7 21 5-5 5 5" /></>),
+    paw: (<><ellipse cx="7" cy="7" rx="1.6" ry="2" /><ellipse cx="12" cy="5.5" rx="1.6" ry="2" /><ellipse cx="17" cy="7" rx="1.6" ry="2" /><path d="M12 11c-3 0-6 2.2-6 5.2a2.8 2.8 0 0 0 2.8 2.8c1 0 1.6-.5 3.2-.5s2.2.5 3.2.5a2.8 2.8 0 0 0 2.8-2.8c0-3-3-5.2-6-5.2z" /></>),
   }
   return <svg {...p}>{paths[name]}</svg>
 }
@@ -49,14 +52,14 @@ function StatCard({ end, suffix, label, iconName, active }) {
   }, [active, end])
 
   return (
-    <div className="text-center p-8 rounded-2xl" style={{ background: 'rgba(255,255,255,0.05)', border: '0.5px solid rgba(196,150,42,0.25)' }}>
-      <div className="w-12 h-12 mx-auto mb-5 rounded-xl flex items-center justify-center" style={{ background: 'rgba(196,150,42,0.15)', color: '#EDB84A' }}>
+    <div className="text-center p-8 rounded-2xl bg-white" style={{ border: '0.5px solid #FFD9B3' }}>
+      <div className="w-12 h-12 mx-auto mb-5 rounded-xl flex items-center justify-center" style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3', color: '#C2470A' }}>
         <Icon name={iconName} size={22} />
       </div>
-      <p className="heading" style={{ fontSize: 'clamp(38px,6vw,58px)', color: '#EDB84A', lineHeight: 1 }}>
+      <p className="heading" style={{ fontSize: 'clamp(38px,6vw,58px)', color: '#E75A08', lineHeight: 1 }}>
         {count}{suffix}
       </p>
-      <p className="text-white/50 text-xs mt-3 tracking-widest uppercase">{label}</p>
+      <p className="text-[#9C9890] text-xs mt-3 tracking-widest uppercase">{label}</p>
     </div>
   )
 }
@@ -66,12 +69,35 @@ const Eyebrow = ({ children, light }) => (
 )
 
 export default function Home() {
+  useSeo({
+    description: 'Ibrali Tours & Travel is a premier travel and tourism company based in Nairobi, Kenya, delivering exceptional local and international travel experiences with professionalism, integrity, and innovation.',
+  })
   const [activeTab, setActiveTab]     = useState('all')
   const [statsVisible, setStatsVisible] = useState(false)
   const [heroSearch, setHeroSearch]   = useState({ destination: '', duration: '', guests: '2' })
   const [newsletterEmail, setNewsletterEmail] = useState('')
   const [newsletterState, setNewsletterState] = useState('idle') // idle | sending | done | error
   const statsRef = useRef(null)
+
+  const heroSlides = [
+    { image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1920&q=90', label: 'Masai Mara, Kenya' },
+    { image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=90', label: 'Dubai, UAE' },
+    { image: 'https://images.unsplash.com/photo-1516214104703-d870798883c5?w=1920&q=90', label: 'DR Congo' },
+    { image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1920&q=90', label: 'Paris, France' },
+    { image: 'https://images.unsplash.com/photo-1516815231560-8f41ec531527?w=1920&q=90', label: 'Maldives' },
+  ]
+  const [activeSlide, setActiveSlide] = useState(0)
+
+  useEffect(() => {
+    const t = setInterval(() => {
+      setActiveSlide((s) => (s + 1) % heroSlides.length)
+    }, 6000)
+    return () => clearInterval(t)
+  }, [heroSlides.length])
+
+  const goToSlide = (i) => setActiveSlide(i)
+  const prevSlide = () => setActiveSlide((s) => (s - 1 + heroSlides.length) % heroSlides.length)
+  const nextSlide = () => setActiveSlide((s) => (s + 1) % heroSlides.length)
 
   const handleNewsletterSubmit = async (e) => {
     e.preventDefault()
@@ -130,6 +156,8 @@ export default function Home() {
     { name: 'Mount Kenya',  tag: 'Alpine Trek',        img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=380&fit=crop', count: '8 tours',  span: '' },
     { name: 'Nairobi',      tag: 'City Experience',   img: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=500&h=380&fit=crop', count: '6 tours',  span: '' },
     { name: 'Lake Nakuru',  tag: 'Flamingo Haven',    img: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=500&h=380&fit=crop', count: '5 tours',  span: '' },
+    { name: 'Dubai',        tag: 'City & Desert',     img: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=500&h=380&fit=crop', count: '3 tours',  span: '' },
+    { name: 'DR Congo',     tag: 'Rainforest Trek',   img: 'https://images.unsplash.com/photo-1516214104703-d870798883c5?w=500&h=380&fit=crop', count: '2 tours',  span: '' },
     { name: 'Samburu',      tag: 'Fly-in Safari',     img: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&h=380&fit=crop', count: '4 tours',  span: 'col-span-2 md:col-span-3' },
   ]
 
@@ -152,39 +180,53 @@ export default function Home() {
   ]
 
   const howItWorks = [
-    { step: '01', title: 'Browse & Discover',    desc: 'Explore our curated Kenya experiences — from Big Five safaris to coastal retreats and mountain treks.', icon: 'map' },
+    { step: '01', title: 'Browse & Discover',    desc: 'Explore our curated experiences — from Big Five safaris in Kenya to city escapes in Dubai and beyond.', icon: 'map' },
     { step: '02', title: 'Customise Your Trip',  desc: 'Tell us your dates, group size and preferences. We\'ll tailor every detail to your vision.', icon: 'calendar' },
-    { step: '03', title: 'Book Securely',        desc: 'Reserve your safari with a simple deposit. Transparent pricing, no hidden fees, full refund policy.', icon: 'shield' },
-    { step: '04', title: 'Experience Africa',    desc: 'Arrive and let Kenya\'s magic unfold — while our team handles everything behind the scenes.', icon: 'compass' },
+    { step: '03', title: 'Book Securely',        desc: 'Reserve your trip with a simple deposit. Transparent pricing, no hidden fees, full refund policy.', icon: 'shield' },
+    { step: '04', title: 'Experience the World',    desc: 'Arrive and let the adventure unfold — while our team handles everything behind the scenes.', icon: 'compass' },
   ]
 
   const features = [
-    { icon: 'gem',     title: 'Best-rate negotiation',       desc: 'Strong negotiation skills secure the best travel and accommodation rates across East Africa and DR Congo.' },
-    { icon: 'users',   title: 'Teams & conferences',         desc: 'Specialists in organizing team building trips, conferences, and seminars for organizations of every size.' },
-    { icon: 'calendar',title: 'Instant CRS bookings',        desc: 'An advanced Computer Reservation System (CRS) confirms your reservations instantly.' },
-    { icon: 'star',    title: 'Affordable packages',         desc: 'Affordable and unmatched tour packages and accommodation options tailored to your budget.' },
-    { icon: 'map',     title: 'Domestic tourism experience', desc: 'Carefully curated journeys through Kenya\'s natural beauty, cultural richness, and scenic destinations.' },
-    { icon: 'support', title: '24/7 support & air rescue',   desc: 'Round-the-clock assistance, with air rescue coordination in emergency situations.' },
+    { icon: 'compass',  title: 'Personalized Travel Planning',              desc: 'Every itinerary is shaped around your dates, interests, and budget — never one-size-fits-all.' },
+    { icon: 'gem',      title: 'Competitive Pricing Through Strategic Partnerships', desc: 'Strong partnerships across Kenya, DR Congo, Dubai, and beyond secure the best rates on flights, stays, and experiences.' },
+    { icon: 'calendar', title: 'Access to Modern Reservation Systems',       desc: 'An advanced Computer Reservation System (CRS) confirms flights, hotels, and transfers instantly.' },
+    { icon: 'briefcase',title: 'Corporate Travel Expertise',                 desc: 'Trusted by organizations for conferences, seminars, retreats, and business travel management.' },
+    { icon: 'star',     title: 'Flexible Travel Packages',                   desc: 'From quick getaways to multi-week expeditions, packages adapt to your group size and pace.' },
+    { icon: 'support',  title: 'Customer-Centered Service',                  desc: 'A dedicated team stays with you from the first inquiry to the moment you return home.' },
+    { icon: 'shield',   title: 'Commitment to Responsible Tourism',          desc: 'We travel in ways that protect Kenya\'s wildlife, landscapes, and communities for the future.' },
   ]
 
   const clientTypes = [
-    'Corporate Organizations', 'Schools', 'NGOs', 'Government Institutions', 'Families', 'International Tourists',
+    'Corporate Organizations', 'Government Institutions', 'NGOs & Development Organizations',
+    'Schools & Universities', 'Religious Organizations', 'Families & Leisure Travelers', 'Tour Groups',
   ]
 
-  const coreServices = [
-    { icon: 'plane',     title: 'Air, Train, Hotel & Lodge Transfers',      desc: 'Seamless travel arrangements to ensure a comfortable and convenient journey.' },
-    { icon: 'hotel',     title: 'Hotel, Restaurant & Airbnb Reservations',  desc: 'Handpicked stays and dining experiences tailored to your preferences.' },
-    { icon: 'briefcase', title: 'Business Tourism',                         desc: 'Efficient travel solutions for corporate trips, meetings, and events.' },
-    { icon: 'compass',   title: 'Excursions & Adventures',                  desc: 'Unforgettable experiences including school trips, city tours, and adventure activities.' },
-    { icon: 'ticket',    title: 'Ticketing Services',                       desc: 'Reliable ticketing solutions for corporate clients and individuals.' },
-  ]
-
-  const additionalServices = [
-    { icon: 'presentation', title: 'Conferences & Seminars',        desc: 'End-to-end planning and management of successful events.' },
-    { icon: 'users',        title: 'Team Building & Workshops',     desc: 'Engaging activities that inspire teamwork and strengthen connections.' },
-    { icon: 'car',          title: 'Car Hire & Cab Services',       desc: 'Reliable and comfortable transportation whenever you need it.' },
-    { icon: 'shield',       title: 'Travel Insurance',              desc: 'Comprehensive coverage for a worry-free travel experience.' },
-    { icon: 'rescue',       title: 'Air Rescue Coordination',       desc: '24/7 support and coordination in emergency situations.' },
+  const serviceCategories = [
+    {
+      icon: 'plane',
+      title: 'Travel Management',
+      items: ['Flight bookings and ticketing', 'Train reservations', 'Airport transfers', 'Hotel and lodge transfers'],
+    },
+    {
+      icon: 'hotel',
+      title: 'Accommodation Services',
+      items: ['Hotel reservations', 'Resort bookings', 'Restaurant reservations', 'Airbnb bookings'],
+    },
+    {
+      icon: 'briefcase',
+      title: 'Corporate Travel Solutions',
+      items: ['Conference and seminar organization', 'Team-building programs', 'Corporate retreats', 'Business travel management'],
+    },
+    {
+      icon: 'paw',
+      title: 'Tourism & Leisure',
+      items: ['Safari tours', 'Exclusive tours', 'Tour guiding services', 'Golf tourism', 'Bird watching', 'Beach holidays', 'Sightseeing tours', 'Hiking adventures', 'French translation services', 'School trips and excursions'],
+    },
+    {
+      icon: 'shield',
+      title: 'Travel Protection & Emergency Support',
+      items: ['Travel insurance', 'Air rescue coordination'],
+    },
   ]
 
   const galleryPhotos = [
@@ -198,17 +240,17 @@ export default function Home() {
 
   const SelectField = ({ label, value, onChange, children }) => (
     <div className="flex flex-col gap-1.5">
-      <label className="text-[10px] tracking-widest uppercase" style={{ color: 'rgba(255,255,255,0.35)' }}>{label}</label>
+      <label className="text-[10px] tracking-widest uppercase" style={{ color: '#9C9890' }}>{label}</label>
       <div className="relative">
         <select
           value={value}
           onChange={onChange}
           className="w-full appearance-none text-sm px-4 py-3 rounded-xl focus:outline-none pr-9"
-          style={{ background: 'rgba(255,255,255,0.07)', border: '0.5px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.8)' }}
+          style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3', color: '#1C1A17' }}
         >
           {children}
         </select>
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'rgba(255,255,255,0.35)' }}>
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#C2470A' }}>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9" /></svg>
         </div>
       </div>
@@ -221,20 +263,42 @@ export default function Home() {
 
         {/* ── HERO ─────────────────────────────────────────── */}
         <section className="relative min-h-screen flex flex-col justify-end overflow-hidden">
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: "url('https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1920&q=90')" }}
-          />
+          {/* Sliding background images — fills the section at every screen size */}
+          {heroSlides.map((slide, i) => (
+            <div
+              key={slide.image}
+              className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
+              style={{ backgroundImage: `url('${slide.image}')`, opacity: i === activeSlide ? 1 : 0 }}
+              aria-hidden={i !== activeSlide}
+            />
+          ))}
           <div
             className="absolute inset-0"
             style={{ background: 'linear-gradient(to top, rgba(56,44,28,0.88) 0%, rgba(56,44,28,0.42) 45%, rgba(56,44,28,0.06) 100%)' }}
           />
 
+          {/* Slide arrows */}
+          <button
+            onClick={prevSlide}
+            aria-label="Previous slide"
+            className="hidden md:flex absolute left-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full items-center justify-center text-white transition-all duration-300 hover:bg-white/15"
+            style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(8px)', border: '0.5px solid rgba(255,255,255,0.25)' }}
+          >
+            <ChevronLeft size={20} strokeWidth={1.8} />
+          </button>
+          <button
+            onClick={nextSlide}
+            aria-label="Next slide"
+            className="hidden md:flex absolute right-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full items-center justify-center text-white transition-all duration-300 hover:bg-white/15"
+            style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(8px)', border: '0.5px solid rgba(255,255,255,0.25)' }}
+          >
+            <ChevronRight size={20} strokeWidth={1.8} />
+          </button>
+
           <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
             <div className="pb-14 md:pb-16">
-              <div className="eyebrow eyebrow-light mb-5 mt-24 md:mt-32">Safaris · Flights · Beach Escapes</div>
               <h1
-                className="heading text-white max-w-4xl"
+                className="heading text-white max-w-4xl mt-24 md:mt-32"
                 style={{ fontSize: 'clamp(44px, 8vw, 92px)', lineHeight: 0.98 }}
               >
                 Exploring the world,<br />
@@ -260,19 +324,38 @@ export default function Home() {
                   { value: '40+',  label: 'Destinations' },
                 ].map((s) => (
                   <div key={s.label}>
-                    <p className="heading" style={{ fontSize: '34px', color: '#EDB84A' }}>{s.value}</p>
+                    <p className="heading" style={{ fontSize: '34px', color: '#F2843A' }}>{s.value}</p>
                     <p className="text-white/45 text-xs mt-1 tracking-wide uppercase">{s.label}</p>
                   </div>
                 ))}
               </div>
             </div>
 
+            {/* Slide indicators */}
+            <div className="flex items-center gap-4 mb-6">
+              <div className="flex items-center gap-2">
+                {heroSlides.map((slide, i) => (
+                  <button
+                    key={slide.image}
+                    onClick={() => goToSlide(i)}
+                    aria-label={`Show ${slide.label}`}
+                    className="h-1.5 rounded-full transition-all duration-300"
+                    style={{
+                      width: i === activeSlide ? '22px' : '7px',
+                      background: i === activeSlide ? '#E75A08' : 'rgba(255,255,255,0.4)',
+                    }}
+                  />
+                ))}
+              </div>
+              <span className="text-white/50 text-xs tracking-wide uppercase">{heroSlides[activeSlide].label}</span>
+            </div>
+
             {/* Search widget — sits at the bottom of the hero, anchored to trust bar */}
             <div
               className="rounded-t-3xl px-6 md:px-8 py-6"
-              style={{ background: 'rgba(56,44,28,0.92)', backdropFilter: 'blur(28px)', border: '0.5px solid rgba(196,150,42,0.22)', borderBottom: 'none' }}
+              style={{ background: 'rgba(255,248,242,0.96)', backdropFilter: 'blur(28px)', border: '0.5px solid #FFD9B3', borderBottom: 'none' }}
             >
-              <p className="text-[10px] tracking-widest uppercase mb-4" style={{ color: 'rgba(255,255,255,0.35)' }}>Find your perfect trip</p>
+              <p className="text-[10px] tracking-widest uppercase mb-4" style={{ color: '#9C9890' }}>Find your perfect trip</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
                 <SelectField
                   label="Destination"
@@ -286,6 +369,10 @@ export default function Home() {
                   <option>Lake Nakuru</option>
                   <option>Samburu</option>
                   <option>Nairobi</option>
+                  <option>Dubai</option>
+                  <option>DR Congo</option>
+                  <option>Paris</option>
+                  <option>Maldives</option>
                 </SelectField>
 
                 <SelectField
@@ -322,7 +409,7 @@ export default function Home() {
         </section>
 
         {/* ── TRUST BAR ────────────────────────────────────── */}
-        <div style={{ background: '#382C1C', borderBottom: '0.5px solid rgba(196,150,42,0.12)' }}>
+        <div style={{ background: '#FFF1E6', borderBottom: '0.5px solid #FFD9B3' }}>
           <div className="max-w-7xl mx-auto px-6 py-5 flex flex-wrap items-center justify-between gap-6">
             <div className="flex flex-wrap items-center gap-6 md:gap-8">
               {/* TripAdvisor */}
@@ -331,15 +418,15 @@ export default function Home() {
                   <svg viewBox="0 0 20 20" fill="white" width="10" height="10"><circle cx="10" cy="10" r="4" fill="white"/><circle cx="10" cy="10" r="2.5" fill="#00AA6C"/></svg>
                 </div>
                 <div>
-                  <p className="text-white/85 text-xs font-medium">Tripadvisor</p>
+                  <p className="text-[#1C1A17] text-xs font-medium">Tripadvisor</p>
                   <div className="flex items-center gap-0.5 mt-0.5">
                     {[...Array(5)].map((_, i) => <span key={i} style={{ color: '#00AA6C', fontSize: '10px' }}>★</span>)}
-                    <span className="text-white/35 text-[10px] ml-1">4.9</span>
+                    <span className="text-[#9C9890] text-[10px] ml-1">4.9</span>
                   </div>
                 </div>
               </div>
 
-              <div className="w-px h-5 bg-white/10 hidden sm:block" />
+              <div className="w-px h-5 bg-[#FFD9B3] hidden sm:block" />
 
               {/* Google */}
               <div className="flex items-center gap-2.5">
@@ -347,32 +434,32 @@ export default function Home() {
                   <span style={{ fontWeight: 800, fontSize: '13px', color: '#4285F4' }}>G</span>
                 </div>
                 <div>
-                  <p className="text-white/85 text-xs font-medium">Google Reviews</p>
+                  <p className="text-[#1C1A17] text-xs font-medium">Google Reviews</p>
                   <div className="flex items-center gap-0.5 mt-0.5">
                     {[...Array(5)].map((_, i) => <span key={i} style={{ color: '#FBBC04', fontSize: '10px' }}>★</span>)}
-                    <span className="text-white/35 text-[10px] ml-1">4.8 · 200+</span>
+                    <span className="text-[#9C9890] text-[10px] ml-1">4.8 · 200+</span>
                   </div>
                 </div>
               </div>
 
-              <div className="w-px h-5 bg-white/10 hidden sm:block" />
+              <div className="w-px h-5 bg-[#FFD9B3] hidden sm:block" />
 
               {/* Award */}
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(196,150,42,0.18)', border: '0.5px solid rgba(196,150,42,0.35)' }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C4962A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3' }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E75A08" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
                   </svg>
                 </div>
                 <div>
-                  <p className="text-white/85 text-xs font-medium">Best Safari 2024</p>
-                  <p className="text-white/35 text-[10px]">East Africa Tourism Awards</p>
+                  <p className="text-[#1C1A17] text-xs font-medium">Best Safari 2024</p>
+                  <p className="text-[#9C9890] text-[10px]">East Africa Tourism Awards</p>
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
+            <div className="flex items-center gap-2 text-xs" style={{ color: '#9C9890' }}>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
               Trusted by 5,000+ travellers worldwide
             </div>
           </div>
@@ -387,7 +474,7 @@ export default function Home() {
                 Find your perfect <span className="heading-accent">adventure</span>
               </h2>
               <p className="text-[#7A7268] text-base mt-4 max-w-lg mx-auto leading-relaxed">
-                Whether you dream of tracking lions at dawn or unwinding on pristine shores, Kenya has it all.
+                Whether you dream of tracking lions at dawn, unwinding on pristine shores, or exploring a new city abroad — we'll take you there.
               </p>
             </Reveal>
 
@@ -414,7 +501,7 @@ export default function Home() {
 
                   <div
                     className="absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100"
-                    style={{ background: 'rgba(196,150,42,0.92)' }}
+                    style={{ background: 'rgba(231, 90, 8,0.92)' }}
                   >
                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#382C1C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="9 18 15 12 9 6" />
@@ -439,31 +526,24 @@ export default function Home() {
               </p>
             </Reveal>
 
-            <div className="grid lg:grid-cols-2 gap-6">
-              {[
-                { label: 'Core services', items: coreServices },
-                { label: 'Additional services', items: additionalServices },
-              ].map((group) => (
-                <div key={group.label} className="card-surface !rounded-2xl p-8">
-                  <p className="text-[11px] font-medium uppercase tracking-[1.5px] mb-6" style={{ color: '#B07E1C' }}>
-                    {group.label}
-                  </p>
-                  <div className="space-y-6">
-                    {group.items.map((service) => (
-                      <div key={service.title} className="flex items-start gap-4">
-                        <div
-                          className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                          style={{ background: '#FAF3E4', border: '0.5px solid #EBD9B0', color: '#B07E1C' }}
-                        >
-                          <Icon name={service.icon} size={19} />
-                        </div>
-                        <div>
-                          <h3 className="text-[15px] font-semibold text-[#1C1A17]">{service.title}</h3>
-                          <p className="text-[#7A7268] text-sm leading-relaxed mt-1">{service.desc}</p>
-                        </div>
-                      </div>
-                    ))}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {serviceCategories.map((cat) => (
+                <div key={cat.title} className="card-surface !rounded-2xl p-8">
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
+                    style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3', color: '#C2470A' }}
+                  >
+                    <Icon name={cat.icon} size={22} />
                   </div>
+                  <h3 className="text-[16px] font-semibold text-[#1C1A17] mb-3">{cat.title}</h3>
+                  <ul className="space-y-2">
+                    {cat.items.map((item) => (
+                      <li key={item} className="flex items-start gap-2.5 text-sm text-[#7A7268] leading-relaxed">
+                        <span className="mt-[7px] w-1 h-1 rounded-full flex-shrink-0" style={{ background: '#E75A08' }} />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               ))}
             </div>
@@ -477,11 +557,11 @@ export default function Home() {
         </section>
 
         {/* ── MARQUEE STRIP ────────────────────────────────── */}
-        <div className="py-3.5 overflow-hidden border-y" style={{ background: '#382C1C', borderColor: 'rgba(196,150,42,0.15)' }}>
+        <div className="py-3.5 overflow-hidden border-y" style={{ background: '#FFF1E6', borderColor: '#FFD9B3' }}>
           <div className="flex gap-12 animate-marquee whitespace-nowrap">
-            {Array(6).fill(['Masai Mara', 'Charter Flights', 'Amboseli', 'Lake Nakuru', 'Samburu', 'Mombasa', 'Mount Kenya', 'Tsavo', 'Maasai Village']).flat().map((d, i) => (
-              <span key={i} className="text-sm tracking-widest uppercase flex items-center gap-4" style={{ color: '#E3D4B4' }}>
-                {d} <span style={{ color: 'rgba(196,150,42,0.45)' }}>✦</span>
+            {Array(6).fill(['Masai Mara', 'Dubai', 'Amboseli', 'DR Congo', 'Samburu', 'Mombasa', 'Paris', 'Tsavo', 'Maldives']).flat().map((d, i) => (
+              <span key={i} className="text-sm tracking-widest uppercase flex items-center gap-4" style={{ color: '#6B6560' }}>
+                {d} <span style={{ color: '#E75A08' }}>✦</span>
               </span>
             ))}
           </div>
@@ -510,7 +590,7 @@ export default function Home() {
                   onClick={() => setActiveTab(tab)}
                   className="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 capitalize"
                   style={activeTab === tab
-                    ? { background: '#C4962A', color: '#382C1C' }
+                    ? { background: '#E75A08', color: '#fff' }
                     : { background: '#fff', color: '#7A7268', border: '0.5px solid #E3DCCD' }
                   }
                 >
@@ -533,13 +613,13 @@ export default function Home() {
         <section ref={statsRef} className="relative py-28 overflow-hidden">
           <div
             className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: "url('https://images.unsplash.com/photo-1547970827-f33b90fde688?w=1800&q=80')" }}
+            style={{ backgroundImage: "url('https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1800&q=80')" }}
           />
-          <div className="absolute inset-0" style={{ background: 'rgba(56,44,28,0.72)' }} />
+          <div className="absolute inset-0" style={{ background: 'rgba(255,241,230,0.85)' }} />
           <div className="relative z-10 max-w-7xl mx-auto px-6">
             <Reveal className="text-center mb-16">
-              <Eyebrow light>Our legacy</Eyebrow>
-              <h2 className="heading text-white" style={{ fontSize: 'clamp(28px, 5vw, 48px)' }}>
+              <Eyebrow>Our legacy</Eyebrow>
+              <h2 className="heading text-[#1C1A17]" style={{ fontSize: 'clamp(28px, 5vw, 48px)' }}>
                 Numbers that <span className="heading-accent">speak</span>
               </h2>
             </Reveal>
@@ -561,7 +641,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto">
             <Reveal className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-14">
               <div>
-                <Eyebrow>Kenya awaits</Eyebrow>
+                <Eyebrow>Where to next</Eyebrow>
                 <h2 className="heading" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.1 }}>
                   Top <span className="heading-accent">destinations</span>
                 </h2>
@@ -590,7 +670,7 @@ export default function Home() {
                     <div>
                       <span
                         className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-medium mb-2"
-                        style={{ background: 'rgba(196,150,42,0.28)', color: '#EDB84A', border: '0.5px solid rgba(196,150,42,0.4)' }}
+                        style={{ background: 'rgba(231, 90, 8,0.28)', color: '#F2843A', border: '0.5px solid rgba(231, 90, 8,0.4)' }}
                       >
                         {dest.tag}
                       </span>
@@ -604,7 +684,7 @@ export default function Home() {
                     </div>
                     <div
                       className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0"
-                      style={{ background: '#C4962A' }}
+                      style={{ background: '#E75A08' }}
                     >
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#382C1C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="9 18 15 12 9 6" />
@@ -618,14 +698,14 @@ export default function Home() {
         </section>
 
         {/* ── HOW IT WORKS ─────────────────────────────────── */}
-        <section className="py-24" style={{ background: '#382C1C' }}>
+        <section className="py-24" style={{ background: '#FFF1E6' }}>
           <div className="max-w-7xl mx-auto px-6">
             <Reveal className="text-center mb-16">
-              <Eyebrow light>Simple process</Eyebrow>
-              <h2 className="heading text-white" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.1 }}>
+              <Eyebrow>Simple process</Eyebrow>
+              <h2 className="heading text-[#1C1A17]" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.1 }}>
                 How it <span className="heading-accent">works</span>
               </h2>
-              <p className="text-white/45 text-base mt-4 max-w-md mx-auto leading-relaxed">
+              <p className="text-[#6B6560] text-base mt-4 max-w-md mx-auto leading-relaxed">
                 From your first click to your last sunset, we take care of everything.
               </p>
             </Reveal>
@@ -634,30 +714,30 @@ export default function Home() {
               {howItWorks.map((step, i) => (
                 <Reveal key={i} delay={i * 0.08} className="relative">
                   <div
-                    className="relative p-8 rounded-2xl h-full"
-                    style={{ background: 'rgba(255,255,255,0.06)', border: '0.5px solid rgba(196,150,42,0.14)' }}
+                    className="relative p-8 rounded-2xl h-full bg-white"
+                    style={{ border: '0.5px solid #FFD9B3' }}
                   >
                     {i < howItWorks.length - 1 && (
                       <div className="hidden lg:block absolute top-12 right-0 translate-x-1/2 z-10">
                         <svg width="28" height="10" viewBox="0 0 28 10" fill="none">
-                          <path d="M0 5H24M24 5L20 1M24 5L20 9" stroke="rgba(196,150,42,0.3)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M0 5H24M24 5L20 1M24 5L20 9" stroke="rgba(231, 90, 8,0.4)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       </div>
                     )}
                     <p
                       className="mb-4 leading-none select-none"
-                      style={{ fontFamily: "'Playfair Display', serif", fontSize: '42px', fontWeight: 700, color: 'rgba(196,150,42,0.18)' }}
+                      style={{ fontFamily: "'Playfair Display', serif", fontSize: '42px', fontWeight: 700, color: 'rgba(231, 90, 8,0.16)' }}
                     >
                       {step.step}
                     </p>
                     <div
                       className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
-                      style={{ background: 'rgba(196,150,42,0.14)', color: '#EDB84A' }}
+                      style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3', color: '#C2470A' }}
                     >
                       <Icon name={step.icon} size={18} />
                     </div>
-                    <h3 className="text-white font-medium text-base mb-2">{step.title}</h3>
-                    <p className="text-white/40 text-sm leading-relaxed">{step.desc}</p>
+                    <h3 className="text-[#1C1A17] font-medium text-base mb-2">{step.title}</h3>
+                    <p className="text-[#7A7268] text-sm leading-relaxed">{step.desc}</p>
                   </div>
                 </Reveal>
               ))}
@@ -683,7 +763,7 @@ export default function Home() {
                 Over 10 years of industry expertise has taught us what truly matters — from the moment you inquire to the moment you return home.
               </p>
             </Reveal>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {features.map((f, i) => (
                 <div
                   key={i}
@@ -691,7 +771,7 @@ export default function Home() {
                 >
                   <div
                     className="w-11 h-11 rounded-xl flex items-center justify-center mb-5"
-                    style={{ background: '#FAF3E4', border: '0.5px solid #EBD9B0', color: '#B07E1C' }}
+                    style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3', color: '#C2470A' }}
                   >
                     <Icon name={f.icon} />
                   </div>
@@ -735,14 +815,14 @@ export default function Home() {
                 <div key={i} className="card-surface !rounded-2xl p-8 relative flex flex-col">
                   <div className="flex items-center gap-0.5 mb-5">
                     {[...Array(t.rating)].map((_, j) => (
-                      <svg key={j} className="w-4 h-4" fill="#EDB84A" viewBox="0 0 20 20">
+                      <svg key={j} className="w-4 h-4" fill="#F2843A" viewBox="0 0 20 20">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                       </svg>
                     ))}
                   </div>
                   <div
                     className="absolute top-6 right-6 select-none"
-                    style={{ fontSize: '56px', lineHeight: 1, color: 'rgba(196,150,42,0.12)', fontFamily: 'Georgia, serif', fontWeight: 700 }}
+                    style={{ fontSize: '56px', lineHeight: 1, color: 'rgba(231, 90, 8,0.12)', fontFamily: 'Georgia, serif', fontWeight: 700 }}
                   >"</div>
                   <p className="text-[#1C1A17] text-sm leading-relaxed flex-1 relative z-10">"{t.quote}"</p>
                   <div className="flex items-center gap-3 pt-5 mt-5 border-t border-[#E3DCCD]">
@@ -782,16 +862,16 @@ export default function Home() {
         </section>
 
         {/* ── PHOTO GALLERY ────────────────────────────────── */}
-        <section className="py-24 px-6" style={{ background: '#382C1C' }}>
+        <section className="py-24 px-6" style={{ background: '#FFF1E6' }}>
           <div className="max-w-7xl mx-auto">
             <Reveal className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
               <div>
-                <Eyebrow light>Kenya in photos</Eyebrow>
-                <h2 className="heading text-white" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.1 }}>
+                <Eyebrow>Our travels in photos</Eyebrow>
+                <h2 className="heading text-[#1C1A17]" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.1 }}>
                   Life through the <span className="heading-accent">lens</span>
                 </h2>
               </div>
-              <a href="#" className="link-underline link-underline-light self-start md:self-auto">
+              <a href="#" className="link-underline self-start md:self-auto">
                 Follow on Instagram →
               </a>
             </Reveal>
@@ -801,7 +881,7 @@ export default function Home() {
                 <div key={i} className="group relative overflow-hidden rounded-xl" style={{ aspectRatio: '1' }}>
                   <img
                     src={photo}
-                    alt={`Kenya travel ${i + 1}`}
+                    alt={`Ibrali travel ${i + 1}`}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     loading="lazy"
                   />
@@ -826,7 +906,7 @@ export default function Home() {
           <Reveal className="max-w-2xl mx-auto text-center">
             <Eyebrow>Travel inspiration</Eyebrow>
             <h2 className="heading mb-4" style={{ fontSize: 'clamp(26px, 4vw, 40px)', lineHeight: 1.15 }}>
-              Get Kenya travel <span className="heading-accent">insider tips</span>
+              Get worldwide travel <span className="heading-accent">insider tips</span>
             </h2>
             <p className="text-[#7A7268] text-base mb-8 leading-relaxed max-w-lg mx-auto">
               Monthly itinerary ideas, off-the-beaten-path destinations, and exclusive early-bird deals — delivered to your inbox.
@@ -860,38 +940,38 @@ export default function Home() {
           <div className="grid lg:grid-cols-2">
             <div
               className="min-h-[50vh] lg:min-h-[580px] bg-cover bg-center"
-              style={{ backgroundImage: "url('https://images.unsplash.com/photo-1547970827-f33b90fde688?w=960&q=85')" }}
+              style={{ backgroundImage: "url('https://images.unsplash.com/photo-1523805009345-7448845a9e53?w=960&q=85')" }}
             />
-            <Reveal className="flex flex-col justify-center px-10 py-16 lg:px-16 h-full bg-[#382C1C]">
-              <Eyebrow light>Ready to go?</Eyebrow>
-              <h2 className="heading text-white mb-6" style={{ fontSize: 'clamp(30px, 5vw, 50px)', lineHeight: 1.1 }}>
+            <Reveal className="flex flex-col justify-center px-10 py-16 lg:px-16 h-full" style={{ background: '#FFF1E6' }}>
+              <Eyebrow>Ready to go?</Eyebrow>
+              <h2 className="heading text-[#1C1A17] mb-6" style={{ fontSize: 'clamp(30px, 5vw, 50px)', lineHeight: 1.1 }}>
                 Your next<br />
                 adventure<br />
-                <span style={{ fontStyle: 'italic', fontWeight: 400, color: '#EDB84A' }}>starts here.</span>
+                <span style={{ fontStyle: 'italic', fontWeight: 400, color: '#E75A08' }}>starts here.</span>
               </h2>
-              <p className="text-white/55 text-base leading-relaxed mb-8 max-w-sm">
-                Discover Kenya's untamed beauty with a company built on passion, expertise, and a deep respect for the land.
+              <p className="text-[#6B6560] text-base leading-relaxed mb-8 max-w-sm">
+                Discover Kenya, DR Congo, Dubai, and beyond with a company built on passion, expertise, and a deep respect for every destination.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Link to="/packages" className="btn btn-gold px-8 py-4">
                   Browse packages →
                 </Link>
-                <Link to="/contact" className="btn btn-ghost px-8 py-4">
+                <Link to="/contact" className="btn btn-light px-8 py-4">
                   Talk to an expert
                 </Link>
               </div>
-              <div className="flex items-center gap-4 pt-6 border-t border-white/10">
+              <div className="flex items-center gap-4 pt-6 border-t border-[#FFD9B3]">
                 <div className="flex -space-x-2">
                   {[
                     'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&fit=crop&crop=face',
                     'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face',
                     'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face',
                   ].map((src, i) => (
-                    <img key={i} src={src} alt="Traveller" className="w-8 h-8 rounded-full object-cover" style={{ border: '2px solid #382C1C' }} />
+                    <img key={i} src={src} alt="Traveller" className="w-8 h-8 rounded-full object-cover" style={{ border: '2px solid #FFF1E6' }} />
                   ))}
                 </div>
-                <p className="text-white/40 text-sm">
-                  Join <span className="text-white/70 font-medium">5,000+</span> happy travellers
+                <p className="text-[#9C9890] text-sm">
+                  Join <span className="text-[#1C1A17] font-medium">5,000+</span> happy travellers
                 </p>
               </div>
             </Reveal>

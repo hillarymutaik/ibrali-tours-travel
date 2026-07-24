@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { useBooking } from '../hooks/useBooking'
 import { TOUR_PACKAGES } from '../utils/constants'
@@ -7,6 +7,7 @@ import { formatCurrency, isValidEmail, isValidPhone, generateBookingId } from '.
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import PageHero from '../components/PageHero'
+import useSeo from '../hooks/useSeo'
 
 const NEXT_STEPS = [
   { title: 'Review details', sub: 'We send a full summary to your email' },
@@ -18,7 +19,7 @@ const NEXT_STEPS = [
 
 /* Compact inline icon set */
 function TrustIcon({ name }) {
-  const common = { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: '#B07E1C', strokeWidth: 1.8, strokeLinecap: 'round', strokeLinejoin: 'round' }
+  const common = { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: '#C2470A', strokeWidth: 1.8, strokeLinecap: 'round', strokeLinejoin: 'round' }
   const paths = {
     check: <polyline points="20 6 9 17 4 12" />,
     lock: <><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></>,
@@ -28,6 +29,11 @@ function TrustIcon({ name }) {
 }
 
 export default function Booking() {
+  useSeo({
+    title: 'Reserve Your Safari',
+    description: 'Fill in the details below and our team will confirm your booking within 24 hours.',
+  })
+
   const navigate = useNavigate()
   const location = useLocation()
   const { user } = useAuth()
@@ -48,6 +54,42 @@ export default function Booking() {
 
   const selectedPackage = TOUR_PACKAGES.find(p => p.id === parseInt(selectedPackageId))
   const totalPrice = selectedPackage ? selectedPackage.price * formData.travelers : 0
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-[#FAF7F1] text-[#1C1A17] font-sans overflow-x-hidden">
+        <Navbar />
+        <PageHero
+          image="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1400&q=60"
+          subtitle="Sign in to reserve your safari, track your booking, and manage your trips."
+        >
+          Book your<br />
+          <span className="heading-accent">adventure</span>
+        </PageHero>
+        <div className="max-w-2xl mx-auto px-6 py-24 text-center">
+          <div className="bg-white rounded-2xl p-12" style={{ border: '0.5px solid #E3DCCD' }}>
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5" style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3' }}>
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C2470A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" />
+              </svg>
+            </div>
+            <h2 className="text-2xl text-[#1C1A17] mb-2 heading">Sign in to book your trip</h2>
+            <p className="text-[#6B6560] text-sm mb-8 max-w-xs mx-auto leading-relaxed">
+              Create an account or sign in to reserve a safari, track your booking, and unlock member-exclusive rates.
+            </p>
+            <Link
+              to="/profile"
+              state={{ from: '/booking', ...location.state }}
+              className="btn btn-gold px-8 py-3.5"
+            >
+              Sign in →
+            </Link>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    )
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -94,7 +136,7 @@ export default function Booking() {
 
   const labelCls = "block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2.5"
   const inputCls = "w-full px-4 py-3.5 bg-white border border-[#E3DCCD] rounded-xl text-sm text-[#1C1A17] placeholder-[#B0A99E] input-safari"
-  const gold = '#C4962A'
+  const gold = '#E75A08'
 
   return (
     <div className="min-h-screen bg-[#FAF7F1] text-[#1C1A17] font-sans overflow-x-hidden">
@@ -102,7 +144,6 @@ export default function Booking() {
 
       {/* ── HERO HEADER ─────────────────────────────────── */}
       <PageHero
-        eyebrow="Reserve Your Safari"
         image="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1400&q=60"
         subtitle="Fill in the details below and our team will confirm your booking within 24 hours."
       >
@@ -113,21 +154,6 @@ export default function Booking() {
       {/* ── MAIN CONTENT ────────────────────────────────── */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 -mt-6">
         <div className="max-w-6xl mx-auto">
-
-          {/* Guest tip */}
-          {!user && (
-            <div className="mb-8 p-4 rounded-2xl flex items-start gap-3 animate-fadeIn" style={{ background: '#FAF3E4', border: '0.5px solid #EBD9B0' }}>
-              <span className="mt-0.5" style={{ color: '#B07E1C' }}>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </span>
-              <div>
-                <p className="font-medium text-[#1C1A17] text-sm">Create an account to manage bookings</p>
-                <p className="text-[#7A7268] text-xs mt-0.5">Track your trips, download receipts, and get exclusive member rates.</p>
-              </div>
-            </div>
-          )}
 
           <div className="grid lg:grid-cols-5 gap-10">
 
@@ -260,7 +286,7 @@ export default function Booking() {
                   <p className="text-white/40 text-[11px] font-medium uppercase tracking-[1.5px] mb-1">Booking summary</p>
                   <h3 className="heading text-white text-lg mb-4 leading-snug">{selectedPackage.title}</h3>
 
-                  <div className="space-y-2.5 text-sm pb-4 mb-4" style={{ borderBottom: '0.5px solid rgba(196,150,42,0.2)' }}>
+                  <div className="space-y-2.5 text-sm pb-4 mb-4" style={{ borderBottom: '0.5px solid rgba(231, 90, 8,0.2)' }}>
                     <div className="flex justify-between"><span className="text-white/50">Price per person</span><span className="font-medium">{formatCurrency(selectedPackage.price)}</span></div>
                     <div className="flex justify-between"><span className="text-white/50">Travelers</span><span className="font-medium">{formData.travelers}</span></div>
                     <div className="flex justify-between"><span className="text-white/50">Duration</span><span className="font-medium">{selectedPackage.duration} days</span></div>
@@ -269,13 +295,13 @@ export default function Booking() {
 
                   <div className="flex justify-between items-end">
                     <span className="text-white/50 text-xs">Total (all taxes included)</span>
-                    <span className="heading" style={{ fontSize: '30px', color: '#EDB84A' }}>{formatCurrency(totalPrice)}</span>
+                    <span className="heading" style={{ fontSize: '30px', color: '#F2843A' }}>{formatCurrency(totalPrice)}</span>
                   </div>
                 </div>
               ) : (
                 <div className="bg-white rounded-2xl p-6 text-center" style={{ border: '0.5px solid #E3DCCD' }}>
-                  <div className="w-12 h-12 rounded-xl mx-auto mb-3 flex items-center justify-center" style={{ background: '#FAF3E4', border: '0.5px solid #EBD9B0' }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B07E1C" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                  <div className="w-12 h-12 rounded-xl mx-auto mb-3 flex items-center justify-center" style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3' }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C2470A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                       <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21 3 6" /><line x1="9" y1="3" x2="9" y2="18" /><line x1="15" y1="6" x2="15" y2="21" />
                     </svg>
                   </div>
@@ -292,7 +318,7 @@ export default function Booking() {
                   { icon: 'bolt', label: 'Instant confirm', sub: 'Booking confirmed immediately' },
                 ].map(t => (
                   <div key={t.label} className="flex items-start gap-3">
-                    <span className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#FAF3E4', border: '0.5px solid #EBD9B0' }}>
+                    <span className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3' }}>
                       <TrustIcon name={t.icon} />
                     </span>
                     <div>
@@ -309,7 +335,7 @@ export default function Booking() {
                 <ol className="space-y-3">
                   {NEXT_STEPS.map((step, i) => (
                     <li key={i} className="flex items-start gap-3">
-                      <span className="w-6 h-6 rounded-full text-[10px] font-medium flex items-center justify-center flex-shrink-0" style={{ background: '#FAF3E4', border: '0.5px solid #EBD9B0', color: '#B07E1C' }}>
+                      <span className="w-6 h-6 rounded-full text-[10px] font-medium flex items-center justify-center flex-shrink-0" style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3', color: '#C2470A' }}>
                         {i + 1}
                       </span>
                       <div>

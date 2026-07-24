@@ -1,20 +1,20 @@
 @import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&display=swap');
 
-/* ── Brand theme — drawn from the Ibrali Tours logo (warm gold + earth) ── */
+/* ── Brand theme — drawn from the Ibrali Tours logo (okapi orange + mahogany) ── */
 @theme {
-  --color-sand:    #FAF7F1;  /* page background — light cream */
-  --color-ebony:   #1C1A17;  /* primary dark — near-black earth */
-  --color-bark:    #382C1C;  /* deepest brown (footer) */
-  --color-gold:    #C4962A;  /* logo gold */
-  --color-brand-50:  #FBF6EC;
-  --color-brand-100: #F5E8CC;
-  --color-brand-200: #EAD19A;
-  --color-brand-300: #DDB661;
-  --color-brand-400: #CDA13C;
-  --color-brand-500: #C4962A;
-  --color-brand-600: #A87C1F;
-  --color-brand-700: #835f18;
+  --color-sand:    #FFF8F2;  /* page background — bright warm white */
+  --color-ebony:   #1C1A17;  /* primary dark text — near-black earth */
+  --color-bark:    #582A0B;  /* deep mahogany — from the logo's okapi body; used sparingly for dark accents, not large section fills */
+  --color-gold:    #E75A08;  /* logo orange (ring + wordmark) */
+  --color-brand-50:  #FFF4ED;
+  --color-brand-100: #FFE0C2;
+  --color-brand-200: #FFC190;
+  --color-brand-300: #FFA35E;
+  --color-brand-400: #F2843A;
+  --color-brand-500: #E75A08;
+  --color-brand-600: #C2470A;
+  --color-brand-700: #96380D;
 }
 
 /* Tailwind's preflight (part of `@import "tailwindcss"` above) already
@@ -39,11 +39,11 @@ body {
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #F7F4EE; }
-::-webkit-scrollbar-thumb { background: #E3D4B4; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #C4962A; }
+::-webkit-scrollbar-thumb { background: #FFD9B3; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #E75A08; }
 
 /* Text selection */
-::selection { background-color: #F59E0B; color: #1C1A17; }
+::selection { background-color: #E75A08; color: #fff; }
 
 /* Keyboard focus — visible gold ring on every interactive element */
 :focus-visible {
@@ -110,23 +110,23 @@ body {
 }
 .btn-gold {
   background: var(--color-gold);
-  color: #382C1C;
+  color: #fff;
 }
 .btn-gold:hover {
-  background: var(--color-brand-300);
+  background: var(--color-brand-600);
   transform: translateY(-1px);
-  box-shadow: 0 10px 28px -10px rgba(196, 150, 42, 0.55);
+  box-shadow: 0 10px 28px -10px rgba(231, 90, 8, 0.55);
 }
 .btn-gold:disabled:hover {
   background: var(--color-gold);
   transform: none;
 }
 .btn-dark {
-  background: #382C1C;
-  color: #F5ECD8;
+  background: var(--color-bark);
+  color: #FFF4ED;
 }
 .btn-dark:hover {
-  background: #463823;
+  background: #75360F;
   transform: translateY(-1px);
 }
 .btn-light {
@@ -200,20 +200,20 @@ body {
 .link-underline-light {
   color: rgba(255, 255, 255, 0.45);
   border-bottom-width: 1px;
-  border-bottom-color: rgba(196, 150, 42, 0.35);
+  border-bottom-color: rgba(231, 90, 8, 0.35);
 }
 .link-underline-light:hover {
   color: rgba(255, 255, 255, 0.85);
 }
 
-/* Input focus — amber ring override */
+/* Input focus — orange ring override */
 .input-safari {
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .input-safari:focus {
   outline: none;
-  border-color: #F59E0B;
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+  border-color: #E75A08;
+  box-shadow: 0 0 0 3px rgba(231, 90, 8, 0.15);
 }
 
 /* ── Animations (consolidated here — index.css is the imported stylesheet) ── */

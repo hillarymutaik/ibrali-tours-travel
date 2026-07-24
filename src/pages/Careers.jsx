@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import PageHero from '../components/PageHero'
+import useSeo from '../hooks/useSeo'
 
 const serif = { fontFamily: "'Playfair Display', serif" }
 
@@ -58,6 +59,11 @@ function Icon({ name, size = 22 }) {
 }
 
 export default function Careers() {
+  useSeo({
+    title: 'Careers',
+    description: 'Join a premier travel and tourism company built on professionalism, integrity, and innovation. Explore career opportunities at Ibrali Tours & Travel.',
+  })
+
   const perks = [
     {
       icon: 'globe',
@@ -84,7 +90,6 @@ export default function Careers() {
       <Navbar />
 
       <PageHero
-        eyebrow="Careers"
         image="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1500&q=70"
         subtitle="Join a premier travel and tourism company built on professionalism, integrity, and innovation. When roles open up, you'll find them here."
       >
@@ -106,7 +111,7 @@ export default function Careers() {
             <div key={perk.title} className="card-surface !rounded-2xl p-8">
               <div
                 className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
-                style={{ background: '#FAF3E4', border: '0.5px solid #EBD9B0', color: '#B07E1C' }}
+                style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3', color: '#C2470A' }}
               >
                 <Icon name={perk.icon} />
               </div>
@@ -133,7 +138,7 @@ export default function Careers() {
           >
             <div
               className="w-16 h-16 mx-auto rounded-2xl flex items-center justify-center mb-6"
-              style={{ background: '#FAF3E4', border: '0.5px solid #EBD9B0', color: '#B07E1C' }}
+              style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3', color: '#C2470A' }}
             >
               <Icon name="briefcase" size={30} />
             </div>
@@ -157,7 +162,7 @@ export default function Careers() {
 
           {/* Stay-in-touch note */}
           <div className="flex items-center justify-center gap-2.5 mt-8 text-sm text-[#7A7268]">
-            <span style={{ color: '#B07E1C' }}><Icon name="bell" size={16} /></span>
+            <span style={{ color: '#C2470A' }}><Icon name="bell" size={16} /></span>
             New roles are posted on this page — check back soon.
           </div>
         </div>

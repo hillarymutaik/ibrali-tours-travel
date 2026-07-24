@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { formatCurrency } from '../utils/helpers'
 
 const CATEGORY_STYLES = {
-  safari: 'bg-[#C4962A] text-[#382C1C]',
+  safari: 'bg-[#E75A08] text-white',
   beach: 'bg-[#2E7D7A] text-white',
   trekking: 'bg-[#5C6B3C] text-white',
   city: 'bg-[#A8916C] text-white',
@@ -14,7 +14,7 @@ const CATEGORY_STYLES = {
 
 const DIFFICULTY_STYLES = {
   Easy: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-  Medium: 'bg-[#FAF3E4] text-[#B07E1C] border-[#EBD9B0]',
+  Medium: 'bg-[#FFF4ED] text-[#C2470A] border-[#FFD9B3]',
   Hard: 'bg-red-50 text-red-700 border-red-200',
 }
 
@@ -45,7 +45,7 @@ export default function PackageCard({ package: pkg }) {
           </span>
           <span
             className="px-2.5 py-1 rounded-full text-sm font-medium backdrop-blur-sm"
-            style={{ background: 'rgba(56,44,28,0.7)', color: '#EDB84A' }}
+            style={{ background: 'rgba(56,44,28,0.7)', color: '#F2843A' }}
           >
             {formatCurrency(pkg.price)}
           </span>
@@ -99,7 +99,7 @@ export default function PackageCard({ package: pkg }) {
             <svg
               key={i}
               className="w-3.5 h-3.5"
-              style={{ color: i < Math.floor(pkg.rating) ? '#EDB84A' : '#E3DCCD' }}
+              style={{ color: i < Math.floor(pkg.rating) ? '#F2843A' : '#E3DCCD' }}
               fill="currentColor"
               viewBox="0 0 20 20"
             >

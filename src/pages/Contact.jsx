@@ -3,6 +3,7 @@ import { API_URL } from '../utils/constants'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import PageHero from '../components/PageHero'
+import useSeo from '../hooks/useSeo'
 
 const serif = { fontFamily: "'Playfair Display', serif" }
 
@@ -22,6 +23,11 @@ function ContactIcon({ type }) {
 }
 
 export default function Contact() {
+  useSeo({
+    title: 'Contact Us',
+    description: 'Tell us where you want to go, how you like to travel, and what matters most. Get in touch with the Ibrali Tours & Travel team today.',
+  })
+
   const [submitted, setSubmitted] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
@@ -71,14 +77,13 @@ export default function Contact() {
     { icon: 'pin', title: 'Office', value: 'Kayahwe & Galana Rd, Kilimani — P.O. Box 24646-00100, Nairobi, Kenya', href: null },
   ]
 
-  const inputClass = 'w-full px-4 py-3.5 bg-white border border-[#E3DCCD] rounded-xl text-sm text-[#1C1A17] placeholder-[#B0A99E] focus:outline-none focus:border-[#C4962A]'
+  const inputClass = 'w-full px-4 py-3.5 bg-white border border-[#E3DCCD] rounded-xl text-sm text-[#1C1A17] placeholder-[#B0A99E] focus:outline-none focus:border-[#E75A08]'
 
   return (
     <div className="min-h-screen bg-[#FAF7F1] text-[#1C1A17] overflow-x-hidden font-sans">
       <Navbar />
 
       <PageHero
-        eyebrow="Contact Us"
         image="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1500&q=70"
         subtitle="Tell us where you want to go, how you like to travel, and what matters most. We will help shape the right itinerary."
       >
@@ -92,7 +97,7 @@ export default function Contact() {
             {contactItems.map((item) => {
               const content = (
                 <div className="flex items-center gap-4 bg-white rounded-2xl p-5 transition" style={{ border: '0.5px solid #E3DCCD' }}>
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: '#FAF3E4', color: '#B07E1C', border: '0.5px solid #EBD9B0' }}>
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: '#FFF4ED', color: '#C2470A', border: '0.5px solid #FFD9B3' }}>
                     <ContactIcon type={item.icon} />
                   </div>
                   <div>
@@ -111,10 +116,10 @@ export default function Contact() {
               )
             })}
 
-            <div className="rounded-2xl p-7 text-white" style={{ background: '#382C1C' }}>
-              <p className="text-[11px] uppercase tracking-[1.5px] text-white/40 font-medium mb-3">Response time</p>
-              <h2 style={{ ...serif, fontWeight: 700, fontSize: '30px', color: '#EDB84A' }}>Within 24 hours</h2>
-              <p className="text-white/55 text-sm leading-relaxed mt-3">
+            <div className="rounded-2xl p-7 text-white" style={{ background: '#E75A08' }}>
+              <p className="text-[11px] uppercase tracking-[1.5px] text-white/70 font-medium mb-3">Response time</p>
+              <h2 style={{ ...serif, fontWeight: 700, fontSize: '30px', color: '#fff' }}>Within 24 hours</h2>
+              <p className="text-white/85 text-sm leading-relaxed mt-3">
                 For urgent departures, call us directly so we can check availability and guide options immediately.
               </p>
             </div>

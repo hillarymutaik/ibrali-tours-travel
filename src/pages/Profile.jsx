@@ -1,16 +1,17 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { isValidEmail, isValidPhone } from '../utils/helpers'
 import authService from '../services/authService'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import useSeo from '../hooks/useSeo'
 
-const gold = '#C4962A'
+const gold = '#E75A08'
 
 /* Compact inline icon set */
 function Icon({ name }) {
-  const common = { width: 17, height: 17, viewBox: '0 0 24 24', fill: 'none', stroke: '#B07E1C', strokeWidth: 1.6, strokeLinecap: 'round', strokeLinejoin: 'round' }
+  const common = { width: 17, height: 17, viewBox: '0 0 24 24', fill: 'none', stroke: '#C2470A', strokeWidth: 1.6, strokeLinecap: 'round', strokeLinejoin: 'round' }
   const paths = {
     user: <><circle cx="12" cy="8" r="4" /><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1" /></>,
     mail: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></>,
@@ -59,7 +60,7 @@ function ChangePasswordCard() {
   return (
     <div className="md:col-span-3 bg-white rounded-2xl overflow-hidden" style={{ border: '0.5px solid #E3DCCD' }}>
       <div className="px-7 py-5 border-b border-[#F0EDE8] flex items-center gap-3">
-        <span className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: '#FAF3E4', border: '0.5px solid #EBD9B0' }}>
+        <span className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3' }}>
           <Icon name="lock" />
         </span>
         <div>
@@ -93,8 +94,16 @@ function ChangePasswordCard() {
 }
 
 export default function Profile() {
+  useSeo({ title: 'Your Profile', description: 'Sign in to manage your Ibrali Tours & Travel account and bookings.' })
+
   const navigate = useNavigate()
+  const location = useLocation()
   const { user, login, register, logout } = useAuth()
+  const redirectAfterAuth = () => {
+    const from = location.state?.from || '/'
+    const packageId = location.state?.packageId
+    navigate(from, packageId ? { state: { packageId } } : undefined)
+  }
   const [mode, setMode] = useState('login') // login | register | forgot | reset
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -129,7 +138,7 @@ export default function Profile() {
         if (!formData.email || !formData.password) { setError('Email and password are required'); return }
         if (!isValidEmail(formData.email)) { setError('Invalid email format'); return }
         await login(formData.email, formData.password)
-        navigate('/')
+        redirectAfterAuth()
       } else if (mode === 'register') {
         if (!formData.name || !formData.email || !formData.password || !formData.phone) {
           setError('All fields are required'); return
@@ -137,7 +146,7 @@ export default function Profile() {
         if (!isValidEmail(formData.email)) { setError('Invalid email format'); return }
         if (!isValidPhone(formData.phone)) { setError('Invalid phone number'); return }
         await register(formData)
-        navigate('/')
+        redirectAfterAuth()
       } else if (mode === 'forgot') {
         if (!isValidEmail(formData.email)) { setError('Enter the email you registered with'); return }
         const data = await authService.forgotPassword(formData.email)
@@ -175,7 +184,7 @@ export default function Profile() {
           <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(56,44,28,0.25), rgba(56,44,28,0.92))' }} />
           <div className="relative max-w-7xl mx-auto flex items-end gap-6">
             <div className="heading w-20 h-20 rounded-2xl flex items-center justify-center flex-shrink-0"
-              style={{ background: gold, color: '#382C1C', fontSize: '38px' }}>
+              style={{ background: gold, color: '#fff', fontSize: '38px' }}>
               {user.name?.charAt(0)?.toUpperCase()}
             </div>
             <div>
@@ -201,7 +210,7 @@ export default function Profile() {
                 { label: 'Phone number', value: user.phone || '—', icon: 'phone' },
               ].map(({ label, value, icon }) => (
                 <div key={label} className="flex items-start gap-4">
-                  <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: '#FAF3E4', border: '0.5px solid #EBD9B0' }}>
+                  <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3' }}>
                     <Icon name={icon} />
                   </div>
                   <div>
@@ -228,7 +237,7 @@ export default function Profile() {
                   <span className="flex items-center gap-2.5">
                     <ActionIcon name={icon} /> {label}
                   </span>
-                  <span style={{ color: '#EDB84A' }} className="group-hover:translate-x-0.5 transition-transform">→</span>
+                  <span style={{ color: '#F2843A' }} className="group-hover:translate-x-0.5 transition-transform">→</span>
                 </Link>
               ))}
             </div>
@@ -268,11 +277,10 @@ export default function Profile() {
         {/* Left — branding panel */}
         <div
           className="hidden lg:flex flex-col justify-end p-14 relative overflow-hidden bg-cover bg-center"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1547970827-f33b90fde688?w=900&q=80')" }}
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1516426122078-c23e76319801?w=900&q=80')" }}
         >
           <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(56,44,28,0.92), rgba(56,44,28,0.3) 60%, transparent)' }} />
           <div className="relative z-10">
-            <div className="eyebrow eyebrow-light mb-5">Safaris · Flights · Beach Escapes</div>
             <h2 className="heading text-white mb-4" style={{ fontSize: 'clamp(36px, 4vw, 52px)' }}>
               Every journey<br />begins with<br /><span className="heading-accent">a first step.</span>
             </h2>
@@ -360,7 +368,7 @@ export default function Profile() {
 
                   {mode === 'login' && (
                     <div className="text-right">
-                      <button type="button" onClick={() => switchMode('forgot')} className="text-xs font-medium text-[#6B6560] hover:text-[#B07E1C] transition-colors">
+                      <button type="button" onClick={() => switchMode('forgot')} className="text-xs font-medium text-[#6B6560] hover:text-[#C2470A] transition-colors">
                         Forgot password?
                       </button>
                     </div>
@@ -383,16 +391,16 @@ export default function Profile() {
                 <p className="text-center text-xs text-[#9C9890] mt-5">
                   {mode === 'login' && (
                     <>Don't have an account?{' '}
-                      <button onClick={() => switchMode('register')} className="text-[#1C1A17] font-medium hover:text-[#B07E1C] transition-colors">Sign up</button>
+                      <button onClick={() => switchMode('register')} className="text-[#1C1A17] font-medium hover:text-[#C2470A] transition-colors">Sign up</button>
                     </>
                   )}
                   {mode === 'register' && (
                     <>Already have an account?{' '}
-                      <button onClick={() => switchMode('login')} className="text-[#1C1A17] font-medium hover:text-[#B07E1C] transition-colors">Sign in</button>
+                      <button onClick={() => switchMode('login')} className="text-[#1C1A17] font-medium hover:text-[#C2470A] transition-colors">Sign in</button>
                     </>
                   )}
                   {(mode === 'forgot' || mode === 'reset') && (
-                    <button onClick={() => switchMode('login')} className="text-[#1C1A17] font-medium hover:text-[#B07E1C] transition-colors">← Back to sign in</button>
+                    <button onClick={() => switchMode('login')} className="text-[#1C1A17] font-medium hover:text-[#C2470A] transition-colors">← Back to sign in</button>
                   )}
                 </p>
               </div>

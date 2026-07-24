@@ -1,9 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { Compass } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import useSeo from '../hooks/useSeo'
 
 export default function NotFound() {
+  useSeo({ title: 'Page Not Found', description: 'The page you are looking for might have moved, been deleted, or never existed.' })
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF7F1] font-sans">
       <Navbar />
@@ -19,10 +22,10 @@ export default function NotFound() {
           {/* Icon + message overlaid */}
           <div className="-mt-10 relative z-10">
             <div
-              className="inline-flex w-16 h-16 rounded-2xl items-center justify-center text-3xl mb-6 shadow-lg shadow-[#EBD9B0]/60"
+              className="inline-flex w-16 h-16 rounded-2xl items-center justify-center mb-6 shadow-lg shadow-[#FFD9B3]/60 text-white"
               style={{ background: 'var(--color-gold)' }}
             >
-              🧭
+              <Compass size={28} strokeWidth={1.8} />
             </div>
 
             <h1 className="heading text-4xl text-[#1C1A17] mb-3">

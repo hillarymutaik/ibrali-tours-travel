@@ -4,10 +4,16 @@ import Navbar from "../components/Navbar"
 import PackageCard from "../components/PackageCard"
 import Footer from "../components/Footer"
 import PageHero from "../components/PageHero"
+import useSeo from "../hooks/useSeo"
 
-const gold = '#C4962A'
+const gold = '#E75A08'
 
 export default function Packages() {
+  useSeo({
+    title: 'Travel Packages',
+    description: 'Browse curated safari, beach, and cultural travel experiences across Kenya, DR Congo, Dubai, and the rest of the world with Ibrali Tours & Travel.',
+  })
+
   const [packages, setPackages] = useState(TOUR_PACKAGES)
   const [filters, setFilters] = useState({
     category: "all",
@@ -49,7 +55,7 @@ export default function Packages() {
 
   const difficultyColour = {
     Easy: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    Medium: "bg-[#FAF3E4] text-[#B07E1C] border-[#EBD9B0]",
+    Medium: "bg-[#FFF4ED] text-[#C2470A] border-[#FFD9B3]",
     Hard: "bg-red-50 text-red-700 border-red-200",
   }
 
@@ -64,9 +70,8 @@ export default function Packages() {
 
       {/* ── HERO HEADER ───────────────────────────────────── */}
       <PageHero
-        eyebrow="Kenya Safari Packages"
         image="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1400&q=60"
-        subtitle={`${TOUR_PACKAGES.length} curated experiences across Kenya's most extraordinary landscapes.`}
+        subtitle={`${TOUR_PACKAGES.length} curated experiences across Kenya, DR Congo, Dubai, and the rest of the world.`}
       >
         Find your<br />
         <span className="heading-accent">adventure</span>
@@ -104,7 +109,7 @@ export default function Packages() {
               </svg>
               Filters
               {activeFilterCount > 0 && (
-                <span className="w-5 h-5 rounded-full text-xs font-medium flex items-center justify-center" style={{ background: gold, color: '#382C1C' }}>
+                <span className="w-5 h-5 rounded-full text-xs font-medium flex items-center justify-center" style={{ background: gold, color: '#fff' }}>
                   {activeFilterCount}
                 </span>
               )}
@@ -158,7 +163,7 @@ export default function Packages() {
               {/* Price range */}
               <div className="lg:col-span-2">
                 <label className="block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2">
-                  Price range — <span className="text-[#1C1A17] font-medium" style={{ color: '#B07E1C' }}>${filters.minPrice.toLocaleString()} – ${filters.maxPrice.toLocaleString()}</span>
+                  Price range — <span className="text-[#1C1A17] font-medium" style={{ color: '#C2470A' }}>${filters.minPrice.toLocaleString()} – ${filters.maxPrice.toLocaleString()}</span>
                 </label>
                 <div className="flex gap-4 items-center">
                   <div className="flex-1">
@@ -200,8 +205,8 @@ export default function Packages() {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-28 text-center">
-            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6" style={{ background: '#FAF3E4', border: '0.5px solid #EBD9B0' }}>
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#B07E1C" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6" style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3' }}>
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C2470A" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /><line x1="11" y1="8" x2="11" y2="14" /><line x1="8" y1="11" x2="14" y2="11" />
               </svg>
             </div>
