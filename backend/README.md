@@ -35,6 +35,28 @@ subscribers and user roles.
 
    …or open phpMyAdmin → Import → choose `backend/database/ibrali.sql`.
 
+3b. **Install PHP dependencies** (PHPMailer, used for admin email
+   notifications):
+
+   ```
+   cd backend && composer install
+   ```
+
+3c. **(Optional) Turn on admin email notifications.** New bookings,
+   contact messages, and newsletter signups always save to the
+   database — this step only adds an emailed copy to
+   `mutaihillary01@gmail.com`. Fill in the `smtp` block in
+   `config.local.php` with a Gmail App Password:
+
+   1. Turn on 2-Step Verification: <https://myaccount.google.com/security>
+   2. Create an App Password: <https://myaccount.google.com/apppasswords>
+      (app: "Mail") — Google gives you a 16-character code.
+   3. Set `smtp.user`/`smtp.from_email` to that Gmail address and
+      `smtp.pass` to the app password (not the normal account password).
+
+   Leave `smtp.host` blank to keep notifications off — nothing else is
+   affected.
+
 4. **Expose the API through Apache.** Either copy `backend/api` to
    `C:\xampp\htdocs\ibrali-api`, or (better — stays in sync with the repo)
    create a junction:

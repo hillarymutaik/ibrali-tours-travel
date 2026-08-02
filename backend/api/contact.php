@@ -28,4 +28,17 @@ $stmt = db()->prepare(
 );
 $stmt->execute([$name, $email, $phone, $message]);
 
+notifyAdmin(
+    'New contact message from ' . $name,
+    '<h2 style="font-family:sans-serif">New contact message</h2>'
+        . '<table style="font-family:sans-serif;font-size:14px">'
+        . notifyRow('Name', $name)
+        . notifyRow('Email', $email)
+        . notifyRow('Phone', $phone ?: '—')
+        . notifyRow('Message', $message)
+        . '</table>',
+    $email,
+    $name
+);
+
 ok(['received' => true], 201);

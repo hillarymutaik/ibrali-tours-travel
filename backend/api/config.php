@@ -129,3 +129,6 @@ function issueToken(int $userId): string
     $stmt->execute([$userId, hash('sha256', $raw)]);
     return $raw;
 }
+
+/* ── Email notifications (bookings, contact, newsletter) ────────────── */
+require __DIR__ . '/mailer.php';

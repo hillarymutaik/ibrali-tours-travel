@@ -111,7 +111,27 @@ if ($method === 'POST') {
 
     $fetch = db()->prepare(BOOKING_SELECT . ' WHERE b.booking_ref = ?');
     $fetch->execute([$ref]);
-    ok(mapBooking($fetch->fetch()), 201);
+    $booking = $fetch->fetch();
+
+    notifyAdmin(
+        'New booking: ' . $booking['package_title'] . ' (' . $ref . ')',
+        '<h2 style="font-family:sans-serif">New booking received</h2>'
+            . '<table style="font-family:sans-serif;font-size:14px">'
+            . notifyRow('Reference', $ref)
+            . notifyRow('Package', $booking['package_title'])
+            . notifyRow('Name', $fullName)
+            . notifyRow('Email', $email)
+            . notifyRow('Phone', $phone)
+            . notifyRow('Travelers', (string)$travelers)
+            . notifyRow('Start date', $startDate)
+            . notifyRow('Total price', number_format((float)$booking['total_price'], 2))
+            . ($requests !== '' ? notifyRow('Special requests', $requests) : '')
+            . '</table>',
+        $email,
+        $fullName
+    );
+
+    ok(mapBooking($booking), 201);
 }
 
 fail('Method not allowed', 405);
