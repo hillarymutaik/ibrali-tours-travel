@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, Pause, Play, Search } from 'lucide-react'
-import { TOUR_PACKAGES, API_URL } from '../utils/constants'
+import { TOUR_PACKAGES, API_URL, TRIP_LENGTHS, GROUP_SIZES } from '../utils/constants'
 import { useLanguage } from '../hooks/useLanguage'
 import Navbar from '../components/Navbar'
 import PackageCard from '../components/PackageCard'
@@ -100,7 +100,7 @@ export default function Home() {
   })
   const [activeTab, setActiveTab]     = useState('all')
   const [statsVisible, setStatsVisible] = useState(false)
-  const [heroSearch, setHeroSearch]   = useState({ destination: '', duration: '', guests: '2' })
+  const [heroSearch, setHeroSearch]   = useState({ destination: '', duration: '', guests: '' })
   const [newsletterEmail, setNewsletterEmail] = useState('')
   const [newsletterState, setNewsletterState] = useState('idle') // idle | sending | done | error
   const statsRef = useRef(null)
@@ -192,12 +192,13 @@ export default function Home() {
   })()
 
   const categories = [
-    { label: t('home.cat.wildlife'), img: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=500&h=700&fit=crop', count: t('home.cat.wildlifeCount') },
-    { label: t('home.cat.air'), img: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=500&h=700&fit=crop', count: t('home.cat.airCount') },
-    { label: t('home.cat.beach'), img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&h=700&fit=crop', count: t('home.cat.beachCount') },
-    { label: t('home.cat.mountain'), img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=700&fit=crop', count: t('home.cat.mountainCount') },
-    { label: t('home.cat.cultural'), img: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=500&h=700&fit=crop', count: t('home.cat.culturalCount') },
-    { label: t('home.cat.luxury'), img: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=500&h=700&fit=crop', count: t('home.cat.luxuryCount') },
+    // `state` pre-filters the packages page; Air Travel is a service, not a package, so it goes to Contact
+    { label: t('home.cat.wildlife'), img: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=500&h=700&fit=crop', count: t('home.cat.wildlifeCount'), state: { category: 'safari' } },
+    { label: t('home.cat.air'), img: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=500&h=700&fit=crop', count: t('home.cat.airCount'), to: '/contact' },
+    { label: t('home.cat.beach'), img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&h=700&fit=crop', count: t('home.cat.beachCount'), state: { category: 'beach' } },
+    { label: t('home.cat.mountain'), img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=700&fit=crop', count: t('home.cat.mountainCount'), state: { category: 'trekking' } },
+    { label: t('home.cat.cultural'), img: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=500&h=700&fit=crop', count: t('home.cat.culturalCount'), state: { category: 'cultural' } },
+    { label: t('home.cat.luxury'), img: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=500&h=700&fit=crop', count: t('home.cat.luxuryCount'), state: { search: 'Luxury' } },
   ]
 
   // Destination names are proper nouns and stay as-is; tags and counts are translated
@@ -357,7 +358,8 @@ export default function Home() {
                 </Link>
               </div>
 
-              <div className="flex flex-wrap gap-10 mt-16 pt-8 border-t border-white/12">
+              {/* Hidden on phones: the same figures appear in the stats section, and the hero is crowded there */}
+              <div className="hidden sm:flex flex-wrap gap-10 mt-16 pt-8 border-t border-white/12">
                 {[
                   { value: '500+', label: t('home.hero.stat.safaris') },
                   { value: '98%',  label: t('home.hero.stat.satisfaction') },
@@ -440,11 +442,9 @@ export default function Home() {
                   onChange={e => setHeroSearch(s => ({ ...s, duration: e.target.value }))}
                 >
                   <option value="">{t('home.search.anyLength')}</option>
-                  <option>{t('home.search.d1')}</option>
-                  <option>{t('home.search.d2')}</option>
-                  <option>{t('home.search.d3')}</option>
-                  <option>{t('home.search.d4')}</option>
-                  <option>{t('home.search.d5')}</option>
+                  {TRIP_LENGTHS.map((l) => (
+                    <option key={l.value} value={l.value}>{t(l.labelKey)}</option>
+                  ))}
                 </SelectField>
 
                 <SelectField
@@ -452,15 +452,18 @@ export default function Home() {
                   value={heroSearch.guests}
                   onChange={e => setHeroSearch(s => ({ ...s, guests: e.target.value }))}
                 >
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3–4</option>
-                  <option>5–8</option>
-                  <option>8+</option>
+                  <option value="">{t('home.search.anyGroup')}</option>
+                  {GROUP_SIZES.map((g) => (
+                    <option key={g.value} value={g.value}>{g.label}</option>
+                  ))}
                 </SelectField>
 
                 {/* Carry the chosen destination into the packages page as its search */}
-                <Link to="/packages" state={{ search: heroSearch.destination }} className="btn btn-gold py-3 text-sm">
+                <Link
+                  to="/packages"
+                  state={{ search: heroSearch.destination, duration: heroSearch.duration, groupSize: heroSearch.guests }}
+                  className="btn btn-gold py-3 text-sm"
+                >
                   <Search size={15} strokeWidth={2} /> {t('home.search.submit')}
                 </Link>
               </div>
@@ -542,7 +545,8 @@ export default function Home() {
               {categories.map((cat, i) => (
                 <Link
                   key={i}
-                  to="/packages"
+                  to={cat.to || '/packages'}
+                  state={cat.state}
                   className="group relative overflow-hidden rounded-2xl"
                   style={{ aspectRatio: '3/4' }}
                 >
@@ -716,6 +720,7 @@ export default function Home() {
                 <Link
                   key={i}
                   to="/packages"
+                  state={{ search: dest.name }}
                   className={`group relative overflow-hidden rounded-2xl ${dest.span}`}
                   style={{ minHeight: dest.tall ? '320px' : '200px' }}
                 >

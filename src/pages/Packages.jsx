@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useLocation } from "react-router-dom"
-import { TOUR_PACKAGES } from "../utils/constants"
+import { TOUR_PACKAGES, TRIP_LENGTHS, GROUP_SIZES } from "../utils/constants"
 import { useLanguage } from "../hooks/useLanguage"
 import Navbar from "../components/Navbar"
 import PackageCard from "../components/PackageCard"
@@ -18,45 +18,58 @@ export default function Packages() {
     description: t('packages.seoDesc'),
   })
 
+  const maxPriceValue = Math.max(...TOUR_PACKAGES.map(p => p.price))
+
+  // Filters can arrive from the home page (hero search, category and destination cards)
+  const incoming = location.state || {}
   const [packages, setPackages] = useState(TOUR_PACKAGES)
   const [filters, setFilters] = useState({
-    category: "all",
+    category: incoming.category || "all",
     difficulty: "all",
+    duration: incoming.duration || "all",
+    groupSize: incoming.groupSize || "all",
     minPrice: 0,
-    maxPrice: Math.max(...TOUR_PACKAGES.map(p => p.price)),
-    // Pre-filled when arriving from the home page search (see Home's hero search)
-    search: location.state?.search || "",
+    maxPrice: maxPriceValue,
+    search: incoming.search || "",
   })
-  const [filtersOpen, setFiltersOpen] = useState(false)
+  // Show the filter panel when filters were applied for the visitor, so they can see why results are narrowed
+  const [filtersOpen, setFiltersOpen] = useState(Boolean(incoming.category || incoming.duration || incoming.groupSize))
 
-  const maxPriceValue = Math.max(...TOUR_PACKAGES.map(p => p.price))
   const categories = ["all", ...new Set(TOUR_PACKAGES.map(p => p.category))]
   const difficulties = ["all", "Easy", "Medium", "Hard"]
 
   const activeFilterCount = [
     filters.category !== "all",
     filters.difficulty !== "all",
+    filters.duration !== "all",
+    filters.groupSize !== "all",
     filters.minPrice > 0,
     filters.maxPrice < maxPriceValue,
     filters.search !== "",
   ].filter(Boolean).length
 
   useEffect(() => {
+    const query = filters.search.toLowerCase()
+    const length = TRIP_LENGTHS.find(l => l.value === filters.duration)
+    const group = GROUP_SIZES.find(g => g.value === filters.groupSize)
     const filtered = TOUR_PACKAGES.filter(pkg => {
       const matchCategory = filters.category === "all" || pkg.category === filters.category
       const matchDifficulty = filters.difficulty === "all" || pkg.difficulty === filters.difficulty
+      const matchDuration = !length || (pkg.duration >= length.min && pkg.duration <= length.max)
+      const matchGroup = !group || pkg.maxTravelers >= group.min
       const matchPrice = pkg.price >= filters.minPrice && pkg.price <= filters.maxPrice
+      // Match the English data and the visitor's language, so "Plage" finds beach trips in French
       const matchSearch =
-        filters.search === "" ||
-        pkg.title.toLowerCase().includes(filters.search.toLowerCase()) ||
-        pkg.destination.toLowerCase().includes(filters.search.toLowerCase())
-      return matchCategory && matchDifficulty && matchPrice && matchSearch
+        query === "" ||
+        [pkg.title, pkg.destination, t(`pkg.${pkg.id}.title`, pkg.title), t(`pkg.${pkg.id}.destination`, pkg.destination)]
+          .some(text => text.toLowerCase().includes(query))
+      return matchCategory && matchDifficulty && matchDuration && matchGroup && matchPrice && matchSearch
     })
     setPackages(filtered)
-  }, [filters])
+  }, [filters, t])
 
   const clearFilters = () =>
-    setFilters({ category: "all", difficulty: "all", minPrice: 0, maxPrice: maxPriceValue, search: "" })
+    setFilters({ category: "all", difficulty: "all", duration: "all", groupSize: "all", minPrice: 0, maxPrice: maxPriceValue, search: "" })
 
   const difficultyColour = {
     Easy: "bg-emerald-50 text-emerald-700 border-emerald-200",
@@ -160,6 +173,32 @@ export default function Packages() {
                           : "bg-white text-[#6B6560] border-[#E3DCCD] hover:border-[#382C1C]"
                         }`}>
                       {d === "all" ? t('packages.allLevels') : t(`common.difficulty.${d}`, d)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Duration */}
+              <div>
+                <label className="block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2">{t('packages.duration')}</label>
+                <div className="flex flex-wrap gap-2">
+                  {[{ value: "all", label: t('packages.all') }, ...TRIP_LENGTHS.map(l => ({ value: l.value, label: t(l.labelKey) }))].map(o => (
+                    <button key={o.value} onClick={() => setFilters({ ...filters, duration: o.value })}
+                      className={`px-3 py-1.5 rounded-full text-xs font-medium border transition ${pill(filters.duration === o.value)}`}>
+                      {o.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Group size */}
+              <div>
+                <label className="block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2">{t('packages.groupSize')}</label>
+                <div className="flex flex-wrap gap-2">
+                  {[{ value: "all", label: t('packages.all') }, ...GROUP_SIZES].map(o => (
+                    <button key={o.value} onClick={() => setFilters({ ...filters, groupSize: o.value })}
+                      className={`px-3 py-1.5 rounded-full text-xs font-medium border transition ${pill(filters.groupSize === o.value)}`}>
+                      {o.label}
                     </button>
                   ))}
                 </div>

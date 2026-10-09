@@ -421,6 +421,24 @@ export const BLOG_POSTS = [
   },
 ]
 
+// Trip-length and group-size choices, shared by the home hero search and the
+// packages page filters (the home search passes these values to /packages)
+export const TRIP_LENGTHS = [
+  { value: '2-3', min: 2, max: 3, labelKey: 'home.search.d1' },
+  { value: '4-5', min: 4, max: 5, labelKey: 'home.search.d2' },
+  { value: '6-7', min: 6, max: 7, labelKey: 'home.search.d3' },
+  { value: '8-10', min: 8, max: 10, labelKey: 'home.search.d4' },
+  { value: '10+', min: 10, max: Infinity, labelKey: 'home.search.d5' },
+]
+
+export const GROUP_SIZES = [
+  { value: '1', min: 1, label: '1' },
+  { value: '2', min: 2, label: '2' },
+  { value: '3-4', min: 3, label: '3–4' },
+  { value: '5-8', min: 5, label: '5–8' },
+  { value: '8+', min: 8, label: '8+' },
+]
+
 // Booking statuses
 export const BOOKING_STATUS = {
   PENDING: 'pending',
