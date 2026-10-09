@@ -85,9 +85,7 @@ export default {
     'careers.openTitle1': 'Current',
     'careers.openTitle2': 'openings',
     'careers.noneTitle': 'No open positions at the moment',
-    'careers.noneDesc': 'We don\'t have any vacancies right now, but we\'re always glad to hear from talented, passionate people. Send us your CV and we\'ll keep it on file for future opportunities.',
-    'careers.apply': 'Send an open application',
-    'careers.getInTouch': 'Get in touch',
+    'careers.noneDesc': 'We don\'t have any vacancies right now, but we\'re always growing and new roles open up from time to time.',
     'careers.notice': 'New roles are posted on this page — check back soon.',
 
     'contact.seoTitle': 'Contact Us',
@@ -206,9 +204,7 @@ export default {
     'careers.openTitle1': 'Offres',
     'careers.openTitle2': 'actuelles',
     'careers.noneTitle': 'Aucun poste ouvert pour le moment',
-    'careers.noneDesc': 'Nous n’avons aucun poste vacant actuellement, mais nous sommes toujours ravis de rencontrer des personnes talentueuses et passionnées. Envoyez-nous votre CV : nous le conserverons pour de futures opportunités.',
-    'careers.apply': 'Envoyer une candidature spontanée',
-    'careers.getInTouch': 'Nous contacter',
+    'careers.noneDesc': 'Nous n’avons aucun poste vacant pour le moment, mais nous sommes en pleine croissance et de nouveaux postes s’ouvrent régulièrement.',
     'careers.notice': 'Les nouveaux postes sont publiés sur cette page — revenez bientôt.',
 
     'contact.seoTitle': 'Contactez-nous',
@@ -327,9 +323,7 @@ export default {
     'careers.openTitle1': 'الفرص',
     'careers.openTitle2': 'الحالية',
     'careers.noneTitle': 'لا توجد وظائف شاغرة حالياً',
-    'careers.noneDesc': 'لا توجد لدينا وظائف شاغرة في الوقت الحالي، لكننا دائماً سعداء بالتعرف على أشخاص موهوبين وشغوفين. أرسل لنا سيرتك الذاتية وسنحتفظ بها لفرص مستقبلية.',
-    'careers.apply': 'إرسال طلب توظيف عام',
-    'careers.getInTouch': 'تواصل معنا',
+    'careers.noneDesc': 'لا توجد لدينا وظائف شاغرة في الوقت الحالي، لكننا ننمو باستمرار وتُفتح وظائف جديدة من حين لآخر.',
     'careers.notice': 'تُنشر الوظائف الجديدة في هذه الصفحة — تفقدها قريباً.',
 
     'contact.seoTitle': 'اتصل بنا',

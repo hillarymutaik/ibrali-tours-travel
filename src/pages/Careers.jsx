@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import PageHero from '../components/PageHero'
@@ -72,9 +71,6 @@ export default function Careers() {
     { icon: 'heart', title: t('careers.p3.title'), text: t('careers.p3.text') },
   ]
 
-  const applyHref =
-    'mailto:info@ibralitravels.com?subject=Open%20Application%20%E2%80%94%20Careers%20at%20Ibrali%20Tours%20%26%20Travel'
-
   return (
     <div className="min-h-screen bg-[#FAF7F1] text-[#1C1A17] overflow-x-hidden font-sans">
       <Navbar />
@@ -138,15 +134,6 @@ export default function Careers() {
             <p className="text-[#7A7268] text-sm leading-relaxed max-w-md mx-auto">
               {t('careers.noneDesc')}
             </p>
-
-            <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
-              <a href={applyHref} className="btn btn-gold px-7 py-3.5">
-                <Icon name="mail" size={17} /> {t('careers.apply')}
-              </a>
-              <Link to="/contact" className="btn btn-light px-7 py-3.5">
-                {t('careers.getInTouch')}
-              </Link>
-            </div>
           </div>
 
           {/* Stay-in-touch note */}
