@@ -1,12 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Compass } from 'lucide-react'
+import { useLanguage } from '../hooks/useLanguage'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import useSeo from '../hooks/useSeo'
 
 export default function NotFound() {
-  useSeo({ title: 'Page Not Found', description: 'The page you are looking for might have moved, been deleted, or never existed.' })
+  const { t } = useLanguage()
+  useSeo({ title: t('notfound.seoTitle'), description: t('notfound.seoDesc') })
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF7F1] font-sans">
       <Navbar />
@@ -29,19 +31,18 @@ export default function NotFound() {
             </div>
 
             <h1 className="heading text-4xl text-[#1C1A17] mb-3">
-              Page not <span className="heading-accent">found</span>
+              {t('notfound.title1')} <span className="heading-accent">{t('notfound.title2')}</span>
             </h1>
             <p className="text-[#6B6560] text-sm leading-relaxed mb-8 max-w-sm mx-auto">
-              The page you're looking for might have moved, been deleted, or never existed.
-              Let's get you back to exploring amazing destinations.
+              {t('notfound.desc')}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link to="/" className="btn btn-dark px-8 py-3.5">
-                ← Go Home
+                {t('notfound.home')}
               </Link>
               <Link to="/packages" className="btn btn-light px-8 py-3.5">
-                Explore Trips
+                {t('notfound.explore')}
               </Link>
             </div>
           </div>

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
+import { useLanguage } from "../hooks/useLanguage";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,6 +12,7 @@ export default function Navbar() {
   const [mobileAboutOpen, setMobileAboutOpen] = useState(false);
 
   const { user } = useAuth();
+  const { t } = useLanguage();
   const location = useLocation();
 
   // Routes that open with a dark hero get a transparent overlay navbar until
@@ -32,18 +35,18 @@ export default function Navbar() {
   useEffect(() => { setIsOpen(false); }, [location.pathname]);
 
   const aboutDropdown = [
-    { path: "/about", label: "Our Story" },
-    { path: "/founder", label: "Message From Founder" },
-    { path: "/careers", label: "Careers" },
+    { path: "/about", label: t("ourStory") },
+    { path: "/founder", label: t("messageFromFounder") },
+    { path: "/careers", label: t("careers") },
   ];
 
   const navItems = [
-    { path: "/", label: "Home" },
-    { label: "About Us", dropdown: aboutDropdown },
-    { path: "/packages", label: "Packages" },
-    { path: "/booking", label: "Book Safari" },
-    { path: "/blog", label: "Blog" },
-    { path: "/contact", label: "Contact Us" },
+    { path: "/", label: t("home") },
+    { label: t("aboutUs"), dropdown: aboutDropdown },
+    { path: "/packages", label: t("packages") },
+    { path: "/booking", label: t("bookSafari") },
+    { path: "/blog", label: t("blog") },
+    { path: "/contact", label: t("contactUs") },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -88,7 +91,7 @@ export default function Navbar() {
                 Ibrali Tours & Travel
               </h1>
               <p className={`text-[10px] tracking-[1.5px] uppercase mt-1 transition-colors duration-300 ${logoTagColor}`}>
-                Discover. Experience. Remember.
+                {t("tagline")}
               </p>
             </div>
           </Link>
@@ -168,7 +171,7 @@ export default function Navbar() {
                   to="/my-bookings"
                   className={`text-sm font-medium transition-colors duration-300 ${linkBase}`}
                 >
-                  My Trips
+                  {t("myTrips")}
                 </Link>
                 <Link
                   to="/profile"
@@ -194,25 +197,30 @@ export default function Navbar() {
                 onMouseEnter={(e) => (e.currentTarget.style.background = "#F2843A")}
                 onMouseLeave={(e) => (e.currentTarget.style.background = "#E75A08")}
               >
-                Book Now
+                {t("bookNow")}
               </Link>
             )}
+
+            <LanguageSwitcher isTransparent={isTransparent} />
           </div>
 
-          {/* Mobile Toggle */}
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className={`md:hidden p-2 rounded-lg transition-colors ${hamburgerColor}`}
-            aria-label="Toggle menu"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              {isOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
+          {/* Mobile Language + Toggle */}
+          <div className="md:hidden flex items-center gap-2">
+            <LanguageSwitcher isTransparent={isTransparent} />
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className={`p-2 rounded-lg transition-colors ${hamburgerColor}`}
+              aria-label={t("toggleMenu")}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {isOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -287,7 +295,7 @@ export default function Navbar() {
                     to="/my-bookings"
                     className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-[#4A4540] hover:bg-white/60 transition"
                   >
-                    My Trips
+                    {t("myTrips")}
                   </Link>
                   <Link
                     to="/profile"
@@ -309,7 +317,7 @@ export default function Navbar() {
                   className="block text-center px-4 py-3 rounded-xl text-sm font-medium"
                   style={{ background: "#E75A08", color: "#fff" }}
                 >
-                  Book Safari Now
+                  {t("bookSafariNow")}
                 </Link>
               )}
             </div>

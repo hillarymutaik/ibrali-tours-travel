@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
+import { useLanguage } from '../hooks/useLanguage'
 import { isValidEmail, isValidPhone } from '../utils/helpers'
 import authService from '../services/authService'
 import Navbar from '../components/Navbar'
@@ -36,16 +37,17 @@ const inputCls = "w-full px-4 py-3.5 bg-white border border-[#E3DCCD] rounded-xl
 
 /* ── Change password card (logged-in view) ─────────────────────────── */
 function ChangePasswordCard() {
+  const { t } = useLanguage()
   const [form, setForm] = useState({ current: '', next: '', confirm: '' })
   const [state, setState] = useState({ error: '', done: false, busy: false })
 
   const submit = async (e) => {
     e.preventDefault()
     if (form.next.length < 6) {
-      setState({ error: 'New password must be at least 6 characters', done: false, busy: false }); return
+      setState({ error: t('profile.pwMin'), done: false, busy: false }); return
     }
     if (form.next !== form.confirm) {
-      setState({ error: 'New passwords do not match', done: false, busy: false }); return
+      setState({ error: t('profile.pwMismatch'), done: false, busy: false }); return
     }
     setState({ error: '', done: false, busy: true })
     try {
@@ -53,7 +55,7 @@ function ChangePasswordCard() {
       setForm({ current: '', next: '', confirm: '' })
       setState({ error: '', done: true, busy: false })
     } catch (err) {
-      setState({ error: err.message, done: false, busy: false })
+      setState({ error: t(`common.msg.${err.message}`, err.message), done: false, busy: false })
     }
   }
 
@@ -64,28 +66,28 @@ function ChangePasswordCard() {
           <Icon name="lock" />
         </span>
         <div>
-          <h2 className="heading text-lg text-[#1C1A17]">Change password</h2>
-          <p className="text-xs text-[#9C9890]">Updating your password signs out your other devices.</p>
+          <h2 className="heading text-lg text-[#1C1A17]">{t('profile.changePw')}</h2>
+          <p className="text-xs text-[#9C9890]">{t('profile.changePwDesc')}</p>
         </div>
       </div>
       <form onSubmit={submit} className="px-7 py-6 grid sm:grid-cols-3 gap-4">
         <div>
-          <label className={labelCls}>Current password</label>
+          <label className={labelCls}>{t('profile.currentPw')}</label>
           <input type="password" value={form.current} onChange={e => setForm(f => ({ ...f, current: e.target.value }))} required placeholder="••••••••" className={inputCls} />
         </div>
         <div>
-          <label className={labelCls}>New password</label>
-          <input type="password" value={form.next} onChange={e => setForm(f => ({ ...f, next: e.target.value }))} required placeholder="Min. 6 characters" className={inputCls} />
+          <label className={labelCls}>{t('profile.newPw')}</label>
+          <input type="password" value={form.next} onChange={e => setForm(f => ({ ...f, next: e.target.value }))} required placeholder={t('profile.newPwPlaceholder')} className={inputCls} />
         </div>
         <div>
-          <label className={labelCls}>Confirm new password</label>
-          <input type="password" value={form.confirm} onChange={e => setForm(f => ({ ...f, confirm: e.target.value }))} required placeholder="Repeat new password" className={inputCls} />
+          <label className={labelCls}>{t('profile.confirmPw')}</label>
+          <input type="password" value={form.confirm} onChange={e => setForm(f => ({ ...f, confirm: e.target.value }))} required placeholder={t('profile.repeatPw')} className={inputCls} />
         </div>
         {state.error && <p className="sm:col-span-3 text-sm text-red-600">{state.error}</p>}
-        {state.done && <p className="sm:col-span-3 text-sm text-emerald-700">Password updated successfully.</p>}
+        {state.done && <p className="sm:col-span-3 text-sm text-emerald-700">{t('profile.pwUpdated')}</p>}
         <div className="sm:col-span-3">
           <button type="submit" disabled={state.busy} className="btn btn-gold px-8 py-3 !rounded-xl">
-            {state.busy ? 'Updating…' : 'Update password'}
+            {state.busy ? t('profile.updating') : t('profile.updatePw')}
           </button>
         </div>
       </form>
@@ -94,7 +96,8 @@ function ChangePasswordCard() {
 }
 
 export default function Profile() {
-  useSeo({ title: 'Your Profile', description: 'Sign in to manage your Ibrali Tours & Travel account and bookings.' })
+  const { t } = useLanguage()
+  useSeo({ title: t('profile.seoTitle'), description: t('profile.seoDesc') })
 
   const navigate = useNavigate()
   const location = useLocation()
@@ -135,36 +138,36 @@ export default function Profile() {
     setLoading(true)
     try {
       if (mode === 'login') {
-        if (!formData.email || !formData.password) { setError('Email and password are required'); return }
-        if (!isValidEmail(formData.email)) { setError('Invalid email format'); return }
+        if (!formData.email || !formData.password) { setError(t('profile.err.required')); return }
+        if (!isValidEmail(formData.email)) { setError(t('profile.err.emailFormat')); return }
         await login(formData.email, formData.password)
         redirectAfterAuth()
       } else if (mode === 'register') {
         if (!formData.name || !formData.email || !formData.password || !formData.phone) {
-          setError('All fields are required'); return
+          setError(t('profile.err.allRequired')); return
         }
-        if (!isValidEmail(formData.email)) { setError('Invalid email format'); return }
-        if (!isValidPhone(formData.phone)) { setError('Invalid phone number'); return }
+        if (!isValidEmail(formData.email)) { setError(t('profile.err.emailFormat')); return }
+        if (!isValidPhone(formData.phone)) { setError(t('profile.err.phone')); return }
         await register(formData)
         redirectAfterAuth()
       } else if (mode === 'forgot') {
-        if (!isValidEmail(formData.email)) { setError('Enter the email you registered with'); return }
+        if (!isValidEmail(formData.email)) { setError(t('profile.err.registeredEmail')); return }
         const data = await authService.forgotPassword(formData.email)
         setFormData(prev => ({ ...prev, code: data?.resetCode || '', password: '' }))
         setNotice(data?.resetCode
-          ? `Your reset code is ${data.resetCode} (valid 15 minutes). In production this would be emailed to you.`
-          : 'If that account exists, a reset code has been sent.')
+          ? t('profile.resetCodeNotice', null, { code: data.resetCode })
+          : t('profile.resetSent'))
         setMode('reset')
       } else if (mode === 'reset') {
-        if (!formData.code) { setError('Enter the reset code'); return }
-        if (formData.password.length < 6) { setError('New password must be at least 6 characters'); return }
+        if (!formData.code) { setError(t('profile.err.code')); return }
+        if (formData.password.length < 6) { setError(t('profile.pwMin')); return }
         await authService.resetPassword(formData.email, formData.code, formData.password)
-        setNotice('Password reset. Sign in with your new password.')
+        setNotice(t('profile.resetDone'))
         setFormData(prev => ({ ...prev, password: '', code: '' }))
         setMode('login')
       }
     } catch (err) {
-      setError(err.message)
+      setError(t(`common.msg.${err.message}`, err.message))
     } finally {
       setLoading(false)
     }
@@ -188,7 +191,7 @@ export default function Profile() {
               {user.name?.charAt(0)?.toUpperCase()}
             </div>
             <div>
-              <div className="eyebrow eyebrow-light mb-2">My Profile</div>
+              <div className="eyebrow eyebrow-light mb-2">{t('profile.myProfile')}</div>
               <h1 className="heading text-white" style={{ fontSize: 'clamp(34px, 5vw, 50px)' }}>{user.name}</h1>
               <p className="text-white/50 text-sm mt-1">{user.email}</p>
             </div>
@@ -201,13 +204,13 @@ export default function Profile() {
           {/* Info card */}
           <div className="md:col-span-2 bg-white rounded-2xl overflow-hidden" style={{ border: '0.5px solid #E3DCCD' }}>
             <div className="px-7 py-5 border-b border-[#F0EDE8]">
-              <h2 className="heading text-lg text-[#1C1A17]">Account information</h2>
+              <h2 className="heading text-lg text-[#1C1A17]">{t('profile.accountInfo')}</h2>
             </div>
             <div className="px-7 py-6 space-y-5">
               {[
-                { label: 'Full name', value: user.name, icon: 'user' },
-                { label: 'Email address', value: user.email, icon: 'mail' },
-                { label: 'Phone number', value: user.phone || '—', icon: 'phone' },
+                { label: t('profile.fullName'), value: user.name, icon: 'user' },
+                { label: t('profile.emailAddr'), value: user.email, icon: 'mail' },
+                { label: t('profile.phoneNum'), value: user.phone || '—', icon: 'phone' },
               ].map(({ label, value, icon }) => (
                 <div key={label} className="flex items-start gap-4">
                   <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3' }}>
@@ -225,11 +228,11 @@ export default function Profile() {
           {/* Quick actions */}
           <div className="space-y-4">
             <div className="rounded-2xl p-6 text-white" style={{ background: '#382C1C' }}>
-              <p className="text-white/40 text-[11px] font-medium uppercase tracking-[1.5px] mb-3">Quick actions</p>
+              <p className="text-white/40 text-[11px] font-medium uppercase tracking-[1.5px] mb-3">{t('profile.quick')}</p>
               {[
-                { to: '/my-bookings', label: 'My trips', icon: 'trips', border: true },
-                { to: '/packages', label: 'Browse packages', icon: 'globe', border: true },
-                { to: '/booking', label: 'Book a safari', icon: 'plane', border: false },
+                { to: '/my-bookings', label: t('profile.myTrips'), icon: 'trips', border: true },
+                { to: '/packages', label: t('profile.browse'), icon: 'globe', border: true },
+                { to: '/booking', label: t('profile.bookSafari'), icon: 'plane', border: false },
               ].map(({ to, label, icon, border }) => (
                 <Link key={to} to={to}
                   className={`flex items-center justify-between gap-3 w-full py-3 text-sm font-medium text-white/80 hover:text-white transition group ${border ? 'border-b border-white/10' : ''}`}
@@ -246,7 +249,7 @@ export default function Profile() {
               onClick={async () => { await logout(); navigate('/') }}
               className="w-full py-3.5 rounded-xl border border-red-200 text-red-600 text-sm font-medium hover:bg-red-50 transition-all duration-200"
             >
-              Sign out
+              {t('profile.signOut')}
             </button>
           </div>
 
@@ -262,10 +265,10 @@ export default function Profile() {
 
   /* ── AUTH VIEW ──────────────────────────────────────────── */
   const heading = {
-    login: ['Welcome back', 'Sign in to your account to continue'],
-    register: ['Join Ibrali Tours', 'Create your account in seconds'],
-    forgot: ['Reset your password', "Enter your account email and we'll issue a reset code"],
-    reset: ['Enter your reset code', 'Use the code to set a new password'],
+    login: [t('profile.welcomeBack'), t('profile.signInSub')],
+    register: [t('profile.joinTitle'), t('profile.joinSub')],
+    forgot: [t('profile.resetTitle'), t('profile.resetSub')],
+    reset: [t('profile.codeTitle'), t('profile.codeSub')],
   }[mode]
 
   return (
@@ -282,10 +285,10 @@ export default function Profile() {
           <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(56,44,28,0.92), rgba(56,44,28,0.3) 60%, transparent)' }} />
           <div className="relative z-10">
             <h2 className="heading text-white mb-4" style={{ fontSize: 'clamp(36px, 4vw, 52px)' }}>
-              Every journey<br />begins with<br /><span className="heading-accent">a first step.</span>
+              {t('profile.brand1')}<br />{t('profile.brand2')}<br /><span className="heading-accent">{t('profile.brand3')}</span>
             </h2>
             <p className="text-white/60 text-sm max-w-xs leading-relaxed">
-              Create an account to save your bookings, manage trips, and unlock member-exclusive experiences.
+              {t('profile.brandSub')}
             </p>
           </div>
         </div>
@@ -297,7 +300,7 @@ export default function Profile() {
             {/* Tab switcher */}
             {(mode === 'login' || mode === 'register') && (
               <div className="flex gap-1 p-1 bg-white rounded-xl mb-8 w-fit" style={{ border: '0.5px solid #E3DCCD' }}>
-                {[['login', 'Sign in'], ['register', 'Create account']].map(([m, label]) => (
+                {[['login', t('profile.tabSignIn')], ['register', t('common.createAccount')]].map(([m, label]) => (
                   <button
                     key={m}
                     onClick={() => switchMode(m)}
@@ -335,41 +338,41 @@ export default function Profile() {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   {mode === 'register' && (
                     <div>
-                      <label className={labelCls}>Full name</label>
+                      <label className={labelCls}>{t('profile.fullName')}</label>
                       <input type="text" name="name" value={formData.name} onChange={handleInputChange} placeholder="Jane Doe" className={inputCls} />
                     </div>
                   )}
 
                   <div>
-                    <label className={labelCls}>Email address</label>
+                    <label className={labelCls}>{t('profile.emailAddr')}</label>
                     <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="you@example.com" className={inputCls} readOnly={mode === 'reset'} />
                   </div>
 
                   {mode === 'register' && (
                     <div>
-                      <label className={labelCls}>Phone number</label>
+                      <label className={labelCls}>{t('profile.phoneNum')}</label>
                       <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="+254 786 000 100" className={inputCls} />
                     </div>
                   )}
 
                   {mode === 'reset' && (
                     <div>
-                      <label className={labelCls}>Reset code</label>
-                      <input type="text" name="code" value={formData.code} onChange={handleInputChange} placeholder="6-digit code" className={`${inputCls} font-mono tracking-[4px]`} maxLength={6} />
+                      <label className={labelCls}>{t('profile.resetCode')}</label>
+                      <input type="text" name="code" value={formData.code} onChange={handleInputChange} placeholder={t('profile.codePlaceholder')} className={`${inputCls} font-mono tracking-[4px]`} maxLength={6} />
                     </div>
                   )}
 
                   {mode !== 'forgot' && (
                     <div>
-                      <label className={labelCls}>{mode === 'reset' ? 'New password' : 'Password'}</label>
-                      <input type="password" name="password" value={formData.password} onChange={handleInputChange} placeholder={mode === 'reset' ? 'Min. 6 characters' : '••••••••'} className={inputCls} />
+                      <label className={labelCls}>{mode === 'reset' ? t('profile.newPw') : t('profile.password')}</label>
+                      <input type="password" name="password" value={formData.password} onChange={handleInputChange} placeholder={mode === 'reset' ? t('profile.newPwPlaceholder') : '••••••••'} className={inputCls} />
                     </div>
                   )}
 
                   {mode === 'login' && (
                     <div className="text-right">
                       <button type="button" onClick={() => switchMode('forgot')} className="text-xs font-medium text-[#6B6560] hover:text-[#C2470A] transition-colors">
-                        Forgot password?
+                        {t('profile.forgot')}
                       </button>
                     </div>
                   )}
@@ -379,28 +382,28 @@ export default function Profile() {
                     disabled={loading}
                     className="btn btn-gold w-full py-4 !rounded-xl tracking-wide"
                   >
-                    {loading ? 'Please wait…' : {
-                      login: 'Sign in →',
-                      register: 'Create account →',
-                      forgot: 'Send reset code →',
-                      reset: 'Set new password →',
-                    }[mode]}
+                    {loading ? t('profile.wait') : `${{
+                      login: t('profile.submitLogin'),
+                      register: t('profile.submitRegister'),
+                      forgot: t('profile.submitForgot'),
+                      reset: t('profile.submitReset'),
+                    }[mode]} →`}
                   </button>
                 </form>
 
                 <p className="text-center text-xs text-[#9C9890] mt-5">
                   {mode === 'login' && (
-                    <>Don't have an account?{' '}
-                      <button onClick={() => switchMode('register')} className="text-[#1C1A17] font-medium hover:text-[#C2470A] transition-colors">Sign up</button>
+                    <>{t('profile.noAccount')}{' '}
+                      <button onClick={() => switchMode('register')} className="text-[#1C1A17] font-medium hover:text-[#C2470A] transition-colors">{t('profile.signUp')}</button>
                     </>
                   )}
                   {mode === 'register' && (
-                    <>Already have an account?{' '}
-                      <button onClick={() => switchMode('login')} className="text-[#1C1A17] font-medium hover:text-[#C2470A] transition-colors">Sign in</button>
+                    <>{t('profile.haveAccount')}{' '}
+                      <button onClick={() => switchMode('login')} className="text-[#1C1A17] font-medium hover:text-[#C2470A] transition-colors">{t('profile.tabSignIn')}</button>
                     </>
                   )}
                   {(mode === 'forgot' || mode === 'reset') && (
-                    <button onClick={() => switchMode('login')} className="text-[#1C1A17] font-medium hover:text-[#C2470A] transition-colors">← Back to sign in</button>
+                    <button onClick={() => switchMode('login')} className="text-[#1C1A17] font-medium hover:text-[#C2470A] transition-colors">{t('profile.backToSignIn')}</button>
                   )}
                 </p>
               </div>

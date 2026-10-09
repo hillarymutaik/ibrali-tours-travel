@@ -131,7 +131,7 @@ npm run build
 npm run deploy
 ```
 
-Live URL: https://hillarymutaik.github.io/ibrali-tours
+Live URL: https://hillarymutaik.github.io/ibrali-tours-travel
 
 ---
 

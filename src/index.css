@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&display=swap');
 
 /* ── Brand theme — drawn from the Ibrali Tours logo (okapi orange + mahogany) ── */
 @theme {
@@ -34,6 +34,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #F7F4EE;
   color: #1C1A17;
+}
+
+/* Arabic text needs a font with Arabic glyphs (Inter/Playfair have none) */
+html:lang(ar) body {
+  font-family: 'Noto Sans Arabic', 'Inter', sans-serif;
+}
+
+/* Block text selection site-wide (copy protection); form fields stay selectable */
+body {
+  -webkit-user-select: none;
+  user-select: none;
+}
+input, textarea, select, [contenteditable="true"] {
+  -webkit-user-select: text;
+  user-select: text;
 }
 
 /* Custom scrollbar */
@@ -240,6 +255,23 @@ body {
 }
 .animate-marquee {
   animation: marquee 30s linear infinite;
+}
+
+/* Hero slideshow: slow zoom on the active photo, and the bar that counts down to the next slide */
+@keyframes kenburns {
+  from { transform: scale(1.08); }
+  to   { transform: scale(1); }
+}
+.animate-kenburns {
+  animation: kenburns 12s ease-out both;
+}
+
+@keyframes progress {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+.animate-progress {
+  animation: progress linear both;
 }
 
 /* Select element on dark backgrounds */

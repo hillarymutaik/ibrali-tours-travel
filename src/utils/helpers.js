@@ -1,6 +1,6 @@
-// Format currency
-export const formatCurrency = (amount, currency = 'USD') => {
-  return new Intl.NumberFormat('en-US', {
+// Format currency (locale comes from the active language, see LOCALES)
+export const formatCurrency = (amount, currency = 'USD', locale = 'en-US') => {
+  return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: currency,
     minimumFractionDigits: 0,
@@ -9,8 +9,8 @@ export const formatCurrency = (amount, currency = 'USD') => {
 }
 
 // Format date
-export const formatDate = (date) => {
-  return new Date(date).toLocaleDateString('en-US', {
+export const formatDate = (date, locale = 'en-US') => {
+  return new Date(date).toLocaleDateString(locale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric'

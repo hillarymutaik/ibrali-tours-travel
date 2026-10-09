@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import PageHero from '../components/PageHero'
 import useSeo from '../hooks/useSeo'
+import { useLanguage } from '../hooks/useLanguage'
 
 const serif = { fontFamily: "'Playfair Display', serif" }
 
@@ -59,27 +60,16 @@ function Icon({ name, size = 22 }) {
 }
 
 export default function Careers() {
+  const { t } = useLanguage()
   useSeo({
-    title: 'Careers',
-    description: 'Join a premier travel and tourism company built on professionalism, integrity, and innovation. Explore career opportunities at Ibrali Tours & Travel.',
+    title: t('careers.seoTitle'),
+    description: t('careers.seoDesc'),
   })
 
   const perks = [
-    {
-      icon: 'globe',
-      title: 'Purpose-driven work',
-      text: 'Help travellers explore the world while we protect its wonders — meaningful work with real impact.',
-    },
-    {
-      icon: 'growth',
-      title: 'Room to grow',
-      text: 'We invest in our people with mentorship, training, and clear paths to advance across the business.',
-    },
-    {
-      icon: 'heart',
-      title: 'A team that cares',
-      text: 'Collaboration, integrity, and genuine support sit at the heart of how we work together every day.',
-    },
+    { icon: 'globe', title: t('careers.p1.title'), text: t('careers.p1.text') },
+    { icon: 'growth', title: t('careers.p2.title'), text: t('careers.p2.text') },
+    { icon: 'heart', title: t('careers.p3.title'), text: t('careers.p3.text') },
   ]
 
   const applyHref =
@@ -91,18 +81,18 @@ export default function Careers() {
 
       <PageHero
         image="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1500&q=70"
-        subtitle="Join a premier travel and tourism company built on professionalism, integrity, and innovation. When roles open up, you'll find them here."
+        subtitle={t('careers.heroSub')}
       >
-        Build your career<br />
-        <span className="heading-accent">with Ibrali</span>
+        {t('careers.hero1')}<br />
+        <span className="heading-accent">{t('careers.hero2')}</span>
       </PageHero>
 
       {/* Why work with us */}
       <section className="max-w-7xl mx-auto px-6 py-20">
         <div className="text-center mb-14">
-          <div className="flex justify-center"><div className="eyebrow mb-4">Why join us</div></div>
+          <div className="flex justify-center"><div className="eyebrow mb-4">{t('careers.whyEyebrow')}</div></div>
           <h2 className="heading" style={{ fontSize: 'clamp(28px, 5vw, 46px)', lineHeight: 1.1 }}>
-            Grow with a team that <span className="heading-accent">loves what it does</span>
+            {t('careers.whyTitle1')} <span className="heading-accent">{t('careers.whyTitle2')}</span>
           </h2>
         </div>
 
@@ -126,9 +116,9 @@ export default function Careers() {
       <section className="px-6 pb-24">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-10">
-            <div className="flex justify-center"><div className="eyebrow mb-4">Open positions</div></div>
+            <div className="flex justify-center"><div className="eyebrow mb-4">{t('careers.openEyebrow')}</div></div>
             <h2 className="heading" style={{ fontSize: 'clamp(26px, 4vw, 40px)', lineHeight: 1.1 }}>
-              Current <span className="heading-accent">openings</span>
+              {t('careers.openTitle1')} <span className="heading-accent">{t('careers.openTitle2')}</span>
             </h2>
           </div>
 
@@ -143,19 +133,18 @@ export default function Careers() {
               <Icon name="briefcase" size={30} />
             </div>
             <h3 className="text-xl mb-3" style={{ ...serif, fontWeight: 700 }}>
-              No open positions at the moment
+              {t('careers.noneTitle')}
             </h3>
             <p className="text-[#7A7268] text-sm leading-relaxed max-w-md mx-auto">
-              We don't have any vacancies right now, but we're always glad to hear from talented,
-              passionate people. Send us your CV and we'll keep it on file for future opportunities.
+              {t('careers.noneDesc')}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
               <a href={applyHref} className="btn btn-gold px-7 py-3.5">
-                <Icon name="mail" size={17} /> Send an open application
+                <Icon name="mail" size={17} /> {t('careers.apply')}
               </a>
               <Link to="/contact" className="btn btn-light px-7 py-3.5">
-                Get in touch
+                {t('careers.getInTouch')}
               </Link>
             </div>
           </div>
@@ -163,7 +152,7 @@ export default function Careers() {
           {/* Stay-in-touch note */}
           <div className="flex items-center justify-center gap-2.5 mt-8 text-sm text-[#7A7268]">
             <span style={{ color: '#C2470A' }}><Icon name="bell" size={16} /></span>
-            New roles are posted on this page — check back soon.
+            {t('careers.notice')}
           </div>
         </div>
       </section>

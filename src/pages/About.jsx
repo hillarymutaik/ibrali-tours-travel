@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import PageHero from '../components/PageHero'
 import useSeo from '../hooks/useSeo'
+import { useLanguage } from '../hooks/useLanguage'
 
 const serif = { fontFamily: "'Playfair Display', serif" }
 
@@ -114,42 +115,27 @@ function Icon({ name }) {
 }
 
 export default function About() {
+  const { t } = useLanguage()
   useSeo({
-    title: 'About Us',
-    description: 'IBRALI Tours & Travel is a Kenyan travel management company providing personalized domestic and international travel solutions for individuals, corporate organizations, institutions, and special interest groups.',
+    title: t('about.seoTitle'),
+    description: t('about.seoDesc'),
   })
 
   const values = [
-    {
-      icon: 'award',
-      title: 'Professionalism',
-      text: 'We are committed to delivering excellence with expertise and accountability.',
-    },
-    {
-      icon: 'shield',
-      title: 'Integrity',
-      text: 'We operate with honesty, transparency, and strong ethical standards.',
-    },
-    {
-      icon: 'bulb',
-      title: 'Innovation',
-      text: 'We embrace creativity and continuous improvement to lead in travel experiences.',
-    },
-    {
-      icon: 'users',
-      title: 'Teamwork',
-      text: 'We collaborate, support, and succeed together to create unforgettable experiences.',
-    },
+    { icon: 'award', title: t('about.v.professionalism.title'), text: t('about.v.professionalism.text') },
+    { icon: 'shield', title: t('about.v.integrity.title'), text: t('about.v.integrity.text') },
+    { icon: 'bulb', title: t('about.v.innovation.title'), text: t('about.v.innovation.text') },
+    { icon: 'users', title: t('about.v.teamwork.title'), text: t('about.v.teamwork.text') },
   ]
 
   const whoWeServe = [
-    { icon: 'briefcase', title: 'Corporate Organizations', text: 'Travel management, conferences, and executive travel.' },
-    { icon: 'bank', title: 'Government Institutions', text: 'Official travel coordination and event logistics.' },
-    { icon: 'globe', title: 'NGOs & Development Organizations', text: 'Mission travel and conference support.' },
-    { icon: 'cap', title: 'Schools & Universities', text: 'Educational tours and excursions.' },
-    { icon: 'church', title: 'Religious Organizations', text: 'Pilgrimages, retreats, and group travel.' },
-    { icon: 'heart', title: 'Families & Leisure Travelers', text: 'Vacations, holidays, and memorable experiences.' },
-    { icon: 'map', title: 'Tour Groups', text: 'Group tours and special interest travel experiences.' },
+    { icon: 'briefcase', title: t('about.s1.title'), text: t('about.s1.text') },
+    { icon: 'bank', title: t('about.s2.title'), text: t('about.s2.text') },
+    { icon: 'globe', title: t('about.s3.title'), text: t('about.s3.text') },
+    { icon: 'cap', title: t('about.s4.title'), text: t('about.s4.text') },
+    { icon: 'church', title: t('about.s5.title'), text: t('about.s5.text') },
+    { icon: 'heart', title: t('about.s6.title'), text: t('about.s6.text') },
+    { icon: 'map', title: t('about.s7.title'), text: t('about.s7.text') },
   ]
 
   return (
@@ -158,31 +144,31 @@ export default function About() {
 
       <PageHero
         image="https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1500&q=70"
-        subtitle="IBRALI Tours & Travel is a premier travel and tourism company based in Nairobi, Kenya, dedicated to delivering exceptional local and international travel experiences with professionalism, integrity, and innovation."
+        subtitle={t('about.heroSub')}
       >
-        Exploring the world,<br />
-        <span className="heading-accent">protecting its wonders</span>
+        {t('about.hero1')}<br />
+        <span className="heading-accent">{t('about.hero2')}</span>
       </PageHero>
 
       <section className="max-w-7xl mx-auto px-6 py-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
-            <div className="eyebrow mb-4">Who we are</div>
+            <div className="eyebrow mb-4">{t('about.whoEyebrow')}</div>
             <h2 className="heading" style={{ fontSize: 'clamp(32px, 5vw, 52px)' }}>
-              Built for journeys that feel personal.
+              {t('about.whoTitle')}
             </h2>
             <p className="text-[#6B6560] leading-relaxed mt-6">
-              IBRALI Tours &amp; Travel is a Kenyan travel management company providing personalized domestic and international travel solutions for individuals, corporate organizations, institutions, and special interest groups. Every journey we plan is built to be exciting, comfortable, and unforgettable.
+              {t('about.whoP1')}
             </p>
             <p className="text-[#6B6560] leading-relaxed mt-4">
-              From our home in Nairobi, our goal is to create memorable travel experiences while promoting sustainable tourism and fostering meaningful connections between people, cultures, and destinations — from Kenya's natural beauty to curated journeys across the Democratic Republic of Congo, Dubai, and the rest of the world.
+              {t('about.whoP2')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 mt-9">
               <Link to="/packages" className="btn btn-dark px-7 py-3.5">
-                Explore packages
+                {t('about.explore')}
               </Link>
               <Link to="/contact" className="btn btn-light px-7 py-3.5">
-                Talk to us
+                {t('about.talk')}
               </Link>
             </div>
           </div>
@@ -199,7 +185,7 @@ export default function About() {
               />
               <div className="rounded-2xl p-6 text-white" style={{ background: '#E75A08' }}>
                 <p style={{ ...serif, fontWeight: 700, fontSize: '38px', color: '#fff' }}>10+</p>
-                <p className="text-white/75 text-xs uppercase tracking-[1.5px] mt-1">Years of industry expertise</p>
+                <p className="text-white/75 text-xs uppercase tracking-[1.5px] mt-1">{t('about.yearsLabel')}</p>
               </div>
             </div>
           </div>
@@ -216,9 +202,9 @@ export default function About() {
             >
               <Icon name="target" />
             </div>
-            <div className="eyebrow mb-3">Our mission</div>
+            <div className="eyebrow mb-3">{t('about.missionEyebrow')}</div>
             <p className="text-[#1C1A17] text-lg leading-relaxed" style={serif}>
-              To provide personalized local and international travel experiences that create lasting memories while delivering exceptional service and value.
+              {t('about.mission')}
             </p>
           </div>
 
@@ -231,10 +217,10 @@ export default function About() {
             </div>
             <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[2px] mb-3" style={{ color: 'rgba(255,255,255,0.85)' }}>
               <span className="w-6 h-px" style={{ background: 'rgba(255,255,255,0.85)' }} />
-              Our vision
+              {t('about.visionLabel')}
             </div>
             <p className="text-white/95 text-lg leading-relaxed" style={serif}>
-              To redefine travel experiences through personalized, innovative, and sustainable tourism solutions.
+              {t('about.vision')}
             </p>
           </div>
         </div>
@@ -244,9 +230,9 @@ export default function About() {
       <section className="px-6 py-20" style={{ background: '#FFF1E6' }}>
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
-            <div className="eyebrow mb-4">Our core values</div>
+            <div className="eyebrow mb-4">{t('about.valuesEyebrow')}</div>
             <h2 className="heading text-[#1C1A17]" style={{ fontSize: 'clamp(32px, 5vw, 52px)' }}>
-              Guided by values, <span className="heading-accent">driven by excellence.</span>
+              {t('about.valuesTitle1')} <span className="heading-accent">{t('about.valuesTitle2')}</span>
             </h2>
           </div>
 
@@ -276,23 +262,23 @@ export default function About() {
           >
             <img
               src="/ibrali-tours-travel/founder.jpg"
-              alt="Hon. Lingo Ngbandani Prince Ibrahim, Founder & Managing Director of Ibrali Tours & Travel"
+              alt={t('founder.alt')}
               className="w-full h-full object-cover"
             />
           </div>
           <div className="text-center sm:text-left flex-1">
             <p className="text-[#1C1A17] text-lg leading-relaxed" style={serif}>
-              “Our goal is not merely to book travel, but to create meaningful experiences that connect people, cultures, and opportunities.”
+              {t('about.founderQuote')}
             </p>
             <p className="mt-4 text-sm font-semibold text-[#1C1A17]">
               Hon. Lingo Ngbandani Prince Ibrahim
-              <span className="font-normal text-[#9C9890]"> · Founder &amp; Managing Director</span>
+              <span className="font-normal text-[#9C9890]"> · {t('about.founderRole')}</span>
             </p>
           </div>
           <span
             className="link-underline flex-shrink-0 whitespace-nowrap"
           >
-            Read the full message <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+            {t('about.founderRead')} <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
           </span>
         </Link>
       </section>
@@ -301,12 +287,12 @@ export default function About() {
       <section className="px-6 pb-20">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <div className="flex justify-center"><div className="eyebrow mb-4">Partner with us</div></div>
+            <div className="flex justify-center"><div className="eyebrow mb-4">{t('about.serveEyebrow')}</div></div>
             <h2 className="heading" style={{ fontSize: 'clamp(26px, 4vw, 40px)' }}>
-              Who we <span className="heading-accent">proudly serve</span>
+              {t('about.serveTitle1')} <span className="heading-accent">{t('about.serveTitle2')}</span>
             </h2>
             <p className="text-[#6B6560] leading-relaxed mt-4 max-w-2xl mx-auto">
-              From corporate boardrooms to school excursions, pilgrimages, and family holidays — we tailor every itinerary to who's travelling.
+              {t('about.serveDesc')}
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">

@@ -1,22 +1,24 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useLanguage } from '../hooks/useLanguage'
 
 const NAV_LINKS = [
-  { to: '/', label: 'Home' },
-  { to: '/packages', label: 'Packages' },
-  { to: '/about', label: 'About Us' },
-  { to: '/careers', label: 'Careers' },
-  { to: '/blog', label: 'Blog' },
-  { to: '/contact', label: 'Contact Us' },
-  { to: '/my-bookings', label: 'My Trips' },
-  { to: '/booking', label: 'Book a trip' },
+  { to: '/', key: 'footer.nav.home' },
+  { to: '/packages', key: 'footer.nav.packages' },
+  { to: '/about', key: 'footer.nav.about' },
+  { to: '/careers', key: 'footer.nav.careers' },
+  { to: '/blog', key: 'footer.nav.blog' },
+  { to: '/contact', key: 'footer.nav.contact' },
+  { to: '/my-bookings', key: 'footer.nav.myTrips' },
+  { to: '/booking', key: 'footer.nav.bookTrip' },
 ]
 
+// Phone numbers and e-mail are kept as-is; only the address is translated
 const CONTACT_ITEMS = [
   { type: 'mail', label: 'info@ibralitravels.com', href: 'mailto:info@ibralitravels.com' },
   { type: 'phone', label: '+254 786 000 100', href: 'tel:+254786000100' },
   { type: 'phone', label: '+254 20 527 0005', href: 'tel:+254205270005' },
-  { type: 'pin', label: 'Kayahwe & Galana Rd, Kilimani — P.O. Box 24646-00100, Nairobi, Kenya', href: null },
+  { type: 'pin', labelKey: 'footer.address', href: null },
 ]
 
 const SOCIAL_LINKS = [
@@ -96,6 +98,7 @@ function ContactIcon({ type }) {
 const columnTitle = 'text-[11px] font-medium uppercase tracking-[1.5px] text-[#9C9890] mb-5'
 
 export default function Footer() {
+  const { t } = useLanguage()
   const currentYear = new Date().getFullYear()
 
   return (
@@ -111,27 +114,27 @@ export default function Footer() {
               Ibrali Tours &amp; Travel
             </h2>
             <p className="text-[13px] italic text-[#E75A08] mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>
-              “Exploring the World, Protecting Its Wonders.”
+              {t('footer.slogan')}
             </p>
             <p className="text-[13px] text-[#6B6560] leading-relaxed max-w-[260px] mb-5">
-              A premier travel and tourism company based in Nairobi, Kenya — delivering exceptional local and international travel experiences with professionalism, integrity, and innovation.
+              {t('footer.tagIntro')}
             </p>
             <div className="flex gap-2 flex-wrap">
-              {['Safaris', 'Air Travel', 'Hotels', 'Business Tourism', 'Excursions', 'Ticketing'].map((tag) => (
+              {['safaris', 'air', 'hotels', 'business', 'excursions', 'ticketing'].map((tag) => (
                 <span
                   key={tag}
                   className="text-[11px] tracking-wide px-3 py-1 rounded-full text-[#C2470A]"
                   style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3' }}
                 >
-                  {tag}
+                  {t(`footer.tag.${tag}`)}
                 </span>
               ))}
             </div>
           </div>
 
           {/* NAV COLUMN */}
-          <nav aria-label="Footer">
-            <p className={columnTitle}>Explore</p>
+          <nav aria-label={t('footer.explore')}>
+            <p className={columnTitle}>{t('footer.explore')}</p>
             {NAV_LINKS.map((item) => (
               <Link
                 key={item.to}
@@ -139,15 +142,16 @@ export default function Footer() {
                 className="block text-[13.5px] text-[#4A4540] hover:text-[#1C1A17] transition-colors mb-3"
               >
                 <span className="text-[11px] mr-2" style={{ color: '#E75A08' }}>→</span>
-                {item.label}
+                {t(item.key)}
               </Link>
             ))}
           </nav>
 
           {/* CONTACT COLUMN */}
           <div>
-            <p className={columnTitle}>Get in touch</p>
-            {CONTACT_ITEMS.map(({ type, label, href }) => {
+            <p className={columnTitle}>{t('footer.getInTouch')}</p>
+            {CONTACT_ITEMS.map(({ type, label, labelKey, href }) => {
+              const text = label ?? t(labelKey)
               const inner = (
                 <>
                   <span
@@ -156,15 +160,15 @@ export default function Footer() {
                   >
                     <ContactIcon type={type} />
                   </span>
-                  <span className="text-[13px] leading-snug">{label}</span>
+                  <span className="text-[13px] leading-snug">{text}</span>
                 </>
               )
               return href ? (
-                <a key={label} href={href} className="flex items-center gap-2.5 mb-3.5 text-[#4A4540] hover:text-[#1C1A17] transition-colors">
+                <a key={text} href={href} className="flex items-center gap-2.5 mb-3.5 text-[#4A4540] hover:text-[#1C1A17] transition-colors">
                   {inner}
                 </a>
               ) : (
-                <div key={label} className="flex items-center gap-2.5 mb-3.5 text-[#4A4540]">
+                <div key={text} className="flex items-center gap-2.5 mb-3.5 text-[#4A4540]">
                   {inner}
                 </div>
               )
@@ -173,7 +177,7 @@ export default function Footer() {
 
           {/* SOCIAL COLUMN */}
           <div>
-            <p className={columnTitle}>Follow us</p>
+            <p className={columnTitle}>{t('footer.followUs')}</p>
             {SOCIAL_LINKS.map(({ label, href, icon }) => (
               <a
                 key={label}
@@ -207,12 +211,12 @@ export default function Footer() {
         {/* BOTTOM BAR */}
         <div className="py-5 pb-7 flex items-center justify-between flex-wrap gap-4">
           <p className="text-xs text-[#9C9890]">
-            © {currentYear} <span className="text-[#6B6560]">Ibrali Tours &amp; Travel</span>. All rights reserved.
+            © {currentYear} <span className="text-[#6B6560]">Ibrali Tours &amp; Travel</span>. {t('footer.rights')}
           </p>
           <div className="flex gap-5">
-            {['Privacy', 'Terms', 'Support'].map((item) => (
+            {['privacy', 'terms', 'support'].map((item) => (
               <a key={item} href="#" className="text-xs text-[#9C9890] hover:text-[#1C1A17] transition-colors">
-                {item}
+                {t(`footer.${item}`)}
               </a>
             ))}
           </div>

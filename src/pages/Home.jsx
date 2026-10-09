@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Pause, Play, Search } from 'lucide-react'
 import { TOUR_PACKAGES, API_URL } from '../utils/constants'
+import { useLanguage } from '../hooks/useLanguage'
 import Navbar from '../components/Navbar'
 import PackageCard from '../components/PackageCard'
 import Footer from '../components/Footer'
@@ -43,12 +44,12 @@ function StatCard({ end, suffix, label, iconName, active }) {
     if (!active) return
     let cur = 0
     const step = end / (1800 / 16)
-    const t = setInterval(() => {
+    const timer = setInterval(() => {
       cur = Math.min(cur + step, end)
       setCount(Math.floor(cur))
-      if (cur >= end) clearInterval(t)
+      if (cur >= end) clearInterval(timer)
     }, 16)
-    return () => clearInterval(t)
+    return () => clearInterval(timer)
   }, [active, end])
 
   return (
@@ -64,13 +65,38 @@ function StatCard({ end, suffix, label, iconName, active }) {
   )
 }
 
+// How long each hero slide stays on screen (ms)
+const SLIDE_INTERVAL = 10000
+
+// Defined outside Home so it isn't re-created on every render (a re-created
+// component remounts its <select> and drops focus after each change)
+const SelectField = ({ label, value, onChange, children }) => (
+  <div className="flex flex-col gap-1.5">
+    <label className="text-[10px] tracking-widest uppercase" style={{ color: '#9C9890' }}>{label}</label>
+    <div className="relative">
+      <select
+        value={value}
+        onChange={onChange}
+        className="w-full appearance-none text-sm px-4 py-3 rounded-xl focus:outline-none pr-9"
+        style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3', color: '#1C1A17' }}
+      >
+        {children}
+      </select>
+      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#C2470A' }}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9" /></svg>
+      </div>
+    </div>
+  </div>
+)
+
 const Eyebrow = ({ children, light }) => (
   <div className={`eyebrow mb-4 ${light ? 'eyebrow-light' : ''}`}>{children}</div>
 )
 
 export default function Home() {
+  const { t } = useLanguage()
   useSeo({
-    description: 'Ibrali Tours & Travel is a premier travel and tourism company based in Nairobi, Kenya, delivering exceptional local and international travel experiences with professionalism, integrity, and innovation.',
+    description: t('home.seo'),
   })
   const [activeTab, setActiveTab]     = useState('all')
   const [statsVisible, setStatsVisible] = useState(false)
@@ -80,24 +106,48 @@ export default function Home() {
   const statsRef = useRef(null)
 
   const heroSlides = [
-    { image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1920&q=90', label: 'Masai Mara, Kenya' },
-    { image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=90', label: 'Dubai, UAE' },
-    { image: 'https://images.unsplash.com/photo-1516214104703-d870798883c5?w=1920&q=90', label: 'DR Congo' },
-    { image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1920&q=90', label: 'Paris, France' },
-    { image: 'https://images.unsplash.com/photo-1516815231560-8f41ec531527?w=1920&q=90', label: 'Maldives' },
+    { image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1920&q=90', label: t('home.slide.0') },
+    { image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=90', label: t('home.slide.1') },
+    { image: 'https://images.unsplash.com/photo-1516214104703-d870798883c5?w=1920&q=90', label: t('home.slide.2') },
+    { image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1920&q=90', label: t('home.slide.3') },
+    { image: 'https://images.unsplash.com/photo-1516815231560-8f41ec531527?w=1920&q=90', label: t('home.slide.4') },
   ]
   const [activeSlide, setActiveSlide] = useState(0)
+  const [isPlaying, setIsPlaying] = useState(true)
+  const [isHovering, setIsHovering] = useState(false)
+  // Bumped whenever the slider resumes, so the progress bar restarts in step with the timer
+  const [resumeKey, setResumeKey] = useState(0)
+  const touchStartX = useRef(null)
+  const sliderPaused = !isPlaying || isHovering
 
+  // Each slide gets a full SLIDE_INTERVAL; manual navigation restarts the countdown
   useEffect(() => {
-    const t = setInterval(() => {
+    if (sliderPaused) return
+    const timer = setTimeout(() => {
       setActiveSlide((s) => (s + 1) % heroSlides.length)
-    }, 6000)
-    return () => clearInterval(t)
-  }, [heroSlides.length])
+    }, SLIDE_INTERVAL)
+    return () => clearTimeout(timer)
+  }, [activeSlide, sliderPaused, heroSlides.length])
 
   const goToSlide = (i) => setActiveSlide(i)
   const prevSlide = () => setActiveSlide((s) => (s - 1 + heroSlides.length) % heroSlides.length)
   const nextSlide = () => setActiveSlide((s) => (s + 1) % heroSlides.length)
+
+  const togglePlay = () => {
+    if (!isPlaying) setResumeKey((k) => k + 1)
+    setIsPlaying((p) => !p)
+  }
+  const handleMouseLeave = () => {
+    setIsHovering(false)
+    setResumeKey((k) => k + 1)
+  }
+  const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX }
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return
+    const dx = e.changedTouches[0].clientX - touchStartX.current
+    if (Math.abs(dx) > 50) (dx < 0 ? nextSlide : prevSlide)()
+    touchStartX.current = null
+  }
 
   const handleNewsletterSubmit = async (e) => {
     e.preventDefault()
@@ -142,90 +192,88 @@ export default function Home() {
   })()
 
   const categories = [
-    { label: 'Wildlife Safari',  img: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=500&h=700&fit=crop', count: '24 trips' },
-    { label: 'Air Travel',       img: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=500&h=700&fit=crop', count: 'Charter & scheduled' },
-    { label: 'Beach Escapes',    img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&h=700&fit=crop', count: '12 trips' },
-    { label: 'Mountain Treks',   img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=700&fit=crop', count: '8 trips' },
-    { label: 'Cultural Tours',   img: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=500&h=700&fit=crop', count: '10 trips' },
-    { label: 'Luxury Stays',     img: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=500&h=700&fit=crop', count: '6 trips' },
+    { label: t('home.cat.wildlife'), img: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=500&h=700&fit=crop', count: t('home.cat.wildlifeCount') },
+    { label: t('home.cat.air'), img: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=500&h=700&fit=crop', count: t('home.cat.airCount') },
+    { label: t('home.cat.beach'), img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&h=700&fit=crop', count: t('home.cat.beachCount') },
+    { label: t('home.cat.mountain'), img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=700&fit=crop', count: t('home.cat.mountainCount') },
+    { label: t('home.cat.cultural'), img: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=500&h=700&fit=crop', count: t('home.cat.culturalCount') },
+    { label: t('home.cat.luxury'), img: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=500&h=700&fit=crop', count: t('home.cat.luxuryCount') },
   ]
 
+  // Destination names are proper nouns and stay as-is; tags and counts are translated
   const destinations = [
-    { name: 'Masai Mara',   tag: 'Wildlife Safari',   img: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&h=500&fit=crop', count: '18 tours', span: 'col-span-2 md:col-span-2', tall: true },
-    { name: 'Mombasa',      tag: 'Coastal Escape',    img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&h=380&fit=crop', count: '12 tours', span: '' },
-    { name: 'Mount Kenya',  tag: 'Alpine Trek',        img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=380&fit=crop', count: '8 tours',  span: '' },
-    { name: 'Nairobi',      tag: 'City Experience',   img: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=500&h=380&fit=crop', count: '6 tours',  span: '' },
-    { name: 'Lake Nakuru',  tag: 'Flamingo Haven',    img: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=500&h=380&fit=crop', count: '5 tours',  span: '' },
-    { name: 'Dubai',        tag: 'City & Desert',     img: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=500&h=380&fit=crop', count: '3 tours',  span: '' },
-    { name: 'DR Congo',     tag: 'Rainforest Trek',   img: 'https://images.unsplash.com/photo-1516214104703-d870798883c5?w=500&h=380&fit=crop', count: '2 tours',  span: '' },
-    { name: 'Samburu',      tag: 'Fly-in Safari',     img: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&h=380&fit=crop', count: '4 tours',  span: 'col-span-2 md:col-span-3' },
+    { name: 'Masai Mara',   tag: t('home.dest.tag.safari'),    img: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=800&h=500&fit=crop', count: t('home.dest.count.18'), span: 'col-span-2 md:col-span-2', tall: true },
+    { name: 'Mombasa',      tag: t('home.dest.tag.coast'),     img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&h=380&fit=crop', count: t('home.dest.count.12'), span: '' },
+    { name: 'Mount Kenya',  tag: t('home.dest.tag.alpine'),    img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=380&fit=crop', count: t('home.dest.count.8'),  span: '' },
+    { name: 'Nairobi',      tag: t('home.dest.tag.city'),      img: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=500&h=380&fit=crop', count: t('home.dest.count.6'),  span: '' },
+    { name: 'Lake Nakuru',  tag: t('home.dest.tag.flamingo'),  img: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=500&h=380&fit=crop', count: t('home.dest.count.5'),  span: '' },
+    { name: 'Dubai',        tag: t('home.dest.tag.desert'),    img: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=500&h=380&fit=crop', count: t('home.dest.count.3'),  span: '' },
+    { name: 'DR Congo',     tag: t('home.dest.tag.rainforest'), img: 'https://images.unsplash.com/photo-1516214104703-d870798883c5?w=500&h=380&fit=crop', count: t('home.dest.count.2'),  span: '' },
+    { name: 'Samburu',      tag: t('home.dest.tag.flyin'),     img: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&h=380&fit=crop', count: t('home.dest.count.4'), span: 'col-span-2 md:col-span-3' },
   ]
 
   const testimonials = [
     {
-      quote: 'An absolutely life-changing experience. Our guide knew every animal by name, and the camp under the stars was breathtaking. We\'ll be back!',
-      author: 'Sarah M.', location: 'London, UK', trip: 'Masai Mara Safari · 5 days', rating: 5,
+      quote: t('home.testi.q1'),
+      author: 'Sarah M.', location: t('home.testi.l1'), trip: t('home.testi.t1'), rating: 5,
       avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face',
     },
     {
-      quote: 'From the moment we landed to the final goodbye, everything was perfectly arranged. Ibrali made our honeymoon truly unforgettable.',
-      author: 'James & Anika R.', location: 'Toronto, Canada', trip: 'Beach & Safari Combo · 10 days', rating: 5,
+      quote: t('home.testi.q2'),
+      author: 'James & Anika R.', location: t('home.testi.l2'), trip: t('home.testi.t2'), rating: 5,
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face',
     },
     {
-      quote: 'Professional, knowledgeable, and genuinely passionate. The cultural immersion with the Maasai was unlike anything we\'ve ever experienced.',
-      author: 'Kenji T.', location: 'Tokyo, Japan', trip: 'Cultural & Wildlife · 7 days', rating: 5,
+      quote: t('home.testi.q3'),
+      author: 'Kenji T.', location: t('home.testi.l3'), trip: t('home.testi.t3'), rating: 5,
       avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face',
     },
   ]
 
   const howItWorks = [
-    { step: '01', title: 'Browse & Discover',    desc: 'Explore our curated experiences — from Big Five safaris in Kenya to city escapes in Dubai and beyond.', icon: 'map' },
-    { step: '02', title: 'Customise Your Trip',  desc: 'Tell us your dates, group size and preferences. We\'ll tailor every detail to your vision.', icon: 'calendar' },
-    { step: '03', title: 'Book Securely',        desc: 'Reserve your trip with a simple deposit. Transparent pricing, no hidden fees, full refund policy.', icon: 'shield' },
-    { step: '04', title: 'Experience the World',    desc: 'Arrive and let the adventure unfold — while our team handles everything behind the scenes.', icon: 'compass' },
+    { step: '01', title: t('home.how.s1.title'), desc: t('home.how.s1.desc'), icon: 'map' },
+    { step: '02', title: t('home.how.s2.title'), desc: t('home.how.s2.desc'), icon: 'calendar' },
+    { step: '03', title: t('home.how.s3.title'), desc: t('home.how.s3.desc'), icon: 'shield' },
+    { step: '04', title: t('home.how.s4.title'), desc: t('home.how.s4.desc'), icon: 'compass' },
   ]
 
   const features = [
-    { icon: 'compass',  title: 'Personalized Travel Planning',              desc: 'Every itinerary is shaped around your dates, interests, and budget — never one-size-fits-all.' },
-    { icon: 'gem',      title: 'Competitive Pricing Through Strategic Partnerships', desc: 'Strong partnerships across Kenya, DR Congo, Dubai, and beyond secure the best rates on flights, stays, and experiences.' },
-    { icon: 'calendar', title: 'Access to Modern Reservation Systems',       desc: 'An advanced Computer Reservation System (CRS) confirms flights, hotels, and transfers instantly.' },
-    { icon: 'briefcase',title: 'Corporate Travel Expertise',                 desc: 'Trusted by organizations for conferences, seminars, retreats, and business travel management.' },
-    { icon: 'star',     title: 'Flexible Travel Packages',                   desc: 'From quick getaways to multi-week expeditions, packages adapt to your group size and pace.' },
-    { icon: 'support',  title: 'Customer-Centered Service',                  desc: 'A dedicated team stays with you from the first inquiry to the moment you return home.' },
-    { icon: 'shield',   title: 'Commitment to Responsible Tourism',          desc: 'We travel in ways that protect Kenya\'s wildlife, landscapes, and communities for the future.' },
+    { icon: 'compass',  title: t('home.why.f1.title'), desc: t('home.why.f1.desc') },
+    { icon: 'gem',      title: t('home.why.f2.title'), desc: t('home.why.f2.desc') },
+    { icon: 'calendar', title: t('home.why.f3.title'), desc: t('home.why.f3.desc') },
+    { icon: 'briefcase', title: t('home.why.f4.title'), desc: t('home.why.f4.desc') },
+    { icon: 'star',     title: t('home.why.f5.title'), desc: t('home.why.f5.desc') },
+    { icon: 'support',  title: t('home.why.f6.title'), desc: t('home.why.f6.desc') },
+    { icon: 'shield',   title: t('home.why.f7.title'), desc: t('home.why.f7.desc') },
   ]
 
-  const clientTypes = [
-    'Corporate Organizations', 'Government Institutions', 'NGOs & Development Organizations',
-    'Schools & Universities', 'Religious Organizations', 'Families & Leisure Travelers', 'Tour Groups',
-  ]
+  const clientTypes = [1, 2, 3, 4, 5, 6, 7].map((n) => t(`home.clients.${n}`))
 
   const serviceCategories = [
     {
       icon: 'plane',
-      title: 'Travel Management',
-      items: ['Flight bookings and ticketing', 'Train reservations', 'Airport transfers', 'Hotel and lodge transfers'],
+      title: t('home.services.travel'),
+      items: [1, 2, 3, 4].map((n) => t(`home.services.travel${n}`)),
     },
     {
       icon: 'hotel',
-      title: 'Accommodation Services',
-      items: ['Hotel reservations', 'Resort bookings', 'Restaurant reservations', 'Airbnb bookings'],
+      title: t('home.services.accom'),
+      items: [1, 2, 3, 4].map((n) => t(`home.services.accom${n}`)),
     },
     {
       icon: 'briefcase',
-      title: 'Corporate Travel Solutions',
-      items: ['Conference and seminar organization', 'Team-building programs', 'Corporate retreats', 'Business travel management'],
+      title: t('home.services.corp'),
+      items: [1, 2, 3, 4].map((n) => t(`home.services.corp${n}`)),
     },
     {
       icon: 'paw',
-      title: 'Tourism & Leisure',
-      items: ['Safari tours', 'Exclusive tours', 'Tour guiding services', 'Golf tourism', 'Bird watching', 'Beach holidays', 'Sightseeing tours', 'Hiking adventures', 'French translation services', 'School trips and excursions'],
+      title: t('home.services.leisure'),
+      items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => t(`home.services.leisure${n}`)),
     },
     {
       icon: 'shield',
-      title: 'Travel Protection & Emergency Support',
-      items: ['Travel insurance', 'Air rescue coordination'],
+      title: t('home.services.protect'),
+      items: [1, 2].map((n) => t(`home.services.protect${n}`)),
     },
   ]
 
@@ -238,39 +286,32 @@ export default function Home() {
     'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=400&fit=crop',
   ]
 
-  const SelectField = ({ label, value, onChange, children }) => (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-[10px] tracking-widest uppercase" style={{ color: '#9C9890' }}>{label}</label>
-      <div className="relative">
-        <select
-          value={value}
-          onChange={onChange}
-          className="w-full appearance-none text-sm px-4 py-3 rounded-xl focus:outline-none pr-9"
-          style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3', color: '#1C1A17' }}
-        >
-          {children}
-        </select>
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: '#C2470A' }}>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9" /></svg>
-        </div>
-      </div>
-    </div>
-  )
-
   return (
       <div className="min-h-screen bg-[#FAF7F1] text-[#1C1A17] overflow-x-hidden font-sans">
         <Navbar />
 
         {/* ── HERO ─────────────────────────────────────────── */}
-        <section className="relative min-h-screen flex flex-col justify-end overflow-hidden">
-          {/* Sliding background images — fills the section at every screen size */}
+        <section
+          className="relative min-h-screen flex flex-col justify-end overflow-hidden"
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={handleMouseLeave}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          {/* Sliding background images — fills the section at every screen size.
+              The active photo drifts slowly (Ken Burns) so the hero never feels static */}
           {heroSlides.map((slide, i) => (
             <div
               key={slide.image}
-              className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
-              style={{ backgroundImage: `url('${slide.image}')`, opacity: i === activeSlide ? 1 : 0 }}
+              className="absolute inset-0 transition-opacity duration-1000 ease-in-out"
+              style={{ opacity: i === activeSlide ? 1 : 0 }}
               aria-hidden={i !== activeSlide}
-            />
+            >
+              <div
+                className={`absolute inset-0 bg-cover bg-center ${i === activeSlide ? 'animate-kenburns' : ''}`}
+                style={{ backgroundImage: `url('${slide.image}')` }}
+              />
+            </div>
           ))}
           <div
             className="absolute inset-0"
@@ -280,7 +321,7 @@ export default function Home() {
           {/* Slide arrows */}
           <button
             onClick={prevSlide}
-            aria-label="Previous slide"
+            aria-label={t('home.aria.prevSlide')}
             className="hidden md:flex absolute left-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full items-center justify-center text-white transition-all duration-300 hover:bg-white/15"
             style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(8px)', border: '0.5px solid rgba(255,255,255,0.25)' }}
           >
@@ -288,7 +329,7 @@ export default function Home() {
           </button>
           <button
             onClick={nextSlide}
-            aria-label="Next slide"
+            aria-label={t('home.aria.nextSlide')}
             className="hidden md:flex absolute right-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full items-center justify-center text-white transition-all duration-300 hover:bg-white/15"
             style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(8px)', border: '0.5px solid rgba(255,255,255,0.25)' }}
           >
@@ -296,32 +337,32 @@ export default function Home() {
           </button>
 
           <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
-            <div className="pb-14 md:pb-16">
+            <div className="pb-14 md:pb-16 animate-fadeIn">
               <h1
                 className="heading text-white max-w-4xl mt-24 md:mt-32"
                 style={{ fontSize: 'clamp(44px, 8vw, 92px)', lineHeight: 0.98 }}
               >
-                Exploring the world,<br />
-                <span className="heading-accent">protecting its wonders.</span>
+                {t('home.hero.line1')}<br />
+                <span className="heading-accent">{t('home.hero.line2')}</span>
               </h1>
               <p className="text-white/70 text-lg mt-6 max-w-xl leading-relaxed">
-                Ibrali Tours &amp; Travel is a premier travel and tourism company based in Nairobi, Kenya — delivering exceptional local and international travel experiences with professionalism, integrity, and innovation.
+                {t('home.hero.desc')}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mt-10">
                 <Link to="/packages" className="btn btn-gold px-8 py-4">
-                  Explore safaris <span className="text-base">→</span>
+                  {t('home.hero.explore')} <span className="text-base">→</span>
                 </Link>
                 <Link to="/contact" className="btn btn-ghost px-8 py-4">
-                  Plan with an expert
+                  {t('home.hero.plan')}
                 </Link>
               </div>
 
               <div className="flex flex-wrap gap-10 mt-16 pt-8 border-t border-white/12">
                 {[
-                  { value: '500+', label: 'Safaris completed' },
-                  { value: '98%',  label: 'Guest satisfaction' },
-                  { value: '10+',  label: 'Years of expertise' },
-                  { value: '40+',  label: 'Destinations' },
+                  { value: '500+', label: t('home.hero.stat.safaris') },
+                  { value: '98%',  label: t('home.hero.stat.satisfaction') },
+                  { value: '10+',  label: t('home.hero.stat.years') },
+                  { value: '40+',  label: t('home.hero.stat.destinations') },
                 ].map((s) => (
                   <div key={s.label}>
                     <p className="heading" style={{ fontSize: '34px', color: '#F2843A' }}>{s.value}</p>
@@ -331,14 +372,14 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Slide indicators */}
-            <div className="flex items-center gap-4 mb-6">
+            {/* Slide indicators + progress toward the next slide + play/pause */}
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-6">
               <div className="flex items-center gap-2">
                 {heroSlides.map((slide, i) => (
                   <button
                     key={slide.image}
                     onClick={() => goToSlide(i)}
-                    aria-label={`Show ${slide.label}`}
+                    aria-label={t('home.aria.showSlide', null, { label: slide.label })}
                     className="h-1.5 rounded-full transition-all duration-300"
                     style={{
                       width: i === activeSlide ? '22px' : '7px',
@@ -347,7 +388,25 @@ export default function Home() {
                   />
                 ))}
               </div>
+              <div className="hidden sm:block w-28 h-[2px] rounded-full bg-white/20 overflow-hidden" aria-hidden="true">
+                <div
+                  key={`${activeSlide}-${resumeKey}`}
+                  className="h-full bg-[#E75A08] animate-progress"
+                  style={{
+                    animationDuration: `${SLIDE_INTERVAL}ms`,
+                    animationPlayState: sliderPaused ? 'paused' : 'running',
+                  }}
+                />
+              </div>
               <span className="text-white/50 text-xs tracking-wide uppercase">{heroSlides[activeSlide].label}</span>
+              <button
+                onClick={togglePlay}
+                aria-label={isPlaying ? t('home.aria.pause') : t('home.aria.play')}
+                className="w-8 h-8 rounded-full flex items-center justify-center text-white/80 hover:text-white hover:bg-white/15 transition-colors"
+                style={{ border: '0.5px solid rgba(255,255,255,0.3)' }}
+              >
+                {isPlaying ? <Pause size={13} fill="currentColor" strokeWidth={0} /> : <Play size={13} fill="currentColor" strokeWidth={0} />}
+              </button>
             </div>
 
             {/* Search widget — sits at the bottom of the hero, anchored to trust bar */}
@@ -355,14 +414,14 @@ export default function Home() {
               className="rounded-t-3xl px-6 md:px-8 py-6"
               style={{ background: 'rgba(255,248,242,0.96)', backdropFilter: 'blur(28px)', border: '0.5px solid #FFD9B3', borderBottom: 'none' }}
             >
-              <p className="text-[10px] tracking-widest uppercase mb-4" style={{ color: '#9C9890' }}>Find your perfect trip</p>
+              <p className="text-[10px] tracking-widest uppercase mb-4" style={{ color: '#9C9890' }}>{t('home.search.title')}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
                 <SelectField
-                  label="Destination"
+                  label={t('home.search.destination')}
                   value={heroSearch.destination}
                   onChange={e => setHeroSearch(s => ({ ...s, destination: e.target.value }))}
                 >
-                  <option value="">Any destination</option>
+                  <option value="">{t('home.search.anyDestination')}</option>
                   <option>Masai Mara</option>
                   <option>Mombasa</option>
                   <option>Mount Kenya</option>
@@ -376,20 +435,20 @@ export default function Home() {
                 </SelectField>
 
                 <SelectField
-                  label="Duration"
+                  label={t('home.search.duration')}
                   value={heroSearch.duration}
                   onChange={e => setHeroSearch(s => ({ ...s, duration: e.target.value }))}
                 >
-                  <option value="">Any length</option>
-                  <option>2–3 days</option>
-                  <option>4–5 days</option>
-                  <option>6–7 days</option>
-                  <option>8–10 days</option>
-                  <option>10+ days</option>
+                  <option value="">{t('home.search.anyLength')}</option>
+                  <option>{t('home.search.d1')}</option>
+                  <option>{t('home.search.d2')}</option>
+                  <option>{t('home.search.d3')}</option>
+                  <option>{t('home.search.d4')}</option>
+                  <option>{t('home.search.d5')}</option>
                 </SelectField>
 
                 <SelectField
-                  label="Travellers"
+                  label={t('home.search.travellers')}
                   value={heroSearch.guests}
                   onChange={e => setHeroSearch(s => ({ ...s, guests: e.target.value }))}
                 >
@@ -400,8 +459,9 @@ export default function Home() {
                   <option>8+</option>
                 </SelectField>
 
-                <Link to="/packages" className="btn btn-gold py-3 text-sm">
-                  Search trips →
+                {/* Carry the chosen destination into the packages page as its search */}
+                <Link to="/packages" state={{ search: heroSearch.destination }} className="btn btn-gold py-3 text-sm">
+                  <Search size={15} strokeWidth={2} /> {t('home.search.submit')}
                 </Link>
               </div>
             </div>
@@ -452,15 +512,15 @@ export default function Home() {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-[#1C1A17] text-xs font-medium">Best Safari 2024</p>
-                  <p className="text-[#9C9890] text-[10px]">East Africa Tourism Awards</p>
+                  <p className="text-[#1C1A17] text-xs font-medium">{t('home.trust.award')}</p>
+                  <p className="text-[#9C9890] text-[10px]">{t('home.trust.awardBy')}</p>
                 </div>
               </div>
             </div>
 
             <div className="flex items-center gap-2 text-xs" style={{ color: '#9C9890' }}>
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
-              Trusted by 5,000+ travellers worldwide
+              {t('home.trust.travellers')}
             </div>
           </div>
         </div>
@@ -469,12 +529,12 @@ export default function Home() {
         <section className="py-24 px-6">
           <div className="max-w-7xl mx-auto">
             <Reveal className="text-center mb-14">
-              <Eyebrow>Explore by type</Eyebrow>
+              <Eyebrow>{t('home.explore.eyebrow')}</Eyebrow>
               <h2 className="heading" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.1 }}>
-                Find your perfect <span className="heading-accent">adventure</span>
+                {t('home.explore.title1')} <span className="heading-accent">{t('home.explore.title2')}</span>
               </h2>
               <p className="text-[#7A7268] text-base mt-4 max-w-lg mx-auto leading-relaxed">
-                Whether you dream of tracking lions at dawn, unwinding on pristine shores, or exploring a new city abroad — we'll take you there.
+                {t('home.explore.desc')}
               </p>
             </Reveal>
 
@@ -517,12 +577,12 @@ export default function Home() {
         <section className="py-24 px-6" style={{ background: '#F5EFE3' }}>
           <div className="max-w-7xl mx-auto">
             <Reveal className="text-center mb-14">
-              <div className="flex justify-center"><Eyebrow>What we do</Eyebrow></div>
+              <div className="flex justify-center"><Eyebrow>{t('home.services.eyebrow')}</Eyebrow></div>
               <h2 className="heading" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.1 }}>
-                Our <span className="heading-accent">services</span>
+                {t('home.services.title1')} <span className="heading-accent">{t('home.services.title2')}</span>
               </h2>
               <p className="text-[#7A7268] text-base mt-4 max-w-lg mx-auto leading-relaxed">
-                From transfers and reservations to corporate travel and emergencies — every detail handled under one roof.
+                {t('home.services.desc')}
               </p>
             </Reveal>
 
@@ -550,7 +610,7 @@ export default function Home() {
 
             <div className="text-center mt-12">
               <Link to="/contact" className="btn btn-dark px-8 py-4">
-                Request a service →
+                {t('home.services.request')} →
               </Link>
             </div>
           </div>
@@ -572,13 +632,13 @@ export default function Home() {
           <div className="max-w-7xl mx-auto">
             <Reveal className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
               <div>
-                <Eyebrow>Handpicked for you</Eyebrow>
+                <Eyebrow>{t('home.feat.eyebrow')}</Eyebrow>
                 <h2 className="heading" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.1 }}>
-                  Featured <span className="heading-accent">adventures</span>
+                  {t('home.feat.title1')} <span className="heading-accent">{t('home.feat.title2')}</span>
                 </h2>
               </div>
               <Link to="/packages" className="link-underline self-start md:self-auto">
-                View all packages →
+                {t('home.feat.viewAll')} →
               </Link>
             </Reveal>
 
@@ -588,13 +648,13 @@ export default function Home() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 capitalize"
+                  className="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300"
                   style={activeTab === tab
                     ? { background: '#E75A08', color: '#fff' }
                     : { background: '#fff', color: '#7A7268', border: '0.5px solid #E3DCCD' }
                   }
                 >
-                  {tab === 'all' ? 'All trips' : tab}
+                  {t(`home.tab.${tab}`)}
                 </button>
               ))}
             </div>
@@ -618,17 +678,17 @@ export default function Home() {
           <div className="absolute inset-0" style={{ background: 'rgba(255,241,230,0.85)' }} />
           <div className="relative z-10 max-w-7xl mx-auto px-6">
             <Reveal className="text-center mb-16">
-              <Eyebrow>Our legacy</Eyebrow>
+              <Eyebrow>{t('home.stats.eyebrow')}</Eyebrow>
               <h2 className="heading text-[#1C1A17]" style={{ fontSize: 'clamp(28px, 5vw, 48px)' }}>
-                Numbers that <span className="heading-accent">speak</span>
+                {t('home.stats.title1')} <span className="heading-accent">{t('home.stats.title2')}</span>
               </h2>
             </Reveal>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { end: 500, suffix: '+', label: 'Safaris Completed',    iconName: 'compass' },
-                { end: 98,  suffix: '%', label: 'Guest Satisfaction',   iconName: 'star' },
-                { end: 10,  suffix: '+', label: 'Years Experience',     iconName: 'shield' },
-                { end: 40,  suffix: '+', label: 'Destinations Covered', iconName: 'map' },
+                { end: 500, suffix: '+', label: t('home.stats.safaris'),       iconName: 'compass' },
+                { end: 98,  suffix: '%', label: t('home.stats.satisfaction'),  iconName: 'star' },
+                { end: 10,  suffix: '+', label: t('home.stats.years'),         iconName: 'shield' },
+                { end: 40,  suffix: '+', label: t('home.stats.destinations'),  iconName: 'map' },
               ].map((stat, i) => (
                 <StatCard key={i} {...stat} active={statsVisible} />
               ))}
@@ -641,13 +701,13 @@ export default function Home() {
           <div className="max-w-7xl mx-auto">
             <Reveal className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-14">
               <div>
-                <Eyebrow>Where to next</Eyebrow>
+                <Eyebrow>{t('home.dest.eyebrow')}</Eyebrow>
                 <h2 className="heading" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.1 }}>
-                  Top <span className="heading-accent">destinations</span>
+                  {t('home.dest.title1')} <span className="heading-accent">{t('home.dest.title2')}</span>
                 </h2>
               </div>
               <Link to="/packages" className="link-underline self-start md:self-auto">
-                View all destinations →
+                {t('home.dest.viewAll')} →
               </Link>
             </Reveal>
 
@@ -701,12 +761,12 @@ export default function Home() {
         <section className="py-24" style={{ background: '#FFF1E6' }}>
           <div className="max-w-7xl mx-auto px-6">
             <Reveal className="text-center mb-16">
-              <Eyebrow>Simple process</Eyebrow>
+              <Eyebrow>{t('home.how.eyebrow')}</Eyebrow>
               <h2 className="heading text-[#1C1A17]" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.1 }}>
-                How it <span className="heading-accent">works</span>
+                {t('home.how.title1')} <span className="heading-accent">{t('home.how.title2')}</span>
               </h2>
               <p className="text-[#6B6560] text-base mt-4 max-w-md mx-auto leading-relaxed">
-                From your first click to your last sunset, we take care of everything.
+                {t('home.how.desc')}
               </p>
             </Reveal>
 
@@ -745,7 +805,7 @@ export default function Home() {
 
             <div className="text-center mt-14">
               <Link to="/booking" className="btn btn-gold px-10 py-4">
-                Start planning your trip →
+                {t('home.how.start')} →
               </Link>
             </div>
           </div>
@@ -755,12 +815,12 @@ export default function Home() {
         <section className="py-24 px-6">
           <div className="max-w-7xl mx-auto">
             <Reveal className="mb-14 text-center">
-              <div className="flex justify-center"><Eyebrow>Our promise</Eyebrow></div>
+              <div className="flex justify-center"><Eyebrow>{t('home.why.eyebrow')}</Eyebrow></div>
               <h2 className="heading" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.1 }}>
-                Why travellers <span className="heading-accent">choose us</span>
+                {t('home.why.title1')} <span className="heading-accent">{t('home.why.title2')}</span>
               </h2>
               <p className="text-[#7A7268] text-base mt-4 max-w-lg mx-auto leading-relaxed">
-                Over 10 years of industry expertise has taught us what truly matters — from the moment you inquire to the moment you return home.
+                {t('home.why.desc')}
               </p>
             </Reveal>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -783,7 +843,7 @@ export default function Home() {
 
             <div className="mt-14 text-center">
               <p className="text-[11px] font-medium uppercase tracking-[2px] text-[#9C9890] mb-5">
-                Proudly serving
+                {t('home.clients.proudly')}
               </p>
               <div className="flex flex-wrap justify-center gap-3">
                 {clientTypes.map((client) => (
@@ -804,17 +864,17 @@ export default function Home() {
         <section className="py-24 px-6" style={{ background: '#F5EFE3' }}>
           <div className="max-w-7xl mx-auto">
             <Reveal className="text-center mb-14">
-              <Eyebrow>Real experiences</Eyebrow>
+              <Eyebrow>{t('home.testi.eyebrow')}</Eyebrow>
               <h2 className="heading" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.1 }}>
-                Stories from our <span className="heading-accent">travellers</span>
+                {t('home.testi.title1')} <span className="heading-accent">{t('home.testi.title2')}</span>
               </h2>
             </Reveal>
 
             <div className="grid gap-6 md:grid-cols-3">
-              {testimonials.map((t, i) => (
+              {testimonials.map((item, i) => (
                 <div key={i} className="card-surface !rounded-2xl p-8 relative flex flex-col">
                   <div className="flex items-center gap-0.5 mb-5">
-                    {[...Array(t.rating)].map((_, j) => (
+                    {[...Array(item.rating)].map((_, j) => (
                       <svg key={j} className="w-4 h-4" fill="#F2843A" viewBox="0 0 20 20">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                       </svg>
@@ -824,17 +884,17 @@ export default function Home() {
                     className="absolute top-6 right-6 select-none"
                     style={{ fontSize: '56px', lineHeight: 1, color: 'rgba(231, 90, 8,0.12)', fontFamily: 'Georgia, serif', fontWeight: 700 }}
                   >"</div>
-                  <p className="text-[#1C1A17] text-sm leading-relaxed flex-1 relative z-10">"{t.quote}"</p>
+                  <p className="text-[#1C1A17] text-sm leading-relaxed flex-1 relative z-10">"{item.quote}"</p>
                   <div className="flex items-center gap-3 pt-5 mt-5 border-t border-[#E3DCCD]">
                     <img
-                      src={t.avatar}
-                      alt={t.author}
+                      src={item.avatar}
+                      alt={item.author}
                       className="w-10 h-10 rounded-full object-cover flex-shrink-0"
                       loading="lazy"
                     />
                     <div>
-                      <p className="text-sm font-semibold text-[#1C1A17]">{t.author}</p>
-                      <p className="text-xs text-[#9C9890] mt-0.5">{t.location} · {t.trip}</p>
+                      <p className="text-sm font-semibold text-[#1C1A17]">{item.author}</p>
+                      <p className="text-xs text-[#9C9890] mt-0.5">{item.location} · {item.trip}</p>
                     </div>
                   </div>
                 </div>
@@ -846,16 +906,16 @@ export default function Home() {
                 <span className="w-5 h-5 rounded-full flex items-center justify-center" style={{ background: '#00AA6C' }}>
                   <svg viewBox="0 0 16 16" fill="white" width="8" height="8"><circle cx="8" cy="8" r="3" fill="white"/><circle cx="8" cy="8" r="2" fill="#00AA6C"/></svg>
                 </span>
-                <span className="font-medium text-[#1C1A17]">4.9&thinsp;/&thinsp;5</span> on Tripadvisor
+                <span className="font-medium text-[#1C1A17]">4.9&thinsp;/&thinsp;5</span> {t('home.testi.onTripadvisor')}
               </div>
               <div className="w-px h-4 bg-[#E3DCCD] hidden sm:block" />
               <div className="flex items-center gap-2 text-sm text-[#7A7268]">
                 <span className="w-5 h-5 rounded-full bg-white border border-[#E3DCCD] flex items-center justify-center text-[11px] font-bold" style={{ color: '#4285F4' }}>G</span>
-                <span className="font-medium text-[#1C1A17]">4.8&thinsp;/&thinsp;5</span> on Google
+                <span className="font-medium text-[#1C1A17]">4.8&thinsp;/&thinsp;5</span> {t('home.testi.onGoogle')}
               </div>
               <div className="w-px h-4 bg-[#E3DCCD] hidden sm:block" />
               <p className="text-sm text-[#7A7268]">
-                ★&ensp;<span className="font-medium text-[#1C1A17]">200+ verified reviews</span>
+                ★&ensp;<span className="font-medium text-[#1C1A17]">{t('home.testi.verified')}</span>
               </p>
             </div>
           </div>
@@ -866,13 +926,13 @@ export default function Home() {
           <div className="max-w-7xl mx-auto">
             <Reveal className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
               <div>
-                <Eyebrow>Our travels in photos</Eyebrow>
+                <Eyebrow>{t('home.gallery.eyebrow')}</Eyebrow>
                 <h2 className="heading text-[#1C1A17]" style={{ fontSize: 'clamp(28px, 5vw, 48px)', lineHeight: 1.1 }}>
-                  Life through the <span className="heading-accent">lens</span>
+                  {t('home.gallery.title1')} <span className="heading-accent">{t('home.gallery.title2')}</span>
                 </h2>
               </div>
-              <a href="#" className="link-underline self-start md:self-auto">
-                Follow on Instagram →
+              <a href="https://www.instagram.com/ibralitravels" target="_blank" rel="noopener noreferrer" className="link-underline self-start md:self-auto">
+                {t('home.gallery.follow')} →
               </a>
             </Reveal>
 
@@ -881,7 +941,7 @@ export default function Home() {
                 <div key={i} className="group relative overflow-hidden rounded-xl" style={{ aspectRatio: '1' }}>
                   <img
                     src={photo}
-                    alt={`Ibrali travel ${i + 1}`}
+                    alt={t('home.gallery.alt', null, { n: i + 1 })}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     loading="lazy"
                   />
@@ -904,12 +964,12 @@ export default function Home() {
         {/* ── NEWSLETTER ──────────────────────────────────── */}
         <section className="py-20 px-6">
           <Reveal className="max-w-2xl mx-auto text-center">
-            <Eyebrow>Travel inspiration</Eyebrow>
+            <Eyebrow>{t('home.news.eyebrow')}</Eyebrow>
             <h2 className="heading mb-4" style={{ fontSize: 'clamp(26px, 4vw, 40px)', lineHeight: 1.15 }}>
-              Get worldwide travel <span className="heading-accent">insider tips</span>
+              {t('home.news.title1')} <span className="heading-accent">{t('home.news.title2')}</span>
             </h2>
             <p className="text-[#7A7268] text-base mb-8 leading-relaxed max-w-lg mx-auto">
-              Monthly itinerary ideas, off-the-beaten-path destinations, and exclusive early-bird deals — delivered to your inbox.
+              {t('home.news.desc')}
             </p>
             <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onSubmit={handleNewsletterSubmit}>
               <input
@@ -917,20 +977,20 @@ export default function Home() {
                 required
                 value={newsletterEmail}
                 onChange={e => setNewsletterEmail(e.target.value)}
-                placeholder="Your email address"
+                placeholder={t('home.news.placeholder')}
                 className="input-safari flex-1 px-5 py-3.5 rounded-full text-sm bg-white text-[#1C1A17] placeholder:text-[#9C9890]"
                 style={{ border: '0.5px solid #E3DCCD' }}
               />
               <button type="submit" disabled={newsletterState === 'sending'} className="btn btn-gold px-7 py-3.5 whitespace-nowrap">
-                {newsletterState === 'sending' ? 'Subscribing…' : 'Subscribe free →'}
+                {newsletterState === 'sending' ? t('home.news.sending') : `${t('home.news.subscribe')} →`}
               </button>
             </form>
             {newsletterState === 'done' ? (
-              <p className="text-emerald-700 text-xs mt-4 font-medium">You're in! Watch your inbox for travel inspiration.</p>
+              <p className="text-emerald-700 text-xs mt-4 font-medium">{t('home.news.done')}</p>
             ) : newsletterState === 'error' ? (
-              <p className="text-red-600 text-xs mt-4">That email doesn't look right — please try again.</p>
+              <p className="text-red-600 text-xs mt-4">{t('home.news.error')}</p>
             ) : (
-              <p className="text-[#9C9890] text-xs mt-4">No spam. Unsubscribe any time.</p>
+              <p className="text-[#9C9890] text-xs mt-4">{t('home.news.privacy')}</p>
             )}
           </Reveal>
         </section>
@@ -943,21 +1003,21 @@ export default function Home() {
               style={{ backgroundImage: "url('https://images.unsplash.com/photo-1523805009345-7448845a9e53?w=960&q=85')" }}
             />
             <Reveal className="flex flex-col justify-center px-10 py-16 lg:px-16 h-full" style={{ background: '#FFF1E6' }}>
-              <Eyebrow>Ready to go?</Eyebrow>
+              <Eyebrow>{t('home.cta.eyebrow')}</Eyebrow>
               <h2 className="heading text-[#1C1A17] mb-6" style={{ fontSize: 'clamp(30px, 5vw, 50px)', lineHeight: 1.1 }}>
-                Your next<br />
-                adventure<br />
-                <span style={{ fontStyle: 'italic', fontWeight: 400, color: '#E75A08' }}>starts here.</span>
+                {t('home.cta.line1')}<br />
+                {t('home.cta.line2')}<br />
+                <span style={{ fontStyle: 'italic', fontWeight: 400, color: '#E75A08' }}>{t('home.cta.line3')}</span>
               </h2>
               <p className="text-[#6B6560] text-base leading-relaxed mb-8 max-w-sm">
-                Discover Kenya, DR Congo, Dubai, and beyond with a company built on passion, expertise, and a deep respect for every destination.
+                {t('home.cta.desc')}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Link to="/packages" className="btn btn-gold px-8 py-4">
-                  Browse packages →
+                  {t('home.cta.browse')} →
                 </Link>
                 <Link to="/contact" className="btn btn-light px-8 py-4">
-                  Talk to an expert
+                  {t('home.cta.talk')}
                 </Link>
               </div>
               <div className="flex items-center gap-4 pt-6 border-t border-[#FFD9B3]">
@@ -967,11 +1027,11 @@ export default function Home() {
                     'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face',
                     'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face',
                   ].map((src, i) => (
-                    <img key={i} src={src} alt="Traveller" className="w-8 h-8 rounded-full object-cover" style={{ border: '2px solid #FFF1E6' }} />
+                    <img key={i} src={src} alt={t('home.cta.travellerAlt')} className="w-8 h-8 rounded-full object-cover" style={{ border: '2px solid #FFF1E6' }} />
                   ))}
                 </div>
                 <p className="text-[#9C9890] text-sm">
-                  Join <span className="text-[#1C1A17] font-medium">5,000+</span> happy travellers
+                  {t('home.cta.joinBefore')} <span className="text-[#1C1A17] font-medium">{t('home.cta.joinCount')}</span> {t('home.cta.joinAfter')}
                 </p>
               </div>
             </Reveal>

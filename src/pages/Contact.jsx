@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import PageHero from '../components/PageHero'
 import useSeo from '../hooks/useSeo'
+import { useLanguage } from '../hooks/useLanguage'
 
 const serif = { fontFamily: "'Playfair Display', serif" }
 
@@ -23,9 +24,10 @@ function ContactIcon({ type }) {
 }
 
 export default function Contact() {
+  const { t } = useLanguage()
   useSeo({
-    title: 'Contact Us',
-    description: 'Tell us where you want to go, how you like to travel, and what matters most. Get in touch with the Ibrali Tours & Travel team today.',
+    title: t('contact.seoTitle'),
+    description: t('contact.seoDesc'),
   })
 
   const [submitted, setSubmitted] = useState(false)
@@ -56,7 +58,7 @@ export default function Contact() {
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok || json.ok === false) {
-        setSendError(json.error || 'Something went wrong. Please try again.')
+        setSendError(json.error || t('common.msg.API Error'))
         return
       }
       setSubmitted(true)
@@ -71,10 +73,10 @@ export default function Contact() {
   }
 
   const contactItems = [
-    { icon: 'mail', title: 'Email', value: 'info@ibralitravels.com', href: 'mailto:info@ibralitravels.com' },
-    { icon: 'phone', title: 'Mobile', value: '+254 786 000 100', href: 'tel:+254786000100' },
-    { icon: 'phone', title: 'Landline', value: '+254 20 527 0005', href: 'tel:+254205270005' },
-    { icon: 'pin', title: 'Office', value: 'Kayahwe & Galana Rd, Kilimani — P.O. Box 24646-00100, Nairobi, Kenya', href: null },
+    { icon: 'mail', title: t('contact.email'), value: 'info@ibralitravels.com', href: 'mailto:info@ibralitravels.com' },
+    { icon: 'phone', title: t('contact.mobile'), value: '+254 786 000 100', href: 'tel:+254786000100' },
+    { icon: 'phone', title: t('contact.landline'), value: '+254 20 527 0005', href: 'tel:+254205270005' },
+    { icon: 'pin', title: t('contact.office'), value: t('footer.address'), href: null },
   ]
 
   const inputClass = 'w-full px-4 py-3.5 bg-white border border-[#E3DCCD] rounded-xl text-sm text-[#1C1A17] placeholder-[#B0A99E] focus:outline-none focus:border-[#E75A08]'
@@ -85,10 +87,10 @@ export default function Contact() {
 
       <PageHero
         image="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1500&q=70"
-        subtitle="Tell us where you want to go, how you like to travel, and what matters most. We will help shape the right itinerary."
+        subtitle={t('contact.heroSub')}
       >
-        Let us plan your<br />
-        <span className="heading-accent">next escape</span>
+        {t('contact.hero1')}<br />
+        <span className="heading-accent">{t('contact.hero2')}</span>
       </PageHero>
 
       <section className="max-w-7xl mx-auto px-6 py-20">
@@ -117,10 +119,10 @@ export default function Contact() {
             })}
 
             <div className="rounded-2xl p-7 text-white" style={{ background: '#E75A08' }}>
-              <p className="text-[11px] uppercase tracking-[1.5px] text-white/70 font-medium mb-3">Response time</p>
-              <h2 style={{ ...serif, fontWeight: 700, fontSize: '30px', color: '#fff' }}>Within 24 hours</h2>
+              <p className="text-[11px] uppercase tracking-[1.5px] text-white/70 font-medium mb-3">{t('contact.responseLabel')}</p>
+              <h2 style={{ ...serif, fontWeight: 700, fontSize: '30px', color: '#fff' }}>{t('contact.responseTitle')}</h2>
               <p className="text-white/85 text-sm leading-relaxed mt-3">
-                For urgent departures, call us directly so we can check availability and guide options immediately.
+                {t('contact.responseDesc')}
               </p>
             </div>
           </div>
@@ -128,14 +130,14 @@ export default function Contact() {
           <div className="lg:col-span-3">
             <form onSubmit={handleSubmit} className="bg-white rounded-2xl overflow-hidden" style={{ border: '0.5px solid #E3DCCD' }}>
               <div className="px-8 py-6 border-b border-[#F0EDE8]">
-                <h2 className="text-xl text-[#1C1A17]" style={{ ...serif, fontWeight: 700 }}>Send a message</h2>
-                <p className="text-[#9C9890] text-sm mt-1">Share a few details and our travel team will get back to you.</p>
+                <h2 className="text-xl text-[#1C1A17]" style={{ ...serif, fontWeight: 700 }}>{t('contact.formTitle')}</h2>
+                <p className="text-[#9C9890] text-sm mt-1">{t('contact.formDesc')}</p>
               </div>
 
               <div className="px-8 py-7 space-y-6">
                 {submitted && (
                   <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-700 text-sm">
-                    Message received. Our team will contact you soon.
+                    {t('contact.received')}
                   </div>
                 )}
 
@@ -147,27 +149,27 @@ export default function Contact() {
 
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2.5">Name</label>
-                    <input name="name" value={formData.name} onChange={handleChange} required placeholder="Your name" className={inputClass} />
+                    <label className="block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2.5">{t('contact.name')}</label>
+                    <input name="name" value={formData.name} onChange={handleChange} required placeholder={t('contact.namePlaceholder')} className={inputClass} />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2.5">Email</label>
+                    <label className="block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2.5">{t('contact.email')}</label>
                     <input name="email" type="email" value={formData.email} onChange={handleChange} required placeholder="you@example.com" className={inputClass} />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2.5">Phone</label>
+                  <label className="block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2.5">{t('contact.phone')}</label>
                   <input name="phone" value={formData.phone} onChange={handleChange} placeholder="+254 786 000 100" className={inputClass} />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2.5">Message</label>
-                  <textarea name="message" value={formData.message} onChange={handleChange} required rows={5} placeholder="Tell us about your dream trip, dates, group size, or budget..." className={`${inputClass} resize-none`} />
+                  <label className="block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2.5">{t('contact.message')}</label>
+                  <textarea name="message" value={formData.message} onChange={handleChange} required rows={5} placeholder={t('contact.messagePlaceholder')} className={`${inputClass} resize-none`} />
                 </div>
 
                 <button type="submit" disabled={sending} className="btn btn-gold w-full py-4 !rounded-xl">
-                  {sending ? 'Sending…' : 'Send message'}
+                  {sending ? t('contact.sending') : t('contact.send')}
                 </button>
               </div>
             </form>

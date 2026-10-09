@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react"
+import { useLocation } from "react-router-dom"
 import { TOUR_PACKAGES } from "../utils/constants"
+import { useLanguage } from "../hooks/useLanguage"
 import Navbar from "../components/Navbar"
 import PackageCard from "../components/PackageCard"
 import Footer from "../components/Footer"
@@ -9,9 +11,11 @@ import useSeo from "../hooks/useSeo"
 const gold = '#E75A08'
 
 export default function Packages() {
+  const { t, locale } = useLanguage()
+  const location = useLocation()
   useSeo({
-    title: 'Travel Packages',
-    description: 'Browse curated safari, beach, and cultural travel experiences across Kenya, DR Congo, Dubai, and the rest of the world with Ibrali Tours & Travel.',
+    title: t('packages.seoTitle'),
+    description: t('packages.seoDesc'),
   })
 
   const [packages, setPackages] = useState(TOUR_PACKAGES)
@@ -20,7 +24,8 @@ export default function Packages() {
     difficulty: "all",
     minPrice: 0,
     maxPrice: Math.max(...TOUR_PACKAGES.map(p => p.price)),
-    search: "",
+    // Pre-filled when arriving from the home page search (see Home's hero search)
+    search: location.state?.search || "",
   })
   const [filtersOpen, setFiltersOpen] = useState(false)
 
@@ -71,10 +76,10 @@ export default function Packages() {
       {/* ── HERO HEADER ───────────────────────────────────── */}
       <PageHero
         image="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1400&q=60"
-        subtitle={`${TOUR_PACKAGES.length} curated experiences across Kenya, DR Congo, Dubai, and the rest of the world.`}
+        subtitle={t('packages.subtitle', null, { n: TOUR_PACKAGES.length })}
       >
-        Find your<br />
-        <span className="heading-accent">adventure</span>
+        {t('packages.hero1')}<br />
+        <span className="heading-accent">{t('packages.hero2')}</span>
       </PageHero>
 
       {/* ── STICKY SEARCH + FILTER BAR ───────────────────── */}
@@ -89,7 +94,7 @@ export default function Packages() {
               </svg>
               <input
                 type="text"
-                placeholder="Search by destination or name…"
+                placeholder={t('packages.searchPlaceholder')}
                 value={filters.search}
                 onChange={(e) => setFilters({ ...filters, search: e.target.value })}
                 className="w-full pl-11 pr-4 py-3 rounded-xl border border-[#E3DCCD] bg-white text-sm focus:outline-none placeholder-[#B0A99E]"
@@ -107,7 +112,7 @@ export default function Packages() {
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h18M7 8h10M11 12h2M9 16h6" />
               </svg>
-              Filters
+              {t('packages.filters')}
               {activeFilterCount > 0 && (
                 <span className="w-5 h-5 rounded-full text-xs font-medium flex items-center justify-center" style={{ background: gold, color: '#fff' }}>
                   {activeFilterCount}
@@ -120,7 +125,7 @@ export default function Packages() {
                 onClick={clearFilters}
                 className="px-5 py-3 rounded-xl border border-[#E3DCCD] bg-white text-sm font-medium text-[#6B6560] hover:text-[#1C1A17] hover:border-[#382C1C] transition"
               >
-                Clear all
+                {t('packages.clearAll')}
               </button>
             )}
           </div>
@@ -131,12 +136,12 @@ export default function Packages() {
 
               {/* Category */}
               <div>
-                <label className="block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2">Category</label>
+                <label className="block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2">{t('packages.category')}</label>
                 <div className="flex flex-wrap gap-2">
                   {categories.map(c => (
                     <button key={c} onClick={() => setFilters({ ...filters, category: c })}
                       className={`px-3 py-1.5 rounded-full text-xs font-medium border transition ${pill(filters.category === c)}`}>
-                      {c === "all" ? "All" : c}
+                      {c === "all" ? t('packages.all') : t(`common.category.${c}`, c)}
                     </button>
                   ))}
                 </div>
@@ -144,7 +149,7 @@ export default function Packages() {
 
               {/* Difficulty */}
               <div>
-                <label className="block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2">Difficulty</label>
+                <label className="block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2">{t('packages.difficulty')}</label>
                 <div className="flex flex-wrap gap-2">
                   {difficulties.map(d => (
                     <button key={d} onClick={() => setFilters({ ...filters, difficulty: d })}
@@ -154,7 +159,7 @@ export default function Packages() {
                           ? `${difficultyColour[d]} hover:border-current`
                           : "bg-white text-[#6B6560] border-[#E3DCCD] hover:border-[#382C1C]"
                         }`}>
-                      {d === "all" ? "All levels" : d}
+                      {d === "all" ? t('packages.allLevels') : t(`common.difficulty.${d}`, d)}
                     </button>
                   ))}
                 </div>
@@ -163,17 +168,17 @@ export default function Packages() {
               {/* Price range */}
               <div className="lg:col-span-2">
                 <label className="block text-[11px] font-medium text-[#6B6560] uppercase tracking-[1.5px] mb-2">
-                  Price range — <span className="text-[#1C1A17] font-medium" style={{ color: '#C2470A' }}>${filters.minPrice.toLocaleString()} – ${filters.maxPrice.toLocaleString()}</span>
+                  {t('packages.priceRange')} <span className="text-[#1C1A17] font-medium" style={{ color: '#C2470A' }}>${filters.minPrice.toLocaleString(locale)} – ${filters.maxPrice.toLocaleString(locale)}</span>
                 </label>
                 <div className="flex gap-4 items-center">
                   <div className="flex-1">
-                    <p className="text-[10px] text-[#9C9890] mb-1">Min</p>
+                    <p className="text-[10px] text-[#9C9890] mb-1">{t('packages.min')}</p>
                     <input type="range" min="0" max={maxPriceValue} value={filters.minPrice}
                       onChange={(e) => setFilters({ ...filters, minPrice: +e.target.value })}
                       className="w-full" style={{ accentColor: gold }} />
                   </div>
                   <div className="flex-1">
-                    <p className="text-[10px] text-[#9C9890] mb-1">Max</p>
+                    <p className="text-[10px] text-[#9C9890] mb-1">{t('packages.max')}</p>
                     <input type="range" min="0" max={maxPriceValue} value={filters.maxPrice}
                       onChange={(e) => setFilters({ ...filters, maxPrice: +e.target.value })}
                       className="w-full" style={{ accentColor: gold }} />
@@ -189,7 +194,8 @@ export default function Packages() {
       {/* ── RESULTS COUNT ─────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-6 pt-8 pb-2 flex items-center justify-between">
         <p className="text-sm text-[#6B6560] font-medium">
-          <span className="heading text-[#1C1A17] text-lg">{packages.length}</span> experience{packages.length !== 1 ? "s" : ""} found
+          <span className="heading text-[#1C1A17] text-lg">{packages.length}</span>{' '}
+          {packages.length !== 1 ? t('packages.foundMany') : t('packages.foundOne')}
         </p>
       </div>
 
@@ -210,12 +216,12 @@ export default function Packages() {
                 <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /><line x1="11" y1="8" x2="11" y2="14" /><line x1="8" y1="11" x2="14" y2="11" />
               </svg>
             </div>
-            <h3 className="heading text-2xl text-[#1C1A17] mb-2">No experiences found</h3>
+            <h3 className="heading text-2xl text-[#1C1A17] mb-2">{t('packages.noneTitle')}</h3>
             <p className="text-[#6B6560] text-sm mb-8 max-w-xs">
-              Try broadening your search or adjusting the filters to see more options.
+              {t('packages.noneDesc')}
             </p>
             <button onClick={clearFilters} className="btn btn-dark px-8 py-4">
-              Reset all filters
+              {t('packages.reset')}
             </button>
           </div>
         )}

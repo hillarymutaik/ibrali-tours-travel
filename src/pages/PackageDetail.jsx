@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react"
 import { useParams, Link, useNavigate } from "react-router-dom"
 import { TOUR_PACKAGES } from "../utils/constants"
 import { formatCurrency, getDifficultyColor, getCategoryColor } from "../utils/helpers"
+import { useLanguage } from "../hooks/useLanguage"
 import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
 import useSeo from "../hooks/useSeo"
@@ -41,13 +42,22 @@ function TrustIcon({ name }) {
 export default function PackageDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { t, locale } = useLanguage()
   const [pkg, setPkg] = useState(null)
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState("overview")
 
+  // Localised package text (falls back to the English data when no translation exists)
+  const title = pkg ? t(`pkg.${pkg.id}.title`, pkg.title) : ''
+  const destination = pkg ? t(`pkg.${pkg.id}.destination`, pkg.destination) : ''
+  const description = pkg ? t(`pkg.${pkg.id}.description`, pkg.description) : ''
+  const bestTime = pkg ? t(`pkg.${pkg.id}.bestTime`, pkg.bestTime) : ''
+  const highlights = pkg ? pkg.highlights.map((h, i) => t(`pkg.${pkg.id}.highlight.${i}`, h)) : []
+  const inclusions = pkg ? pkg.inclusions.map((item, i) => t(`pkg.${pkg.id}.inclusion.${i}`, item)) : []
+
   useSeo({
-    title: pkg ? pkg.title : 'Safari Package',
-    description: pkg ? pkg.description : 'Explore our curated safari and travel packages across Kenya, DR Congo, Dubai, and the rest of the world with Ibrali Tours & Travel.',
+    title: pkg ? title : t('detail.seoFallbackTitle'),
+    description: pkg ? description : t('detail.seoFallbackDesc'),
     image: pkg?.image,
   })
 
@@ -62,7 +72,7 @@ export default function PackageDetail() {
       <div className="min-h-screen bg-[#FAF7F1] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="w-10 h-10 rounded-full border-4 border-t-transparent animate-spin" style={{ borderColor: gold, borderTopColor: 'transparent' }} />
-          <p className="text-[#6B6560] text-sm font-medium">Loading experience…</p>
+          <p className="text-[#6B6560] text-sm font-medium">{t('detail.loading')}</p>
         </div>
       </div>
     )
@@ -78,10 +88,10 @@ export default function PackageDetail() {
               <circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /><line x1="8" y1="11" x2="14" y2="11" />
             </svg>
           </div>
-          <h1 className="text-3xl text-[#1C1A17] mb-3" style={{ ...serif, fontWeight: 700 }}>Experience not found</h1>
-          <p className="text-[#6B6560] mb-8">This package may have moved or no longer exists.</p>
+          <h1 className="text-3xl text-[#1C1A17] mb-3" style={{ ...serif, fontWeight: 700 }}>{t('detail.notFoundTitle')}</h1>
+          <p className="text-[#6B6560] mb-8">{t('detail.notFoundDesc')}</p>
           <Link to="/packages" className="btn btn-dark px-8 py-4">
-            ← Back to packages
+            {t('detail.backToPackages')}
           </Link>
         </div>
         <Footer />
@@ -99,7 +109,7 @@ export default function PackageDetail() {
       <section className="relative h-[75vh] overflow-hidden">
         <img
           src={pkg.image}
-          alt={pkg.title}
+          alt={title}
           className="w-full h-full object-cover scale-[1.04] transition-transform duration-[8s] hover:scale-100"
         />
 
@@ -111,13 +121,13 @@ export default function PackageDetail() {
           onClick={() => navigate("/packages")}
           className="absolute top-24 left-6 md:left-10 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-medium px-4 py-2 rounded-full hover:bg-white/20 transition"
         >
-          ← All packages
+          {t('detail.allPackages')}
         </button>
 
         {/* Rating pill */}
         <div className="absolute top-24 right-6 md:right-10 bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-medium px-4 py-2 rounded-full flex items-center gap-1.5">
           <span style={{ color: '#F2843A' }}>★</span>
-          {pkg.rating} · {pkg.reviews} reviews
+          {pkg.rating} {t('detail.reviews', null, { n: pkg.reviews })}
         </div>
 
         {/* Hero copy */}
@@ -125,22 +135,22 @@ export default function PackageDetail() {
           <div className="max-w-7xl mx-auto px-6 md:px-10 pb-12">
             <div className="flex flex-wrap gap-2 mb-4">
               <span className="px-3 py-1 rounded-full text-xs font-medium" style={{ background: gold, color: '#fff' }}>
-                {pkg.category}
+                {t(`common.category.${pkg.category?.toLowerCase()}`, pkg.category)}
               </span>
               <span className={`px-3 py-1 rounded-full text-xs font-medium ${difficultyStyle[pkg.difficulty] || "bg-white/20 text-white"}`}>
-                {pkg.difficulty}
+                {t(`common.difficulty.${pkg.difficulty}`, pkg.difficulty)}
               </span>
             </div>
 
             <h1 className="text-white leading-[1.0] max-w-3xl" style={{ ...serif, fontWeight: 700, fontSize: 'clamp(36px, 6vw, 64px)' }}>
-              {pkg.title}
+              {title}
             </h1>
 
             <p className="text-white/65 mt-3 text-base flex items-center gap-2">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F2843A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
               </svg>
-              {pkg.destination} · {pkg.duration}-day adventure
+              {destination} · {t('detail.dayAdventure', null, { n: pkg.duration })}
             </p>
           </div>
         </div>
@@ -155,10 +165,10 @@ export default function PackageDetail() {
           {/* QUICK STATS */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {[
-              { label: "Duration", value: `${pkg.duration} days`, icon: "calendar" },
-              { label: "Max group", value: pkg.maxTravelers, icon: "group" },
-              { label: "Best time", value: pkg.bestTime, icon: "sun" },
-              { label: "Rating", value: `${pkg.rating} / 5`, icon: "star" },
+              { label: t('detail.statDuration'), value: t('detail.days', null, { n: pkg.duration }), icon: "calendar" },
+              { label: t('detail.statGroup'), value: pkg.maxTravelers, icon: "group" },
+              { label: t('detail.statBest'), value: bestTime, icon: "sun" },
+              { label: t('detail.statRating'), value: `${pkg.rating} / 5`, icon: "star" },
             ].map((s) => (
               <div key={s.label} className="bg-white rounded-2xl p-4" style={{ border: '0.5px solid #E3DCCD' }}>
                 <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-3" style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3' }}>
@@ -173,16 +183,16 @@ export default function PackageDetail() {
           {/* TABS */}
           <div>
             <div className="flex gap-1 p-1 bg-white rounded-xl w-fit mb-8" style={{ border: '0.5px solid #E3DCCD' }}>
-              {tabs.map(t => (
+              {tabs.map(tabKey => (
                 <button
-                  key={t}
-                  onClick={() => setActiveTab(t)}
-                  className={`px-5 py-2 rounded-lg text-xs font-medium capitalize transition-all duration-200 ${activeTab === t
+                  key={tabKey}
+                  onClick={() => setActiveTab(tabKey)}
+                  className={`px-5 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${activeTab === tabKey
                     ? "bg-[#382C1C] text-white"
                     : "text-[#6B6560] hover:text-[#1C1A17]"
                     }`}
                 >
-                  {t}
+                  {t(`detail.tab.${tabKey}`)}
                 </button>
               ))}
             </div>
@@ -190,17 +200,17 @@ export default function PackageDetail() {
             {/* OVERVIEW TAB */}
             {activeTab === "overview" && (
               <div className="space-y-6 animate-fade-in">
-                <h2 className="text-2xl" style={{ ...serif, fontWeight: 700 }}>About this experience</h2>
-                <p className="text-[#4A4540] leading-relaxed text-base">{pkg.description}</p>
+                <h2 className="text-2xl" style={{ ...serif, fontWeight: 700 }}>{t('detail.aboutTitle')}</h2>
+                <p className="text-[#4A4540] leading-relaxed text-base">{description}</p>
               </div>
             )}
 
             {/* HIGHLIGHTS TAB */}
             {activeTab === "highlights" && (
               <div className="animate-fade-in">
-                <h2 className="text-2xl mb-6" style={{ ...serif, fontWeight: 700 }}>Highlights</h2>
+                <h2 className="text-2xl mb-6" style={{ ...serif, fontWeight: 700 }}>{t('detail.highlightsTitle')}</h2>
                 <div className="grid sm:grid-cols-2 gap-3">
-                  {pkg.highlights.map((h, i) => (
+                  {highlights.map((h, i) => (
                     <div
                       key={i}
                       className="flex items-start gap-3 card-surface p-4 !rounded-xl"
@@ -218,12 +228,12 @@ export default function PackageDetail() {
             {/* INCLUSIONS TAB */}
             {activeTab === "inclusions" && (
               <div className="animate-fade-in">
-                <h2 className="text-2xl mb-6" style={{ ...serif, fontWeight: 700 }}>What's included</h2>
+                <h2 className="text-2xl mb-6" style={{ ...serif, fontWeight: 700 }}>{t('detail.includedTitle')}</h2>
                 <div className="bg-white rounded-2xl overflow-hidden" style={{ border: '0.5px solid #E3DCCD' }}>
-                  {pkg.inclusions.map((item, i) => (
+                  {inclusions.map((item, i) => (
                     <div
                       key={i}
-                      className={`flex items-center gap-3 px-6 py-4 text-sm text-[#1C1A17] ${i < pkg.inclusions.length - 1 ? "border-b border-[#F0EDE8]" : ""
+                      className={`flex items-center gap-3 px-6 py-4 text-sm text-[#1C1A17] ${i < inclusions.length - 1 ? "border-b border-[#F0EDE8]" : ""
                         }`}
                     >
                       <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: gold }} />
@@ -243,17 +253,17 @@ export default function PackageDetail() {
             {/* Main booking card */}
             <div className="rounded-2xl p-7 text-white" style={{ background: '#382C1C' }}>
 
-              <p className="text-white/50 text-[11px] font-medium uppercase tracking-[1.5px] mb-1">Price per person</p>
+              <p className="text-white/50 text-[11px] font-medium uppercase tracking-[1.5px] mb-1">{t('common.pricePerPerson')}</p>
               <p className="mb-1" style={{ ...serif, fontWeight: 700, fontSize: '40px', color: '#F2843A' }}>
-                {formatCurrency(pkg.price)}
+                {formatCurrency(pkg.price, 'USD', locale)}
               </p>
-              <p className="text-white/40 text-xs mb-7">All taxes & fees included</p>
+              <p className="text-white/40 text-xs mb-7">{t('detail.taxes')}</p>
 
               <div className="space-y-3 pb-6 mb-6 text-sm" style={{ borderBottom: '0.5px solid rgba(231, 90, 8,0.2)' }}>
-                <div className="flex justify-between"><span className="text-white/50">Destination</span><span className="font-medium">{pkg.destination}</span></div>
-                <div className="flex justify-between"><span className="text-white/50">Duration</span><span className="font-medium">{pkg.duration} days</span></div>
-                <div className="flex justify-between"><span className="text-white/50">Difficulty</span><span className="font-medium capitalize">{pkg.difficulty}</span></div>
-                <div className="flex justify-between"><span className="text-white/50">Max group</span><span className="font-medium">{pkg.maxTravelers} people</span></div>
+                <div className="flex justify-between"><span className="text-white/50">{t('detail.destination')}</span><span className="font-medium">{destination}</span></div>
+                <div className="flex justify-between"><span className="text-white/50">{t('detail.statDuration')}</span><span className="font-medium">{t('detail.days', null, { n: pkg.duration })}</span></div>
+                <div className="flex justify-between"><span className="text-white/50">{t('detail.difficulty')}</span><span className="font-medium">{t(`common.difficulty.${pkg.difficulty}`, pkg.difficulty)}</span></div>
+                <div className="flex justify-between"><span className="text-white/50">{t('detail.statGroup')}</span><span className="font-medium">{t('detail.people', null, { n: pkg.maxTravelers })}</span></div>
               </div>
 
               <Link
@@ -261,14 +271,14 @@ export default function PackageDetail() {
                 state={{ packageId: pkg.id }}
                 className="btn btn-gold w-full py-4 !rounded-xl tracking-wide"
               >
-                Reserve this experience →
+                {t('detail.reserve')} →
               </Link>
 
               <button
                 onClick={() => navigate("/packages")}
                 className="w-full mt-3 py-3 rounded-xl border border-white/20 text-white/70 hover:bg-white/5 transition text-sm"
               >
-                View all packages
+                {t('detail.viewAllPackages')}
               </button>
             </div>
 
@@ -276,17 +286,17 @@ export default function PackageDetail() {
             <div className="bg-white rounded-2xl p-5" style={{ border: '0.5px solid #E3DCCD' }}>
               <div className="space-y-3">
                 {[
-                  { icon: "check", label: "Free cancellation", sub: "Up to 48 hrs before departure" },
-                  { icon: "lock", label: "Secure booking", sub: "256-bit SSL encryption" },
-                  { icon: "bolt", label: "Instant confirmation", sub: "Booking confirmed immediately" },
-                ].map((t) => (
-                  <div key={t.label} className="flex items-start gap-3">
+                  { icon: "check", label: t('detail.trust.cancel'), sub: t('detail.trust.cancelSub') },
+                  { icon: "lock", label: t('detail.trust.secure'), sub: t('detail.trust.secureSub') },
+                  { icon: "bolt", label: t('detail.trust.instant'), sub: t('detail.trust.instantSub') },
+                ].map((badge) => (
+                  <div key={badge.label} className="flex items-start gap-3">
                     <span className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#FFF4ED', border: '0.5px solid #FFD9B3' }}>
-                      <TrustIcon name={t.icon} />
+                      <TrustIcon name={badge.icon} />
                     </span>
                     <div>
-                      <p className="text-xs font-medium text-[#1C1A17]">{t.label}</p>
-                      <p className="text-xs text-[#9C9890]">{t.sub}</p>
+                      <p className="text-xs font-medium text-[#1C1A17]">{badge.label}</p>
+                      <p className="text-xs text-[#9C9890]">{badge.sub}</p>
                     </div>
                   </div>
                 ))}

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import { useLanguage } from '../hooks/useLanguage'
 
 /** Floating gold "back to top" button — appears after scrolling past the hero. */
 export default function BackToTop() {
+  const { t } = useLanguage()
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -13,7 +15,7 @@ export default function BackToTop() {
   return (
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      aria-label="Back to top"
+      aria-label={t('common.backToTop')}
       className={`fixed bottom-24 right-6 z-50 w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300 ${
         visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3 pointer-events-none'
       }`}

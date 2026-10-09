@@ -1,14 +1,16 @@
 import React from 'react'
 import { MessageCircle } from 'lucide-react'
+import { useLanguage } from '../hooks/useLanguage'
 
 /** Floating "chat with us" button — opens a pre-filled WhatsApp conversation. */
 export default function WhatsAppChat() {
+  const { t } = useLanguage()
   return (
     <a
       href="https://wa.me/254786000100?text=Hi%20Ibrali%20Tours%20%26%20Travel%2C%20I%27d%20like%20to%20ask%20about..."
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Chat with us on WhatsApp"
+      aria-label={t('common.chatWhatsApp')}
       className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center transition-transform duration-300 hover:-translate-y-0.5"
       style={{
         background: '#25D366',
