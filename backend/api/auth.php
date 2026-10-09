@@ -6,6 +6,8 @@
  *   POST auth.php?action=logout           (Bearer token)
  *   GET  auth.php?action=me               (Bearer token)
  *   POST auth.php?action=change-password  (Bearer) {currentPassword, newPassword}
+ *   POST auth.php?action=update-profile   (Bearer) {name, phone} — email is the sign-in id and stays fixed
+ *   POST auth.php?action=logout-others    (Bearer) revokes every session except this one
  *   POST auth.php?action=forgot-password  {email} → issues a 6-digit reset code
  *   POST auth.php?action=reset-password   {email, code, newPassword}
  *
@@ -112,6 +114,35 @@ switch ($action) {
 
         ok(['changed' => true]);
 
+    case 'update-profile':
+        $user  = requireUser();
+        $b     = body();
+        $name  = trim($b['name'] ?? '');
+        $phone = trim($b['phone'] ?? '');
+        $len   = fn(string $s): int => function_exists('mb_strlen') ? mb_strlen($s) : strlen($s);
+        if ($name === '' || $len($name) > 120) {
+            fail('Enter a name of up to 120 characters');
+        }
+        if ($len($phone) > 30) {
+            fail('Phone number must be 30 characters or fewer');
+        }
+        $phone = $phone === '' ? null : $phone;
+        db()->prepare('UPDATE users SET name = ?, phone = ? WHERE id = ?')
+            ->execute([$name, $phone, $user['id']]);
+        ok(['user' => [
+            'id'    => (int)$user['id'],
+            'name'  => $name,
+            'email' => $user['email'],
+            'phone' => $phone,
+            'role'  => $user['role'],
+        ]]);
+
+    case 'logout-others':
+        $user = requireUser();
+        $stmt = db()->prepare('DELETE FROM auth_tokens WHERE user_id = ? AND token_hash <> ?');
+        $stmt->execute([$user['id'], hash('sha256', bearerToken())]);
+        ok(['revoked' => $stmt->rowCount()]);
+
     case 'forgot-password':
         $email = strtolower(trim(body()['email'] ?? ''));
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -163,5 +194,5 @@ switch ($action) {
         ok(['reset' => true]);
 
     default:
-        fail('Unknown action. Use register, login, logout, me, change-password, forgot-password or reset-password.', 404);
+        fail('Unknown action. Use register, login, logout, me, change-password, update-profile, logout-others, forgot-password or reset-password.', 404);
 }

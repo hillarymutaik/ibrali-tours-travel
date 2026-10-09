@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 
 // Form fields keep normal copy/paste so bookings, contact and login still work.
 const isEditable = (target) => {
@@ -9,7 +10,12 @@ const isEditable = (target) => {
 const COPY_SHORTCUTS = ['c', 'x', 'a']
 
 export default function ContentProtection() {
+  // Public website only — staff in the admin console need to copy references, emails and phone numbers
+  const { pathname } = useLocation()
+  const enabled = !(pathname === '/admin' || pathname.startsWith('/admin/'))
+
   useEffect(() => {
+    if (!enabled) return
     const blockUnlessEditable = (e) => {
       if (!isEditable(e.target)) e.preventDefault()
     }
@@ -36,7 +42,7 @@ export default function ContentProtection() {
       document.removeEventListener('dragstart', blockUnlessEditable)
       document.removeEventListener('keydown', blockCopyShortcuts)
     }
-  }, [])
+  }, [enabled])
 
   return null
 }

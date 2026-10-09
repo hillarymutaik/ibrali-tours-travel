@@ -14,7 +14,7 @@ import Careers from "../pages/Careers";
 import Contact from "../pages/Contact";
 import Blog from "../pages/Blog";
 import BlogPost from "../pages/BlogPost";
-import Admin from "../pages/Admin";
+import AdminApp from "../admin/AdminApp";
 import NotFound from "../pages/NotFound";
 import PageTransition from "../components/PageTransition";
 import BackToTop from "../components/BackToTop";
@@ -27,6 +27,16 @@ function AppRoutes() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
+
+  // The admin console is a separate app: none of the public site's chrome
+  // (page transitions, WhatsApp button, back-to-top) is rendered around it.
+  if (location.pathname === "/admin" || location.pathname.startsWith("/admin/")) {
+    return (
+      <Routes>
+        <Route path="/admin/*" element={<AdminApp />} />
+      </Routes>
+    );
+  }
 
   return (
     <MotionConfig reducedMotion="user">
@@ -45,7 +55,6 @@ function AppRoutes() {
           <Route path="/booking" element={<Booking />} />
           <Route path="/my-bookings" element={<MyBookings />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </PageTransition>

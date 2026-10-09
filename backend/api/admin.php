@@ -10,8 +10,10 @@
  *   POST admin.php?action=user-role        {id, role: customer|admin}
  *   GET  admin.php?action=messages         all contact messages
  *   POST admin.php?action=message-read     {id}
+ *   POST admin.php?action=message-unread   {id}
  *   POST admin.php?action=message-delete   {id}
  *   GET  admin.php?action=subscribers      newsletter subscribers
+ *   POST admin.php?action=subscriber-delete {id}
  *   GET  admin.php?action=users            registered users
  *   GET  admin.php?action=packages         all packages (incl. inactive)
  *   POST admin.php?action=package-save     {id?, title, destination, price, duration, category, difficulty, maxTravelers, bestTime, image, description, isActive}
@@ -47,17 +49,20 @@ switch ($action) {
               ORDER BY b.created_at DESC'
         )->fetchAll();
         ok(array_map(fn($r) => [
-            'id'           => $r['booking_ref'],
-            'packageTitle' => $r['package_title'],
-            'fullName'     => $r['full_name'],
-            'email'        => $r['email'],
-            'phone'        => $r['phone'],
-            'travelers'    => (int)$r['travelers'],
-            'startDate'    => $r['start_date'],
-            'totalPrice'   => (float)$r['total_price'],
-            'status'       => $r['status'],
-            'createdAt'    => $r['created_at'],
-            'isGuest'      => $r['user_id'] === null,
+            'id'              => $r['booking_ref'],
+            'packageId'       => (int)$r['package_id'],
+            'packageTitle'    => $r['package_title'],
+            'userId'          => $r['user_id'] === null ? null : (int)$r['user_id'],
+            'fullName'        => $r['full_name'],
+            'email'           => $r['email'],
+            'phone'           => $r['phone'],
+            'travelers'       => (int)$r['travelers'],
+            'startDate'       => $r['start_date'],
+            'specialRequests' => $r['special_requests'],
+            'totalPrice'      => (float)$r['total_price'],
+            'status'          => $r['status'],
+            'createdAt'       => $r['created_at'],
+            'isGuest'         => $r['user_id'] === null,
         ], $rows));
 
     case 'booking-status':
@@ -95,6 +100,11 @@ switch ($action) {
         $stmt->execute([(int)(body()['id'] ?? 0)]);
         ok(['updated' => $stmt->rowCount() > 0]);
 
+    case 'message-unread':
+        $stmt = db()->prepare('UPDATE contact_messages SET is_read = 0 WHERE id = ?');
+        $stmt->execute([(int)(body()['id'] ?? 0)]);
+        ok(['updated' => $stmt->rowCount() > 0]);
+
     case 'message-delete':
         $stmt = db()->prepare('DELETE FROM contact_messages WHERE id = ?');
         $stmt->execute([(int)(body()['id'] ?? 0)]);
@@ -108,6 +118,11 @@ switch ($action) {
             'email'     => $r['email'],
             'createdAt' => $r['created_at'],
         ], $rows));
+
+    case 'subscriber-delete':
+        $stmt = db()->prepare('DELETE FROM newsletter_subscribers WHERE id = ?');
+        $stmt->execute([(int)(body()['id'] ?? 0)]);
+        $stmt->rowCount() ? ok(['deleted' => true]) : fail('Subscriber not found', 404);
 
     /* ── Users ────────────────────────────────────────────────────── */
     case 'users':
