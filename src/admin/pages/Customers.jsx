@@ -92,13 +92,14 @@ export default function Customers() {
   return (
     <div>
       <PageHeader
+        eyebrow="People"
         title="Customers & team"
         description="Registered website accounts and the staff with console access."
         actions={<Button icon={Download} onClick={exportCsv} disabled={!filtered.length}>Export CSV</Button>}
       />
 
       <Card className="overflow-hidden">
-        <div className="flex flex-col md:flex-row gap-3 p-4 border-b border-[#EAECF0]">
+        <div className="flex flex-col md:flex-row gap-3 p-4 border-b border-[#E3DCCD]">
           <Segmented
             label="Role"
             value={role}
@@ -138,26 +139,26 @@ export default function Customers() {
                         tabIndex={0}
                         onClick={() => setParam('open', u.id)}
                         onKeyDown={(e) => { if (e.key === 'Enter') setParam('open', u.id) }}
-                        className={`${rowCls} cursor-pointer hover:bg-[#F9FAFB] focus:outline-none focus-visible:bg-[#F9FAFB]`}
+                        className={`${rowCls} cursor-pointer hover:bg-[#FAF7F1] focus:outline-none focus-visible:bg-[#FAF7F1]`}
                       >
                         <td className={tdCls}>
                           <div className="flex items-center gap-3">
                             <Avatar name={u.name} size={36} tone={u.role === 'admin' ? 'brand' : 'neutral'} />
                             <div className="min-w-0">
-                              <p className="font-medium text-[#101828] flex items-center gap-1.5">
+                              <p className="font-medium text-[#1C1A17] flex items-center gap-1.5">
                                 {u.name}
-                                {u.id === me.id && <span className="text-xs font-normal text-[#667085]">(you)</span>}
+                                {u.id === me.id && <span className="text-xs font-normal text-[#7A7268]">(you)</span>}
                               </p>
-                              <p className="text-xs text-[#667085]">{u.email}</p>
+                              <p className="text-xs text-[#7A7268]">{u.email}</p>
                             </div>
                           </div>
                         </td>
                         <td className={`${tdCls} whitespace-nowrap`}>{u.phone || '—'}</td>
                         <td className={tdCls}><RoleBadge role={u.role} /></td>
                         <td className={`${tdCls} text-right tabular-nums`}>{num(t.count)}</td>
-                        <td className={`${tdCls} text-right tabular-nums font-medium text-[#101828]`}>{money(t.spent)}</td>
+                        <td className={`${tdCls} text-right tabular-nums font-medium text-[#1C1A17]`}>{money(t.spent)}</td>
                         <td className={`${tdCls} whitespace-nowrap`}>{dateShort(u.createdAt)}</td>
-                        <td className={tdCls}><ChevronRight size={18} className="text-[#98A2B3]" /></td>
+                        <td className={tdCls}><ChevronRight size={18} className="text-[#9C9890]" /></td>
                       </tr>
                     )
                   })}
@@ -175,7 +176,7 @@ export default function Customers() {
         title={open?.name}
         subtitle={open ? `Joined ${dateShort(open.createdAt)}` : ''}
         footer={open && (open.id === me.id ? (
-          <p className="text-[13px] text-[#667085] mr-auto self-center">You can't change your own role.</p>
+          <p className="text-[13px] text-[#7A7268] mr-auto self-center">You can't change your own role.</p>
         ) : (
           <Button
             variant={open.role === 'admin' ? 'dangerOutline' : 'secondary'}
@@ -193,14 +194,14 @@ export default function Customers() {
               <div className="min-w-0">
                 <RoleBadge role={open.role} />
                 <div className="mt-2 space-y-1 text-sm">
-                  <p className="flex items-center gap-1.5 text-[#344054]">
-                    <Mail size={15} className="text-[#98A2B3]" />
+                  <p className="flex items-center gap-1.5 text-[#4A4540]">
+                    <Mail size={15} className="text-[#9C9890]" />
                     <a href={`mailto:${open.email}`} className="hover:text-[#C2470A] break-all">{open.email}</a>
                     <CopyButton value={open.email} label="Copy email" />
                   </p>
                   {open.phone && (
-                    <p className="flex items-center gap-1.5 text-[#344054]">
-                      <Phone size={15} className="text-[#98A2B3]" />
+                    <p className="flex items-center gap-1.5 text-[#4A4540]">
+                      <Phone size={15} className="text-[#9C9890]" />
                       <a href={`tel:${open.phone}`} className="hover:text-[#C2470A]">{open.phone}</a>
                       <CopyButton value={open.phone} label="Copy phone" />
                     </p>
@@ -210,32 +211,32 @@ export default function Customers() {
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-xl border border-[#EAECF0] p-4">
-                <p className="text-xs font-medium text-[#667085]">Bookings</p>
-                <p className="text-2xl font-semibold text-[#101828] mt-1">{num(openBookings.length)}</p>
+              <div className="rounded-xl border border-[#E3DCCD] p-4">
+                <p className="text-xs font-medium text-[#7A7268]">Bookings</p>
+                <p className="text-2xl font-semibold text-[#1C1A17] mt-1">{num(openBookings.length)}</p>
               </div>
-              <div className="rounded-xl border border-[#EAECF0] p-4">
-                <p className="text-xs font-medium text-[#667085]">Total spent</p>
-                <p className="text-2xl font-semibold text-[#101828] mt-1">{money(openBookings.filter(isEarned).reduce((s, b) => s + b.totalPrice, 0))}</p>
+              <div className="rounded-xl border border-[#E3DCCD] p-4">
+                <p className="text-xs font-medium text-[#7A7268]">Total spent</p>
+                <p className="text-2xl font-semibold text-[#1C1A17] mt-1">{money(openBookings.filter(isEarned).reduce((s, b) => s + b.totalPrice, 0))}</p>
               </div>
             </div>
 
             <section>
-              <h3 className="text-sm font-semibold text-[#101828] mb-2">Booking history</h3>
+              <h3 className="text-sm font-semibold text-[#1C1A17] mb-2">Booking history</h3>
               {openBookings.length === 0 ? (
-                <p className="text-sm text-[#667085]">No bookings made with this account yet.</p>
+                <p className="text-sm text-[#7A7268]">No bookings made with this account yet.</p>
               ) : (
-                <ul className="rounded-xl border border-[#EAECF0] divide-y divide-[#EAECF0] overflow-hidden">
+                <ul className="rounded-xl border border-[#E3DCCD] divide-y divide-[#E3DCCD] overflow-hidden">
                   {openBookings.map((b) => (
                     <li key={b.id}>
-                      <Link to={`/admin/bookings?open=${encodeURIComponent(b.id)}`} className="flex items-center gap-3 px-4 py-3 hover:bg-[#F9FAFB]">
-                        <CalendarCheck size={17} className="text-[#98A2B3] flex-shrink-0" />
+                      <Link to={`/admin/bookings?open=${encodeURIComponent(b.id)}`} className="flex items-center gap-3 px-4 py-3 hover:bg-[#FAF7F1]">
+                        <CalendarCheck size={17} className="text-[#9C9890] flex-shrink-0" />
                         <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium text-[#101828] truncate">{b.packageTitle}</p>
-                          <p className="text-xs text-[#667085]"><span className="font-mono">{b.id}</span> · travels {dateShort(b.startDate)} · booked {relative(b.createdAt)}</p>
+                          <p className="text-sm font-medium text-[#1C1A17] truncate">{b.packageTitle}</p>
+                          <p className="text-xs text-[#7A7268]"><span className="font-mono">{b.id}</span> · travels {dateShort(b.startDate)} · booked {relative(b.createdAt)}</p>
                         </div>
                         <div className="text-right flex-shrink-0">
-                          <p className="text-sm font-medium text-[#101828] tabular-nums">{money(b.totalPrice)}</p>
+                          <p className="text-sm font-medium text-[#1C1A17] tabular-nums">{money(b.totalPrice)}</p>
                           <div className="mt-1"><StatusBadge status={b.status} /></div>
                         </div>
                       </Link>

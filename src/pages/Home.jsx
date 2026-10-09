@@ -106,11 +106,11 @@ export default function Home() {
   const statsRef = useRef(null)
 
   const heroSlides = [
-    { image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1920&q=90', label: t('home.slide.0') },
-    { image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=90', label: t('home.slide.1') },
-    { image: 'https://images.unsplash.com/photo-1516214104703-d870798883c5?w=1920&q=90', label: t('home.slide.2') },
-    { image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1920&q=90', label: t('home.slide.3') },
-    { image: 'https://images.unsplash.com/photo-1516815231560-8f41ec531527?w=1920&q=90', label: t('home.slide.4') },
+    // Okapi — Ibrali's logo animal, native to DR Congo's rainforest (photo: Douglas Cioffi, Unsplash License)
+    { image: 'https://images.unsplash.com/photo-1785277168940-9ac364c6c085?w=1920&q=90', label: t('home.slide.okapi') },
+    { image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1920&q=90', label: t('home.slide.masai') },
+    { image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=90', label: t('home.slide.dubai') },
+    { image: 'https://images.unsplash.com/photo-1516815231560-8f41ec531527?w=1920&q=90', label: t('home.slide.maldives') },
   ]
   const [activeSlide, setActiveSlide] = useState(0)
   const [isPlaying, setIsPlaying] = useState(true)
@@ -317,6 +317,16 @@ export default function Home() {
           <div
             className="absolute inset-0"
             style={{ background: 'linear-gradient(to top, rgba(56,44,28,0.88) 0%, rgba(56,44,28,0.42) 45%, rgba(56,44,28,0.06) 100%)' }}
+          />
+          {/* Scrims so the nav and headline stay legible on bright photos (e.g. the okapi
+              in sunlit forest) without dimming the whole image */}
+          <div
+            className="absolute inset-x-0 top-0 h-40 pointer-events-none"
+            style={{ background: 'linear-gradient(to bottom, rgba(28,22,14,0.55), rgba(28,22,14,0))' }}
+          />
+          <div
+            className="absolute inset-0 hidden md:block pointer-events-none"
+            style={{ background: 'linear-gradient(to right, rgba(40,30,18,0.62) 0%, rgba(40,30,18,0.35) 38%, rgba(40,30,18,0) 68%)' }}
           />
 
           {/* Slide arrows */}

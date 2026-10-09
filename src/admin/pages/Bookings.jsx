@@ -49,11 +49,11 @@ function sortBookings(list, sort) {
 
 function DetailRow({ icon: Icon, label, children }) {
   return (
-    <div className="flex items-start gap-3 py-3 border-b border-[#F2F4F7] last:border-0">
-      <Icon size={17} strokeWidth={1.9} className="text-[#98A2B3] mt-0.5 flex-shrink-0" />
+    <div className="flex items-start gap-3 py-3 border-b border-[#F2EDE5] last:border-0">
+      <Icon size={17} strokeWidth={1.9} className="text-[#9C9890] mt-0.5 flex-shrink-0" />
       <div className="min-w-0 flex-1">
-        <p className="text-xs font-medium text-[#667085]">{label}</p>
-        <div className="text-sm text-[#101828] mt-0.5">{children}</div>
+        <p className="text-xs font-medium text-[#7A7268]">{label}</p>
+        <div className="text-sm text-[#1C1A17] mt-0.5">{children}</div>
       </div>
     </div>
   )
@@ -174,6 +174,7 @@ export default function Bookings() {
   return (
     <div>
       <PageHeader
+        eyebrow="Operations"
         title="Bookings"
         description="Review, confirm and manage every reservation."
         actions={<Button icon={Download} onClick={() => exportCsv(filtered)} disabled={!filtered.length}>Export CSV</Button>}
@@ -181,7 +182,7 @@ export default function Bookings() {
 
       <Card className="overflow-hidden">
         {/* Toolbar */}
-        <div className="flex flex-col gap-3 p-4 border-b border-[#EAECF0]">
+        <div className="flex flex-col gap-3 p-4 border-b border-[#E3DCCD]">
           <div className="overflow-x-auto -mx-1 px-1">
             <Segmented
               label="Booking status"
@@ -203,7 +204,7 @@ export default function Bookings() {
 
         {/* Bulk actions */}
         {selectedIds.length > 0 && (
-          <div className="flex flex-wrap items-center gap-2 px-4 py-2.5 bg-[#FFF4ED] border-b border-[#FFD6AE]">
+          <div className="flex flex-wrap items-center gap-2 px-4 py-2.5 bg-[#FFF4ED] border-b border-[#FFD9B3]">
             <p className="text-sm font-semibold text-[#96380D] mr-2">{selectedIds.length} selected</p>
             <Button size="sm" icon={CircleCheck} onClick={async () => { if (await setStatus(selectedIds, 'confirmed')) setSelected(new Set()) }}>Confirm</Button>
             <Button size="sm" icon={Flag} onClick={async () => { if (await setStatus(selectedIds, 'completed')) setSelected(new Set()) }}>Mark completed</Button>
@@ -246,31 +247,31 @@ export default function Bookings() {
                       tabIndex={0}
                       onClick={() => setParam('open', b.id)}
                       onKeyDown={(e) => { if (e.key === 'Enter') setParam('open', b.id) }}
-                      className={`${rowCls} cursor-pointer hover:bg-[#F9FAFB] focus:outline-none focus-visible:bg-[#F9FAFB] ${selected.has(b.id) ? 'bg-[#FFFAF5]' : ''}`}
+                      className={`${rowCls} cursor-pointer hover:bg-[#FAF7F1] focus:outline-none focus-visible:bg-[#FAF7F1] ${selected.has(b.id) ? 'bg-[#FFFAF5]' : ''}`}
                     >
                       <td className={tdCls} onClick={(e) => e.stopPropagation()}>
                         <Checkbox checked={selected.has(b.id)} onChange={(on) => toggleOne(b.id, on)} label={`Select booking ${b.id}`} />
                       </td>
                       <td className={tdCls}>
-                        <p className="font-mono text-[13px] font-medium text-[#101828]">{b.id}</p>
-                        <p className="text-xs text-[#667085]">{relative(b.createdAt)}</p>
+                        <p className="font-mono text-[13px] font-medium text-[#1C1A17]">{b.id}</p>
+                        <p className="text-xs text-[#7A7268]">{relative(b.createdAt)}</p>
                       </td>
                       <td className={tdCls}>
-                        <p className="font-medium text-[#101828] flex items-center gap-1.5">
+                        <p className="font-medium text-[#1C1A17] flex items-center gap-1.5">
                           {b.fullName}
                           {b.isGuest && <Badge>Guest</Badge>}
                         </p>
-                        <p className="text-xs text-[#667085]">{b.email}</p>
+                        <p className="text-xs text-[#7A7268]">{b.email}</p>
                       </td>
                       <td className={`${tdCls} max-w-[220px]`}><p className="truncate">{b.packageTitle}</p></td>
                       <td className={tdCls}>
-                        <p className="text-[#344054] whitespace-nowrap">{dateShort(b.startDate)}</p>
-                        <p className="text-xs text-[#667085]">{travelHint(b.startDate)}</p>
+                        <p className="text-[#4A4540] whitespace-nowrap">{dateShort(b.startDate)}</p>
+                        <p className="text-xs text-[#7A7268]">{travelHint(b.startDate)}</p>
                       </td>
                       <td className={`${tdCls} text-right tabular-nums`}>{b.travelers}</td>
-                      <td className={`${tdCls} text-right font-medium text-[#101828] tabular-nums whitespace-nowrap`}>{money(b.totalPrice)}</td>
+                      <td className={`${tdCls} text-right font-medium text-[#1C1A17] tabular-nums whitespace-nowrap`}>{money(b.totalPrice)}</td>
                       <td className={tdCls}><StatusBadge status={b.status} /></td>
-                      <td className={tdCls}><ChevronRight size={18} className="text-[#98A2B3]" /></td>
+                      <td className={tdCls}><ChevronRight size={18} className="text-[#9C9890]" /></td>
                     </tr>
                   ))}
                 </tbody>
@@ -305,21 +306,21 @@ export default function Bookings() {
                 </p>
               </div>
             )}
-            <div className="rounded-xl border border-[#EAECF0] bg-[#F9FAFB] p-4">
-              <p className="text-xs font-medium text-[#667085]">Total</p>
-              <p className="text-[28px] font-semibold text-[#101828] leading-tight">{money(open.totalPrice)}</p>
-              <p className="text-sm text-[#475467] mt-0.5">{open.packageTitle} · {open.travelers} traveller{open.travelers === 1 ? '' : 's'}</p>
+            <div className="rounded-xl border border-[#E3DCCD] bg-[#FAF7F1] p-4">
+              <p className="text-xs font-medium text-[#7A7268]">Total</p>
+              <p className="text-[28px] font-semibold text-[#1C1A17] leading-tight">{money(open.totalPrice)}</p>
+              <p className="text-sm text-[#6B6560] mt-0.5">{open.packageTitle} · {open.travelers} traveller{open.travelers === 1 ? '' : 's'}</p>
             </div>
 
             <section>
-              <h3 className="text-sm font-semibold text-[#101828] mb-1">Trip</h3>
-              <DetailRow icon={CalendarDays} label="Travel date">{dateShort(open.startDate)} <span className="text-[#667085]">· {travelHint(open.startDate)}</span></DetailRow>
+              <h3 className="text-sm font-semibold text-[#1C1A17] mb-1">Trip</h3>
+              <DetailRow icon={CalendarDays} label="Travel date">{dateShort(open.startDate)} <span className="text-[#7A7268]">· {travelHint(open.startDate)}</span></DetailRow>
               <DetailRow icon={UsersRound} label="Travellers">{num(open.travelers)}</DetailRow>
               <DetailRow icon={Check} label="Account">{open.isGuest ? 'Guest checkout' : 'Registered customer'}</DetailRow>
             </section>
 
             <section>
-              <h3 className="text-sm font-semibold text-[#101828] mb-1">Customer</h3>
+              <h3 className="text-sm font-semibold text-[#1C1A17] mb-1">Customer</h3>
               <DetailRow icon={UserRound} label="Name">{open.fullName}</DetailRow>
               <DetailRow icon={Mail} label="Email">
                 <span className="flex items-center gap-1">
@@ -336,24 +337,24 @@ export default function Bookings() {
             </section>
 
             <section>
-              <h3 className="text-sm font-semibold text-[#101828] mb-2">Special requests</h3>
+              <h3 className="text-sm font-semibold text-[#1C1A17] mb-2">Special requests</h3>
               {open.specialRequests ? (
-                <p className="text-sm text-[#344054] whitespace-pre-wrap leading-relaxed rounded-lg border border-[#EAECF0] p-3.5">{open.specialRequests}</p>
+                <p className="text-sm text-[#4A4540] whitespace-pre-wrap leading-relaxed rounded-lg border border-[#E3DCCD] p-3.5">{open.specialRequests}</p>
               ) : (
-                <p className="text-sm text-[#667085]">None provided.</p>
+                <p className="text-sm text-[#7A7268]">None provided.</p>
               )}
             </section>
 
             <div className="flex flex-wrap gap-2.5">
               <a
                 href={`mailto:${open.email}?subject=${encodeURIComponent(`Your Ibrali Tours & Travel booking ${open.id}`)}&body=${encodeURIComponent(`Dear ${open.fullName},\n\n`)}`}
-                className="inline-flex items-center gap-2 h-10 px-4 rounded-lg border border-[#D0D5DD] bg-white text-sm font-semibold text-[#344054] hover:bg-[#F9FAFB] shadow-[0_1px_2px_rgba(16,24,40,0.05)]"
+                className="inline-flex items-center gap-2 h-10 px-4 rounded-full border border-[#D9CFBF] bg-white text-sm font-semibold text-[#4A4540] hover:bg-[#FAF7F1] shadow-[0_1px_2px_rgba(28,26,23,0.05)]"
               >
                 <Mail size={16} /> Email customer
               </a>
               <a
                 href={`tel:${open.phone}`}
-                className="inline-flex items-center gap-2 h-10 px-4 rounded-lg border border-[#D0D5DD] bg-white text-sm font-semibold text-[#344054] hover:bg-[#F9FAFB] shadow-[0_1px_2px_rgba(16,24,40,0.05)]"
+                className="inline-flex items-center gap-2 h-10 px-4 rounded-full border border-[#D9CFBF] bg-white text-sm font-semibold text-[#4A4540] hover:bg-[#FAF7F1] shadow-[0_1px_2px_rgba(28,26,23,0.05)]"
               >
                 <Phone size={16} /> Call
               </a>

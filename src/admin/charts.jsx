@@ -3,18 +3,20 @@ import { ChartColumn, Table2 } from 'lucide-react'
 import { Card, CardHeader } from './ui'
 import { thCls, tdCls, rowCls } from './styles'
 
-/* Chart tokens — single-series charts use categorical slot 1 (validated on the
-   white card surface: lightness band, chroma floor and 3:1 contrast all pass).
-   Text never wears the series colour; it uses the ink tokens below. */
+/* Chart tokens — the website's brand orange (#E75A08) as the single series
+   colour, validated on the white card surface: lightness band, chroma floor
+   and 3:1 contrast all pass. Hover darkens to brand-600 (the lighter #F2843A
+   would drop below 3:1). Text never wears the series colour; it uses the ink
+   tokens below. Gridlines sit one step lighter than card borders. */
 const VIZ = {
-  series: '#2a78d6',
-  seriesHover: '#3987e5',
-  grid: '#EAECF0',
-  baseline: '#D0D5DD',
-  band: '#F2F4F7',
-  muted: '#667085',
-  ink: '#101828',
-  ink2: '#344054',
+  series: '#E75A08',
+  seriesHover: '#C2470A',
+  grid: '#EFE9DF',
+  baseline: '#D9CFBF',
+  band: '#F2EDE5',
+  muted: '#7A7268',
+  ink: '#1C1A17',
+  ink2: '#4A4540',
 }
 
 /** Rounded ticks (0 / 500 / 1,000 …) and the axis top. */
@@ -145,22 +147,22 @@ export function ColumnChart({ data, format, formatAxis = format, integer = false
 
       {max === 0 && width > 0 && (
         <div className="absolute inset-x-0 top-0 flex items-center justify-center pointer-events-none" style={{ height: padT + plotH }}>
-          <span className="text-[13px] text-[#667085] bg-white/90 px-3 py-1 rounded-md">{emptyText}</span>
+          <span className="text-[13px] text-[#7A7268] bg-white/90 px-3 py-1 rounded-md">{emptyText}</span>
         </div>
       )}
 
       {hovered && (
         <div
           aria-hidden="true"
-          className="absolute z-10 pointer-events-none rounded-lg bg-white px-3 py-2 shadow-[0_12px_16px_-4px_rgba(16,24,40,0.08),0_4px_6px_-2px_rgba(16,24,40,0.03)] ring-1 ring-[#EAECF0] whitespace-nowrap"
+          className="absolute z-10 pointer-events-none rounded-lg bg-white px-3 py-2 shadow-[0_12px_16px_-4px_rgba(28,26,23,0.08),0_4px_6px_-2px_rgba(28,26,23,0.03)] ring-1 ring-[#E3DCCD] whitespace-nowrap"
           style={{
             left: Math.min(Math.max(cx(active), 70), width - 70),
             top: Math.max(0, y(hovered.value) - 10),
             transform: 'translate(-50%, -100%)',
           }}
         >
-          <p className="text-sm font-semibold text-[#101828]" style={{ fontVariantNumeric: 'tabular-nums' }}>{format(hovered.value)}</p>
-          <p className="text-xs text-[#475467] mt-0.5 flex items-center gap-1.5">
+          <p className="text-sm font-semibold text-[#1C1A17]" style={{ fontVariantNumeric: 'tabular-nums' }}>{format(hovered.value)}</p>
+          <p className="text-xs text-[#6B6560] mt-0.5 flex items-center gap-1.5">
             <span className="inline-block w-3 h-0.5 rounded-full" style={{ background: VIZ.series }} />
             {hovered.longLabel ?? hovered.label}
           </p>
@@ -184,15 +186,15 @@ export function BarList({ items, format }) {
         return (
           <li key={item.key} className="group">
             <div className="flex items-baseline justify-between gap-3 mb-1.5">
-              <span className="text-sm font-medium text-[#344054] truncate">{item.label}</span>
-              {item.sub && <span className="text-xs text-[#667085] whitespace-nowrap">{item.sub}</span>}
+              <span className="text-sm font-medium text-[#4A4540] truncate">{item.label}</span>
+              {item.sub && <span className="text-xs text-[#7A7268] whitespace-nowrap">{item.sub}</span>}
             </div>
             <div className="flex items-center gap-2">
               <div
-                className="h-2.5 rounded-r-[4px] transition-colors bg-[#2a78d6] group-hover:bg-[#3987e5]"
+                className="h-2.5 rounded-r-[4px] transition-colors bg-[#E75A08] group-hover:bg-[#C2470A]"
                 style={{ width: `calc((100% - 88px) * ${frac})`, minWidth: item.value > 0 ? 3 : 0 }}
               />
-              <span className="text-[13px] font-semibold text-[#101828] whitespace-nowrap" style={{ fontVariantNumeric: 'tabular-nums' }}>
+              <span className="text-[13px] font-semibold text-[#1C1A17] whitespace-nowrap" style={{ fontVariantNumeric: 'tabular-nums' }}>
                 {format(item.value)}
               </span>
             </div>
@@ -210,7 +212,7 @@ export function BarList({ items, format }) {
 export function ChartCard({ title, subtitle, table, children, className = '' }) {
   const [view, setView] = useState('chart')
   const toggle = (
-    <div className="inline-flex p-0.5 rounded-lg bg-[#F2F4F7] border border-[#EAECF0]" role="group" aria-label={`${title} view`}>
+    <div className="inline-flex p-0.5 rounded-lg bg-[#F2EDE5] border border-[#E3DCCD]" role="group" aria-label={`${title} view`}>
       {[
         { id: 'chart', icon: ChartColumn, label: 'Chart view' },
         { id: 'table', icon: Table2, label: 'Table view' },
@@ -222,7 +224,7 @@ export function ChartCard({ title, subtitle, table, children, className = '' }) 
           aria-pressed={view === o.id}
           aria-label={o.label}
           title={o.label}
-          className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors ${view === o.id ? 'bg-white text-[#182230] shadow-[0_1px_2px_rgba(16,24,40,0.1)]' : 'text-[#667085] hover:text-[#344054]'}`}
+          className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors ${view === o.id ? 'bg-white text-[#1C1A17] shadow-[0_1px_2px_rgba(28,26,23,0.1)]' : 'text-[#7A7268] hover:text-[#4A4540]'}`}
         >
           <o.icon size={15} strokeWidth={1.9} />
         </button>
@@ -235,7 +237,7 @@ export function ChartCard({ title, subtitle, table, children, className = '' }) 
       <CardHeader title={title} subtitle={subtitle} actions={table ? toggle : null} />
       <div className="px-5 pb-5">
         {view === 'chart' || !table ? children : (
-          <div className="max-h-[260px] overflow-auto rounded-lg border border-[#EAECF0]">
+          <div className="max-h-[260px] overflow-auto rounded-lg border border-[#E3DCCD]">
             <table className="w-full">
               <thead className="sticky top-0">
                 <tr>
@@ -248,7 +250,7 @@ export function ChartCard({ title, subtitle, table, children, className = '' }) 
                 {table.rows.map((r, i) => (
                   <tr key={i} className={rowCls}>
                     {r.map((cell, j) => (
-                      <td key={j} className={`${tdCls} !py-2.5 ${table.columns[j].align === 'right' ? 'text-right tabular-nums text-[#101828] font-medium' : ''}`}>{cell}</td>
+                      <td key={j} className={`${tdCls} !py-2.5 ${table.columns[j].align === 'right' ? 'text-right tabular-nums text-[#1C1A17] font-medium' : ''}`}>{cell}</td>
                     ))}
                   </tr>
                 ))}

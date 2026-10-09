@@ -52,6 +52,7 @@ export default function Subscribers() {
   return (
     <div>
       <PageHeader
+        eyebrow="People"
         title="Newsletter subscribers"
         description="People who signed up for travel inspiration on the website."
         actions={
@@ -73,17 +74,17 @@ export default function Subscribers() {
 
       <div className="grid sm:grid-cols-2 gap-4 mb-6">
         <Card className="p-5">
-          <p className="text-sm font-medium text-[#475467]">Total subscribers</p>
-          <p className="text-[30px] font-semibold text-[#101828] leading-tight mt-2">{num(subscribers.length)}</p>
+          <p className="text-sm font-medium text-[#6B6560]">Total subscribers</p>
+          <p className="text-[30px] font-semibold text-[#1C1A17] leading-tight mt-2">{num(subscribers.length)}</p>
         </Card>
         <Card className="p-5">
-          <p className="text-sm font-medium text-[#475467]">Joined in the last 30 days</p>
-          <p className="text-[30px] font-semibold text-[#101828] leading-tight mt-2">{num(recent)}</p>
+          <p className="text-sm font-medium text-[#6B6560]">Joined in the last 30 days</p>
+          <p className="text-[30px] font-semibold text-[#1C1A17] leading-tight mt-2">{num(recent)}</p>
         </Card>
       </div>
 
       <Card className="overflow-hidden">
-        <div className="p-4 border-b border-[#EAECF0]">
+        <div className="p-4 border-b border-[#E3DCCD]">
           <SearchInput value={query} onChange={setQuery} placeholder="Search by email" />
         </div>
         {filtered.length === 0 ? (
@@ -101,16 +102,16 @@ export default function Subscribers() {
                 </thead>
                 <tbody>
                   {paged.pageItems.map((s) => (
-                    <tr key={s.id} className={`${rowCls} hover:bg-[#F9FAFB]`}>
+                    <tr key={s.id} className={`${rowCls} hover:bg-[#FAF7F1]`}>
                       <td className={tdCls}>
                         <span className="flex items-center gap-1">
-                          <a href={`mailto:${s.email}`} className="font-medium text-[#101828] hover:text-[#C2470A]">{s.email}</a>
+                          <a href={`mailto:${s.email}`} className="font-medium text-[#1C1A17] hover:text-[#C2470A]">{s.email}</a>
                           <CopyButton value={s.email} label="Copy email" />
                         </span>
                       </td>
                       <td className={tdCls}>
-                        <p className="text-[#344054]">{dateShort(s.createdAt)}</p>
-                        {relative(s.createdAt) !== dateShort(s.createdAt) && <p className="text-xs text-[#667085]">{relative(s.createdAt)}</p>}
+                        <p className="text-[#4A4540]">{dateShort(s.createdAt)}</p>
+                        {relative(s.createdAt) !== dateShort(s.createdAt) && <p className="text-xs text-[#7A7268]">{relative(s.createdAt)}</p>}
                       </td>
                       <td className={`${tdCls} text-right`}>
                         <Button size="sm" variant="ghost" icon={Trash2} onClick={() => setRemoving(s)} className="!text-[#B42318] hover:!bg-[#FEF3F2]">

@@ -83,12 +83,12 @@ function ToastProvider({ children }) {
       {createPortal(
         <div className="admin-app fixed bottom-4 right-4 z-[80] flex flex-col gap-2.5 w-[calc(100%-2rem)] max-w-sm" aria-live="polite" dir="ltr" lang="en">
           {toasts.map((t) => (
-            <div key={t.id} className="flex items-start gap-3 rounded-xl bg-white px-4 py-3.5 shadow-[0_12px_16px_-4px_rgba(16,24,40,0.08),0_4px_6px_-2px_rgba(16,24,40,0.03)] ring-1 ring-[#EAECF0] animate-[admin-pop_180ms_cubic-bezier(0.16,1,0.3,1)]">
+            <div key={t.id} className="flex items-start gap-3 rounded-xl bg-white px-4 py-3.5 shadow-[0_12px_16px_-4px_rgba(28,26,23,0.08),0_4px_6px_-2px_rgba(28,26,23,0.03)] ring-1 ring-[#E3DCCD] animate-[admin-pop_180ms_cubic-bezier(0.16,1,0.3,1)]">
               {t.tone === 'success'
                 ? <CircleCheck size={20} className="text-[#079455] flex-shrink-0 mt-px" />
                 : <CircleAlert size={20} className="text-[#D92D20] flex-shrink-0 mt-px" />}
-              <p className="text-sm text-[#344054] flex-1 leading-snug">{t.message}</p>
-              <button type="button" onClick={() => dismiss(t.id)} aria-label="Dismiss" className="text-[#98A2B3] hover:text-[#475467]">
+              <p className="text-sm text-[#4A4540] flex-1 leading-snug">{t.message}</p>
+              <button type="button" onClick={() => dismiss(t.id)} aria-label="Dismiss" className="text-[#9C9890] hover:text-[#6B6560]">
                 <X size={16} />
               </button>
             </div>
@@ -111,8 +111,8 @@ function SideLink({ item, collapsed, count = 0, onNavigate }) {
       title={collapsed ? item.label : undefined}
       className={({ isActive }) =>
         `relative flex items-center gap-3 h-10 rounded-lg text-sm font-medium transition-colors ${collapsed ? 'justify-center px-0' : 'px-3'} ${isActive
-          ? 'bg-white/[0.08] text-white'
-          : 'text-[#98A2B3] hover:bg-white/[0.05] hover:text-white'}`
+          ? 'bg-[#E75A08]/[0.16] text-white'
+          : 'text-[#F5ECD8]/70 hover:bg-white/[0.06] hover:text-white'}`
       }
     >
       {({ isActive }) => (
@@ -122,7 +122,7 @@ function SideLink({ item, collapsed, count = 0, onNavigate }) {
           {!collapsed && <span className="flex-1 truncate">{item.label}</span>}
           {count > 0 && (
             <span className={collapsed
-              ? 'absolute top-1.5 right-2.5 w-2 h-2 rounded-full bg-[#E75A08] ring-2 ring-[#0F1115]'
+              ? 'absolute top-1.5 right-2.5 w-2 h-2 rounded-full bg-[#E75A08] ring-2 ring-[#382C1C]'
               : 'min-w-[22px] h-[22px] px-1.5 rounded-full bg-[#E75A08] text-white text-[11px] font-semibold flex items-center justify-center tabular-nums'}>
               {collapsed ? '' : count}
             </span>
@@ -140,8 +140,8 @@ function SidebarContent({ collapsed, counts, onNavigate }) {
         <img src="/ibrali-tours-travel/logo.webp" alt="" className="w-9 h-9 rounded-full object-cover bg-white ring-2 ring-white/10 flex-shrink-0" />
         {!collapsed && (
           <div className="min-w-0">
-            <p className="text-[15px] font-semibold text-white leading-tight truncate">Ibrali Tours</p>
-            <p className="text-xs text-[#98A2B3] leading-tight mt-0.5">Admin console</p>
+            <p className="heading text-[17px] text-white leading-tight truncate">Ibrali Tours</p>
+            <p className="text-[10px] uppercase tracking-[1.5px] text-[#F5ECD8]/55 leading-tight mt-1">Admin console</p>
           </div>
         )}
       </div>
@@ -150,7 +150,7 @@ function SidebarContent({ collapsed, counts, onNavigate }) {
         {NAV.map((section, si) => (
           <div key={si}>
             {section.group && !collapsed && (
-              <p className="px-3 mb-1.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#667085]">{section.group}</p>
+              <p className="px-3 mb-1.5 text-[10px] font-medium uppercase tracking-[2px] text-[#F2843A]/80">{section.group}</p>
             )}
             {section.group && collapsed && <div className="mx-3 mb-2 h-px bg-white/10" />}
             <ul className="space-y-0.5">
@@ -183,7 +183,7 @@ function Dropdown({ button, children, width = 300 }) {
       {button({ open, toggle: () => setOpen((o) => !o) })}
       {open && (
         <div
-          className="absolute right-0 top-full mt-2 z-40 rounded-xl bg-white shadow-[0_12px_16px_-4px_rgba(16,24,40,0.08),0_4px_6px_-2px_rgba(16,24,40,0.03)] ring-1 ring-[#EAECF0] overflow-hidden animate-[admin-pop_150ms_ease-out]"
+          className="absolute right-0 top-full mt-2 z-40 rounded-xl bg-white shadow-[0_12px_16px_-4px_rgba(28,26,23,0.08),0_4px_6px_-2px_rgba(28,26,23,0.03)] ring-1 ring-[#E3DCCD] overflow-hidden animate-[admin-pop_150ms_ease-out]"
           style={{ width }}
           onClick={(e) => { if (e.target.closest('a,button[data-close]')) setOpen(false) }}
         >
@@ -195,13 +195,13 @@ function Dropdown({ button, children, width = 300 }) {
 }
 
 function MenuLink({ to, href, icon: Icon, children, sub, onClick, danger }) {
-  const cls = `w-full flex items-start gap-3 px-4 py-2.5 text-left text-sm transition-colors hover:bg-[#F9FAFB] ${danger ? 'text-[#B42318]' : 'text-[#344054]'}`
+  const cls = `w-full flex items-start gap-3 px-4 py-2.5 text-left text-sm transition-colors hover:bg-[#FAF7F1] ${danger ? 'text-[#B42318]' : 'text-[#4A4540]'}`
   const inner = (
     <>
-      {Icon && <Icon size={17} strokeWidth={1.9} className={`mt-px flex-shrink-0 ${danger ? '' : 'text-[#667085]'}`} />}
+      {Icon && <Icon size={17} strokeWidth={1.9} className={`mt-px flex-shrink-0 ${danger ? '' : 'text-[#7A7268]'}`} />}
       <span className="min-w-0">
         <span className="block font-medium">{children}</span>
-        {sub && <span className="block text-xs text-[#667085] mt-0.5">{sub}</span>}
+        {sub && <span className="block text-xs text-[#7A7268] mt-0.5">{sub}</span>}
       </span>
     </>
   )
@@ -255,42 +255,42 @@ function CommandPalette({ open, onClose, data }) {
 
   return createPortal(
     <div className="admin-app fixed inset-0 z-[60] flex items-start justify-center p-4 pt-[12vh]" dir="ltr" lang="en">
-      <div className="absolute inset-0 bg-[#0C111D]/50 backdrop-blur-[2px]" onClick={onClose} />
-      <div role="dialog" aria-modal="true" aria-label="Search" className="relative w-full max-w-xl rounded-xl bg-white shadow-[0_24px_48px_-12px_rgba(16,24,40,0.18)] ring-1 ring-[#EAECF0] overflow-hidden animate-[admin-pop_160ms_ease-out]">
-        <div className="flex items-center gap-3 px-4 border-b border-[#EAECF0]">
-          <Search size={18} className="text-[#667085]" />
+      <div className="absolute inset-0 bg-[#1C1A17]/50 backdrop-blur-[2px]" onClick={onClose} />
+      <div role="dialog" aria-modal="true" aria-label="Search" className="relative w-full max-w-xl rounded-xl bg-white shadow-[0_24px_48px_-12px_rgba(28,26,23,0.18)] ring-1 ring-[#E3DCCD] overflow-hidden animate-[admin-pop_160ms_ease-out]">
+        <div className="flex items-center gap-3 px-4 border-b border-[#E3DCCD]">
+          <Search size={18} className="text-[#7A7268]" />
           <input
             autoFocus
             value={query}
             onChange={(e) => { setQuery(e.target.value); setActive(0) }}
             onKeyDown={onKeyDown}
             placeholder="Search bookings, customers, messages, packages…"
-            className="flex-1 h-14 text-[15px] text-[#101828] placeholder:text-[#98A2B3] bg-transparent focus:outline-none"
+            className="flex-1 h-14 text-[15px] text-[#1C1A17] placeholder:text-[#9C9890] bg-transparent focus:outline-none"
             aria-label="Search the admin console"
           />
-          <kbd className="text-[11px] font-medium text-[#667085] border border-[#EAECF0] rounded px-1.5 py-0.5">Esc</kbd>
+          <kbd className="text-[11px] font-medium text-[#7A7268] border border-[#E3DCCD] rounded px-1.5 py-0.5">Esc</kbd>
         </div>
         <ul className="max-h-[50vh] overflow-y-auto py-2" role="listbox">
-          {results.length === 0 && <li className="px-4 py-8 text-center text-sm text-[#667085]">No results for “{query}”</li>}
+          {results.length === 0 && <li className="px-4 py-8 text-center text-sm text-[#7A7268]">No results for “{query}”</li>}
           {results.map((r, i) => {
             const header = i === 0 || results[i - 1].group !== r.group ? r.group : null
             return (
               <li key={r.id}>
-                {header && <p className="px-4 pt-2.5 pb-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-[#98A2B3]">{header}</p>}
+                {header && <p className="px-4 pt-2.5 pb-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-[#9C9890]">{header}</p>}
                 <button
                   type="button"
                   role="option"
                   aria-selected={i === active}
                   onMouseMove={() => setActive(i)}
                   onClick={() => go(r)}
-                  className={`w-full flex items-center gap-3 px-4 py-2.5 text-left ${i === active ? 'bg-[#F9FAFB]' : ''}`}
+                  className={`w-full flex items-center gap-3 px-4 py-2.5 text-left ${i === active ? 'bg-[#FAF7F1]' : ''}`}
                 >
-                  <r.icon size={17} strokeWidth={1.9} className="text-[#667085] flex-shrink-0" />
+                  <r.icon size={17} strokeWidth={1.9} className="text-[#7A7268] flex-shrink-0" />
                   <span className="min-w-0 flex-1">
-                    <span className="block text-sm font-medium text-[#101828] truncate">{r.label}</span>
-                    {r.sub && <span className="block text-xs text-[#667085] truncate">{r.sub}</span>}
+                    <span className="block text-sm font-medium text-[#1C1A17] truncate">{r.label}</span>
+                    {r.sub && <span className="block text-xs text-[#7A7268] truncate">{r.sub}</span>}
                   </span>
-                  {i === active && <CornerDownLeft size={15} className="text-[#98A2B3]" />}
+                  {i === active && <CornerDownLeft size={15} className="text-[#9C9890]" />}
                 </button>
               </li>
             )
@@ -435,7 +435,7 @@ function Workspace({ me, onSignedOut, onMeUpdated }) {
       <div className="min-h-screen flex">
         {/* Desktop sidebar */}
         <aside
-          className="hidden lg:block flex-shrink-0 sticky top-0 h-screen bg-[#0F1115] transition-[width] duration-200"
+          className="hidden lg:block flex-shrink-0 sticky top-0 h-screen bg-[#382C1C] transition-[width] duration-200"
           style={{ width: collapsed ? 76 : 264 }}
         >
           <SidebarContent collapsed={collapsed} counts={counts} />
@@ -444,8 +444,8 @@ function Workspace({ me, onSignedOut, onMeUpdated }) {
         {/* Mobile sidebar */}
         {mobileNav && (
           <div className="lg:hidden fixed inset-0 z-50">
-            <div className="absolute inset-0 bg-[#0C111D]/50" onClick={() => setMobileNav(false)} />
-            <aside className="absolute inset-y-0 left-0 w-[280px] bg-[#0F1115] animate-[admin-slide-left_220ms_cubic-bezier(0.16,1,0.3,1)]">
+            <div className="absolute inset-0 bg-[#1C1A17]/50" onClick={() => setMobileNav(false)} />
+            <aside className="absolute inset-y-0 left-0 w-[280px] bg-[#382C1C] animate-[admin-slide-left_220ms_cubic-bezier(0.16,1,0.3,1)]">
               <button type="button" onClick={() => setMobileNav(false)} aria-label="Close menu" className="absolute top-4 -right-12 w-9 h-9 rounded-lg bg-white/10 text-white flex items-center justify-center">
                 <X size={18} />
               </button>
@@ -456,8 +456,8 @@ function Workspace({ me, onSignedOut, onMeUpdated }) {
 
         <div className="flex-1 min-w-0 flex flex-col">
           {/* Top bar */}
-          <header className="sticky top-0 z-30 h-16 flex items-center gap-3 px-4 sm:px-6 bg-white/95 backdrop-blur border-b border-[#EAECF0]">
-            <button type="button" onClick={() => setMobileNav(true)} aria-label="Open menu" className="lg:hidden w-9 h-9 -ml-1 rounded-lg flex items-center justify-center text-[#475467] hover:bg-[#F2F4F7]">
+          <header className="sticky top-0 z-30 h-16 flex items-center gap-3 px-4 sm:px-6 bg-[#FAF7F1]/95 backdrop-blur-xl border-b border-[#E3DCCD]">
+            <button type="button" onClick={() => setMobileNav(true)} aria-label="Open menu" className="lg:hidden w-9 h-9 -ml-1 rounded-lg flex items-center justify-center text-[#6B6560] hover:bg-[#F2EDE5]">
               <Menu size={20} />
             </button>
             <button
@@ -465,7 +465,7 @@ function Workspace({ me, onSignedOut, onMeUpdated }) {
               onClick={toggleCollapsed}
               aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
               title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-              className="hidden lg:flex w-9 h-9 -ml-2 rounded-lg items-center justify-center text-[#475467] hover:bg-[#F2F4F7]"
+              className="hidden lg:flex w-9 h-9 -ml-2 rounded-lg items-center justify-center text-[#6B6560] hover:bg-[#F2EDE5]"
             >
               {collapsed ? <PanelLeftOpen size={19} strokeWidth={1.9} /> : <PanelLeftClose size={19} strokeWidth={1.9} />}
             </button>
@@ -473,23 +473,23 @@ function Workspace({ me, onSignedOut, onMeUpdated }) {
             <button
               type="button"
               onClick={() => setPaletteOpen(true)}
-              className="flex-1 max-w-md h-10 flex items-center gap-2.5 px-3 rounded-lg border border-[#D0D5DD] bg-white text-sm text-[#667085] hover:border-[#98A2B3] transition-colors shadow-[0_1px_2px_rgba(16,24,40,0.05)]"
+              className="flex-1 max-w-md h-10 flex items-center gap-2.5 px-4 rounded-full border border-[#E3DCCD] bg-white text-sm text-[#7A7268] hover:border-[#E75A08] transition-colors"
             >
               <Search size={16} />
               <span className="truncate">Search<span className="hidden sm:inline"> bookings, customers, messages…</span></span>
-              <kbd className="ml-auto hidden sm:inline text-[11px] font-medium text-[#667085] border border-[#EAECF0] rounded px-1.5 py-0.5">Ctrl K</kbd>
+              <kbd className="ml-auto hidden sm:inline text-[11px] font-medium text-[#7A7268] border border-[#E3DCCD] rounded px-1.5 py-0.5">Ctrl K</kbd>
             </button>
 
             <div className="ml-auto flex items-center gap-1 sm:gap-2">
               {updatedAt && (
-                <span className="hidden xl:inline text-xs text-[#667085] mr-1">Updated {relative(updatedAt, now)}</span>
+                <span className="hidden xl:inline text-xs text-[#7A7268] mr-1">Updated {relative(updatedAt, now)}</span>
               )}
               <button
                 type="button"
                 onClick={() => load({ silent: true })}
                 aria-label="Refresh data"
                 title="Refresh data"
-                className="w-9 h-9 rounded-lg flex items-center justify-center text-[#475467] hover:bg-[#F2F4F7]"
+                className="w-9 h-9 rounded-lg flex items-center justify-center text-[#6B6560] hover:bg-[#F2EDE5]"
               >
                 <RefreshCw size={18} strokeWidth={1.9} className={refreshing ? 'animate-spin' : ''} />
               </button>
@@ -497,17 +497,17 @@ function Workspace({ me, onSignedOut, onMeUpdated }) {
               <Dropdown
                 width={320}
                 button={({ toggle, open }) => (
-                  <button type="button" onClick={toggle} aria-expanded={open} aria-label={`Notifications${alerts ? `, ${alerts} need attention` : ''}`} className="relative w-9 h-9 rounded-lg flex items-center justify-center text-[#475467] hover:bg-[#F2F4F7]">
+                  <button type="button" onClick={toggle} aria-expanded={open} aria-label={`Notifications${alerts ? `, ${alerts} need attention` : ''}`} className="relative w-9 h-9 rounded-lg flex items-center justify-center text-[#6B6560] hover:bg-[#F2EDE5]">
                     <Bell size={18} strokeWidth={1.9} />
                     {alerts > 0 && <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#E75A08] ring-2 ring-white" />}
                   </button>
                 )}
               >
-                <div className="px-4 py-3 border-b border-[#EAECF0]">
-                  <p className="text-sm font-semibold text-[#101828]">Needs attention</p>
+                <div className="px-4 py-3 border-b border-[#E3DCCD]">
+                  <p className="text-sm font-semibold text-[#1C1A17]">Needs attention</p>
                 </div>
                 {alerts === 0 && departures === 0 ? (
-                  <p className="px-4 py-6 text-sm text-center text-[#667085]">You're all caught up.</p>
+                  <p className="px-4 py-6 text-sm text-center text-[#7A7268]">You're all caught up.</p>
                 ) : (
                   <div className="py-1.5">
                     {counts.pending > 0 && (
@@ -537,14 +537,14 @@ function Workspace({ me, onSignedOut, onMeUpdated }) {
                   </button>
                 )}
               >
-                <div className="flex items-center gap-3 px-4 py-3 border-b border-[#EAECF0]">
+                <div className="flex items-center gap-3 px-4 py-3 border-b border-[#E3DCCD]">
                   <Avatar name={me.name} size={36} />
                   <div className="min-w-0">
-                    <p className="text-sm font-semibold text-[#101828] truncate">{me.name}</p>
-                    <p className="text-xs text-[#475467] truncate">{me.email}</p>
+                    <p className="text-sm font-semibold text-[#1C1A17] truncate">{me.name}</p>
+                    <p className="text-xs text-[#6B6560] truncate">{me.email}</p>
                   </div>
                 </div>
-                <div className="py-1.5 border-b border-[#EAECF0]">
+                <div className="py-1.5 border-b border-[#E3DCCD]">
                   <MenuLink to="/admin/settings" icon={Settings} sub="Account, security and preferences">Settings</MenuLink>
                   <MenuLink href={websiteUrl()} icon={ExternalLink}>View website</MenuLink>
                 </div>
@@ -615,7 +615,7 @@ export default function AdminApp() {
   }, [])
 
   return (
-    <div className="admin-app min-h-screen bg-[#F7F8FA] text-[#101828] antialiased" dir="ltr" lang="en">
+    <div className="admin-app min-h-screen bg-[#F7F4EE] text-[#1C1A17] antialiased" dir="ltr" lang="en">
       <ToastProvider>
         {me ? (
           <Workspace me={me} onSignedOut={handleSignedOut} onMeUpdated={setMe} />

@@ -20,13 +20,13 @@ const greeting = (d) => (d.getHours() < 12 ? 'Good morning' : d.getHours() < 18 
 function Delta({ pct, label }) {
   if (pct === null) {
     // No comparable base (all-time view, or nothing in the previous period)
-    return <span className="text-[13px] text-[#667085]">{label === 'All time' ? label : `— ${label}`}</span>
+    return <span className="text-[13px] text-[#7A7268]">{label === 'All time' ? label : `— ${label}`}</span>
   }
   const rounded = Math.round(pct)
-  const tone = rounded > 0 ? 'text-[#067647]' : rounded < 0 ? 'text-[#B42318]' : 'text-[#475467]'
+  const tone = rounded > 0 ? 'text-[#067647]' : rounded < 0 ? 'text-[#B42318]' : 'text-[#6B6560]'
   const Icon = rounded > 0 ? ArrowUpRight : rounded < 0 ? ArrowDownRight : Minus
   return (
-    <span className="inline-flex items-center gap-1.5 text-[13px] text-[#475467]">
+    <span className="inline-flex items-center gap-1.5 text-[13px] text-[#6B6560]">
       <span className={`inline-flex items-center gap-0.5 font-semibold ${tone}`}>
         <Icon size={15} strokeWidth={2.2} aria-hidden="true" />
         {rounded > 0 ? '+' : ''}{rounded}%
@@ -40,14 +40,14 @@ function KpiTile({ icon: Icon, label, value, pct, compareLabel, sub }) {
   return (
     <Card className="p-5">
       <div className="flex items-start justify-between gap-3">
-        <p className="text-sm font-medium text-[#475467]">{label}</p>
-        <span className="w-9 h-9 rounded-lg border border-[#EAECF0] flex items-center justify-center text-[#475467] flex-shrink-0">
+        <p className="text-sm font-medium text-[#6B6560]">{label}</p>
+        <span className="w-9 h-9 rounded-lg border border-[#E3DCCD] flex items-center justify-center text-[#6B6560] flex-shrink-0">
           <Icon size={18} strokeWidth={1.9} />
         </span>
       </div>
-      <p className="text-[30px] leading-none font-semibold text-[#101828] tracking-[-0.02em] mt-3">{value}</p>
+      <p className="text-[30px] leading-none font-semibold text-[#1C1A17] tracking-[-0.02em] mt-3">{value}</p>
       <div className="mt-3 min-h-[20px]"><Delta pct={pct} label={compareLabel} /></div>
-      {sub && <p className="text-xs text-[#667085] mt-1">{sub}</p>}
+      {sub && <p className="text-xs text-[#7A7268] mt-1">{sub}</p>}
     </Card>
   )
 }
@@ -57,16 +57,16 @@ function AttentionCard({ to, icon: Icon, count, label, clearLabel }) {
   return (
     <Link
       to={to}
-      className="group flex items-center gap-4 rounded-xl border border-[#EAECF0] bg-white px-4 py-3.5 shadow-[0_1px_2px_rgba(16,24,40,0.05)] hover:border-[#D0D5DD] transition-colors"
+      className="group flex items-center gap-4 rounded-xl border border-[#E3DCCD] bg-white px-4 py-3.5 shadow-[0_1px_2px_rgba(28,26,23,0.05)] hover:border-[#D9CFBF] transition-colors"
     >
-      <span className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${active ? 'bg-[#FFF4ED] text-[#C2470A]' : 'bg-[#F2F4F7] text-[#667085]'}`}>
+      <span className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${active ? 'bg-[#FFF4ED] text-[#C2470A]' : 'bg-[#F2EDE5] text-[#7A7268]'}`}>
         <Icon size={19} strokeWidth={1.9} />
       </span>
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-semibold text-[#101828]">{active ? `${count} ${label}` : clearLabel}</p>
-        <p className="text-xs text-[#667085] mt-0.5">{active ? 'Needs attention' : 'Nothing waiting'}</p>
+        <p className="text-sm font-semibold text-[#1C1A17]">{active ? `${count} ${label}` : clearLabel}</p>
+        <p className="text-xs text-[#7A7268] mt-0.5">{active ? 'Needs attention' : 'Nothing waiting'}</p>
       </div>
-      <ChevronRight size={18} className="text-[#98A2B3] group-hover:text-[#475467] group-hover:translate-x-0.5 transition" />
+      <ChevronRight size={18} className="text-[#9C9890] group-hover:text-[#6B6560] group-hover:translate-x-0.5 transition" />
     </Link>
   )
 }
@@ -150,6 +150,7 @@ export default function Overview() {
   return (
     <div>
       <PageHeader
+        eyebrow="Dashboard"
         title={`${greeting(now)}, ${me.name.split(' ')[0]}`}
         description="Here's what's happening across Ibrali Tours & Travel."
       />
@@ -164,7 +165,7 @@ export default function Overview() {
       {/* One filter row, scoping everything below it */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
         <Segmented label="Date range" options={RANGES.map((r) => ({ value: r.id, label: r.label }))} value={range} onChange={setRange} />
-        <p className="text-[13px] text-[#667085]">Based on booking date</p>
+        <p className="text-[13px] text-[#7A7268]">Based on booking date</p>
       </div>
 
       <div className={`space-y-6 transition-opacity duration-200 ${refreshing ? 'opacity-60' : ''}`}>
@@ -229,15 +230,15 @@ export default function Overview() {
                     <button
                       type="button"
                       onClick={() => navigate(`/admin/bookings?status=${s.status}`)}
-                      className="w-full flex items-center gap-4 py-3 border-b border-[#F2F4F7] last:border-0 text-left group"
+                      className="w-full flex items-center gap-4 py-3 border-b border-[#F2EDE5] last:border-0 text-left group"
                     >
                       <span className="w-[112px] flex-shrink-0"><StatusBadge status={s.status} /></span>
                       <span className="flex-1 min-w-0">
-                        <span className="block h-2 rounded-r-[4px] bg-[#2a78d6] group-hover:bg-[#3987e5] transition-colors" style={{ width: `${share * 100}%`, minWidth: s.count ? 3 : 0 }} />
+                        <span className="block h-2 rounded-r-[4px] bg-[#E75A08] group-hover:bg-[#C2470A] transition-colors" style={{ width: `${share * 100}%`, minWidth: s.count ? 3 : 0 }} />
                       </span>
-                      <span className="w-12 text-right text-sm font-semibold text-[#101828] tabular-nums">{num(s.count)}</span>
-                      <span className="w-12 text-right text-[13px] text-[#667085] tabular-nums">{Math.round(share * 100)}%</span>
-                      <span className="hidden sm:block w-24 text-right text-[13px] text-[#475467] tabular-nums">{money(s.value)}</span>
+                      <span className="w-12 text-right text-sm font-semibold text-[#1C1A17] tabular-nums">{num(s.count)}</span>
+                      <span className="w-12 text-right text-[13px] text-[#7A7268] tabular-nums">{Math.round(share * 100)}%</span>
+                      <span className="hidden sm:block w-24 text-right text-[13px] text-[#6B6560] tabular-nums">{money(s.value)}</span>
                     </button>
                   </li>
                 )
@@ -274,18 +275,18 @@ export default function Overview() {
                         tabIndex={0}
                         onClick={() => navigate(`/admin/bookings?open=${encodeURIComponent(b.id)}`)}
                         onKeyDown={(e) => { if (e.key === 'Enter') navigate(`/admin/bookings?open=${encodeURIComponent(b.id)}`) }}
-                        className={`${rowCls} cursor-pointer hover:bg-[#F9FAFB] focus:outline-none focus-visible:bg-[#F9FAFB]`}
+                        className={`${rowCls} cursor-pointer hover:bg-[#FAF7F1] focus:outline-none focus-visible:bg-[#FAF7F1]`}
                       >
                         <td className={tdCls}>
-                          <p className="font-medium text-[#101828]">{b.fullName}</p>
-                          <p className="text-xs text-[#667085]"><span className="font-mono">{b.id}</span> · {relative(b.createdAt)}</p>
+                          <p className="font-medium text-[#1C1A17]">{b.fullName}</p>
+                          <p className="text-xs text-[#7A7268]"><span className="font-mono">{b.id}</span> · {relative(b.createdAt)}</p>
                         </td>
                         <td className={`${tdCls} max-w-[220px] truncate`}>{b.packageTitle}</td>
                         <td className={tdCls}>
-                          <p className="text-[#344054]">{dateShort(b.startDate)}</p>
-                          <p className="text-xs text-[#667085]">{travelHint(b.startDate)}</p>
+                          <p className="text-[#4A4540]">{dateShort(b.startDate)}</p>
+                          <p className="text-xs text-[#7A7268]">{travelHint(b.startDate)}</p>
                         </td>
-                        <td className={`${tdCls} text-right font-medium text-[#101828] tabular-nums`}>{money(b.totalPrice)}</td>
+                        <td className={`${tdCls} text-right font-medium text-[#1C1A17] tabular-nums`}>{money(b.totalPrice)}</td>
                         <td className={tdCls}><StatusBadge status={b.status} /></td>
                       </tr>
                     ))}
@@ -302,18 +303,18 @@ export default function Overview() {
                 { icon: UserPlus, label: 'New customer accounts', value: view.newUsers, prev: view.prevUsers, to: '/admin/customers' },
                 { icon: AtSign, label: 'New newsletter subscribers', value: view.newSubs, prev: view.prevSubs, to: '/admin/subscribers' },
               ].map((row) => (
-                <Link key={row.label} to={row.to} className="flex items-center gap-4 rounded-lg border border-[#EAECF0] p-4 hover:border-[#D0D5DD] transition-colors">
-                  <span className="w-10 h-10 rounded-lg bg-[#F2F4F7] text-[#475467] flex items-center justify-center flex-shrink-0">
+                <Link key={row.label} to={row.to} className="flex items-center gap-4 rounded-lg border border-[#E3DCCD] p-4 hover:border-[#D9CFBF] transition-colors">
+                  <span className="w-10 h-10 rounded-lg bg-[#F2EDE5] text-[#6B6560] flex items-center justify-center flex-shrink-0">
                     <row.icon size={19} strokeWidth={1.9} />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[13px] text-[#475467]">{row.label}</p>
-                    <p className="text-2xl font-semibold text-[#101828] leading-tight mt-0.5">{num(row.value)}</p>
+                    <p className="text-[13px] text-[#6B6560]">{row.label}</p>
+                    <p className="text-2xl font-semibold text-[#1C1A17] leading-tight mt-0.5">{num(row.value)}</p>
                     <div className="mt-1"><Delta pct={pctChange(row.value, row.prev)} label={compare} /></div>
                   </div>
                 </Link>
               ))}
-              <p className="text-xs text-[#667085] pt-1">
+              <p className="text-xs text-[#7A7268] pt-1">
                 {num(users.length)} accounts and {num(subscribers.length)} subscribers in total.
               </p>
             </div>

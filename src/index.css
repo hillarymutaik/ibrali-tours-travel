@@ -62,7 +62,16 @@ input, textarea, select, [contenteditable="true"] {
 }
 .admin-app select option {
   background: #fff;
-  color: #101828;
+  color: #1C1A17;
+}
+/* Form fields show their own orange focus ring, and drawers/dialogs take focus
+   programmatically — skip the site-wide outline there so it isn't doubled.
+   Buttons, links and table rows keep the site's visible keyboard outline. */
+.admin-app input:focus-visible,
+.admin-app textarea:focus-visible,
+.admin-app select:focus-visible,
+.admin-app [tabindex="-1"]:focus-visible {
+  outline: none;
 }
 .admin-app ::selection {
   background-color: rgba(231, 90, 8, 0.18);

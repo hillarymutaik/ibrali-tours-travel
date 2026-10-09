@@ -24,10 +24,10 @@ const consoleUrl = () => `${window.location.origin}${window.location.pathname}#/
 /** Settings row: what it is on the left, the controls on the right. */
 function Section({ title, description, children }) {
   return (
-    <div className="grid lg:grid-cols-[280px_minmax(0,1fr)] gap-4 lg:gap-8 py-7 border-b border-[#EAECF0] last:border-0">
+    <div className="grid lg:grid-cols-[280px_minmax(0,1fr)] gap-4 lg:gap-8 py-7 border-b border-[#E3DCCD] last:border-0">
       <div>
-        <h2 className="text-sm font-semibold text-[#344054]">{title}</h2>
-        {description && <p className="text-sm text-[#475467] mt-1 leading-relaxed">{description}</p>}
+        <h2 className="text-sm font-semibold text-[#4A4540]">{title}</h2>
+        {description && <p className="text-sm text-[#6B6560] mt-1 leading-relaxed">{description}</p>}
       </div>
       <div className="min-w-0">{children}</div>
     </div>
@@ -43,7 +43,7 @@ function PasswordInput({ id, value, onChange, autoComplete }) {
         type="button"
         onClick={() => setShow((s) => !s)}
         aria-label={show ? 'Hide password' : 'Show password'}
-        className="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-md flex items-center justify-center text-[#667085] hover:text-[#344054] hover:bg-[#F2F4F7]"
+        className="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-md flex items-center justify-center text-[#7A7268] hover:text-[#4A4540] hover:bg-[#F2EDE5]"
       >
         {show ? <EyeOff size={17} /> : <Eye size={17} />}
       </button>
@@ -80,10 +80,10 @@ function AccountTab() {
           <div className="flex items-center gap-4 mb-6">
             <Avatar name={form.name || me.name} size={56} />
             <div className="min-w-0">
-              <p className="text-base font-semibold text-[#101828] truncate">{me.name}</p>
+              <p className="text-base font-semibold text-[#1C1A17] truncate">{me.name}</p>
               <div className="flex flex-wrap items-center gap-2 mt-1">
                 <Badge tone="brand" icon={ShieldCheck}>Administrator</Badge>
-                {record?.createdAt && <span className="text-xs text-[#667085]">Member since {dateShort(record.createdAt)}</span>}
+                {record?.createdAt && <span className="text-xs text-[#7A7268]">Member since {dateShort(record.createdAt)}</span>}
               </div>
             </div>
           </div>
@@ -92,7 +92,7 @@ function AccountTab() {
               <input id="s-name" className={inputCls} value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} autoComplete="name" />
             </Field>
             <Field label="Email" htmlFor="s-email" hint="Used to sign in, so it can't be changed here.">
-              <input id="s-email" className={`${inputCls} bg-[#F9FAFB] text-[#667085] cursor-not-allowed`} value={me.email} readOnly aria-readonly="true" />
+              <input id="s-email" className={`${inputCls} bg-[#FAF7F1] text-[#7A7268] cursor-not-allowed`} value={me.email} readOnly aria-readonly="true" />
             </Field>
             <Field label="Phone" htmlFor="s-phone" error={touched ? phoneError : ''}>
               <input id="s-phone" type="tel" className={inputCls} value={form.phone} onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))} placeholder="+254 …" autoComplete="tel" />
@@ -108,8 +108,8 @@ function AccountTab() {
       <Section title="Sign out" description="End your session on this device. You'll need your password to sign in again.">
         <Card className="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
-            <MonitorSmartphone size={20} className="text-[#667085] flex-shrink-0" />
-            <p className="text-sm text-[#344054] min-w-0">Signed in as <span className="font-medium text-[#101828] break-all">{me.email}</span></p>
+            <MonitorSmartphone size={20} className="text-[#7A7268] flex-shrink-0" />
+            <p className="text-sm text-[#4A4540] min-w-0">Signed in as <span className="font-medium text-[#1C1A17] break-all">{me.email}</span></p>
           </div>
           <Button icon={LogOut} onClick={signOut}>Sign out</Button>
         </Card>
@@ -201,10 +201,10 @@ function SecurityTab() {
       <Section title="Sessions" description="If you signed in on a shared or lost device, sign it out from here.">
         <Card className="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-start gap-3">
-            <MonitorSmartphone size={20} className="text-[#667085] flex-shrink-0 mt-0.5" />
+            <MonitorSmartphone size={20} className="text-[#7A7268] flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-medium text-[#101828]">This device</p>
-              <p className="text-[13px] text-[#667085]">Stays signed in. All other devices will need to sign in again.</p>
+              <p className="text-sm font-medium text-[#1C1A17]">This device</p>
+              <p className="text-[13px] text-[#7A7268]">Stays signed in. All other devices will need to sign in again.</p>
             </div>
           </div>
           <Button variant="dangerOutline" icon={LogOut} onClick={() => setConfirmOthers(true)}>Sign out other devices</Button>
@@ -213,19 +213,19 @@ function SecurityTab() {
 
       <Section title="Admin access" description="People who can sign in to this console and manage everything in it.">
         <Card className="overflow-hidden">
-          <ul className="divide-y divide-[#EAECF0]">
+          <ul className="divide-y divide-[#E3DCCD]">
             {admins.map((u) => (
               <li key={u.id} className="flex items-center gap-3 px-5 py-3.5">
                 <Avatar name={u.name} size={34} />
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-[#101828] truncate">{u.name}</p>
-                  <p className="text-xs text-[#667085] truncate">{u.email}</p>
+                  <p className="text-sm font-medium text-[#1C1A17] truncate">{u.name}</p>
+                  <p className="text-xs text-[#7A7268] truncate">{u.email}</p>
                 </div>
               </li>
             ))}
           </ul>
-          <div className="px-5 py-3.5 border-t border-[#EAECF0] bg-[#F9FAFB] flex items-center justify-between gap-3">
-            <p className="text-[13px] text-[#475467]">{num(admins.length)} admin{admins.length === 1 ? '' : 's'}</p>
+          <div className="px-5 py-3.5 border-t border-[#E3DCCD] bg-[#FAF7F1] flex items-center justify-between gap-3">
+            <p className="text-[13px] text-[#6B6560]">{num(admins.length)} admin{admins.length === 1 ? '' : 's'}</p>
             <Link to="/admin/customers?role=admin" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#C2470A] hover:text-[#96380D]">
               <UsersRound size={16} /> Manage team
             </Link>
@@ -283,7 +283,7 @@ function PreferencesTab() {
         </Section>
       ))}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-6">
-        <p className="text-[13px] text-[#667085]">Preferences are saved in this browser.</p>
+        <p className="text-[13px] text-[#7A7268]">Preferences are saved in this browser.</p>
         <Button
           icon={RotateCcw}
           disabled={isDefault}
@@ -313,13 +313,13 @@ function SystemTab() {
       <Section title="Backend connection" description="The booking system this console reads from and writes to.">
         <Card className="p-5 sm:p-6">
           <div className="flex flex-col sm:flex-row sm:items-start gap-4">
-            <Server size={20} className="text-[#667085] flex-shrink-0 mt-0.5" />
+            <Server size={20} className="text-[#7A7268] flex-shrink-0 mt-0.5" />
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <p className="text-sm font-medium text-[#101828] break-all">{API_BASE}</p>
+                <p className="text-sm font-medium text-[#1C1A17] break-all">{API_BASE}</p>
                 <CopyButton value={API_BASE} label="Copy address" />
               </div>
-              <p className="text-[13px] text-[#667085] mt-1">
+              <p className="text-[13px] text-[#7A7268] mt-1">
                 Last synced {updatedAt ? relative(updatedAt) : '—'} · {refreshLabel(prefs.refreshSeconds)}
               </p>
               {error && <p className="text-[13px] text-[#B42318] mt-2">{error}</p>}
@@ -338,20 +338,20 @@ function SystemTab() {
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {stats.map((s) => (
             <Card key={s.label} className="p-4">
-              <p className="text-[13px] text-[#475467]">{s.label}</p>
-              <p className="text-2xl font-semibold text-[#101828] leading-tight mt-1">{num(s.value)}</p>
-              <p className="text-xs text-[#667085] mt-0.5">{s.sub}</p>
+              <p className="text-[13px] text-[#6B6560]">{s.label}</p>
+              <p className="text-2xl font-semibold text-[#1C1A17] leading-tight mt-1">{num(s.value)}</p>
+              <p className="text-xs text-[#7A7268] mt-0.5">{s.sub}</p>
             </Card>
           ))}
         </div>
       </Section>
 
       <Section title="Links" description="Quick access to the public site and this console's address.">
-        <Card className="divide-y divide-[#EAECF0]">
+        <Card className="divide-y divide-[#E3DCCD]">
           <div className="flex items-center justify-between gap-3 px-5 py-4">
             <div className="min-w-0">
-              <p className="text-sm font-medium text-[#101828]">Public website</p>
-              <p className="text-xs text-[#667085] truncate">{websiteUrl()}</p>
+              <p className="text-sm font-medium text-[#1C1A17]">Public website</p>
+              <p className="text-xs text-[#7A7268] truncate">{websiteUrl()}</p>
             </div>
             <a href={websiteUrl()} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#C2470A] hover:text-[#96380D] flex-shrink-0">
               Open <ExternalLink size={15} />
@@ -359,8 +359,8 @@ function SystemTab() {
           </div>
           <div className="flex items-center justify-between gap-3 px-5 py-4">
             <div className="min-w-0">
-              <p className="text-sm font-medium text-[#101828]">Admin console address</p>
-              <p className="text-xs text-[#667085] truncate">{consoleUrl()}</p>
+              <p className="text-sm font-medium text-[#1C1A17]">Admin console address</p>
+              <p className="text-xs text-[#7A7268] truncate">{consoleUrl()}</p>
             </div>
             <CopyButton value={consoleUrl()} label="Copy console address" />
           </div>
@@ -368,7 +368,7 @@ function SystemTab() {
       </Section>
 
       <Section title="Keyboard shortcuts" description="Work faster without the mouse.">
-        <Card className="divide-y divide-[#EAECF0]">
+        <Card className="divide-y divide-[#E3DCCD]">
           {[
             ['Search everything', ['Ctrl', 'K']],
             ['Close a panel or dialog', ['Esc']],
@@ -376,10 +376,10 @@ function SystemTab() {
             ['Move through search results', ['↑', '↓']],
           ].map(([label, keys]) => (
             <div key={label} className="flex items-center justify-between gap-3 px-5 py-3.5">
-              <span className="flex items-center gap-2.5 text-sm text-[#344054]"><Keyboard size={16} className="text-[#98A2B3]" />{label}</span>
+              <span className="flex items-center gap-2.5 text-sm text-[#4A4540]"><Keyboard size={16} className="text-[#9C9890]" />{label}</span>
               <span className="flex gap-1">
                 {keys.map((k) => (
-                  <kbd key={k} className="min-w-[28px] text-center text-xs font-medium text-[#344054] bg-[#F9FAFB] border border-[#EAECF0] rounded-md px-1.5 py-1">{k}</kbd>
+                  <kbd key={k} className="min-w-[28px] text-center text-xs font-medium text-[#4A4540] bg-[#FAF7F1] border border-[#E3DCCD] rounded-md px-1.5 py-1">{k}</kbd>
                 ))}
               </span>
             </div>
@@ -398,9 +398,9 @@ export default function Settings() {
 
   return (
     <div className="max-w-5xl">
-      <PageHeader title="Settings" description="Manage your account, security and how the console works." />
+      <PageHeader eyebrow="Console" title="Settings" description="Manage your account, security and how the console works." />
 
-      <div className="border-b border-[#EAECF0] overflow-x-auto">
+      <div className="border-b border-[#E3DCCD] overflow-x-auto">
         <div role="tablist" aria-label="Settings sections" className="flex gap-6 min-w-max">
           {TABS.map((t) => {
             const active = t.id === tab
@@ -413,7 +413,7 @@ export default function Settings() {
                 onClick={() => setParams({ tab: t.id }, { replace: true })}
                 className={`inline-flex items-center gap-2 pb-3 -mb-px border-b-2 text-sm font-semibold transition-colors ${active
                   ? 'border-[#E75A08] text-[#C2470A]'
-                  : 'border-transparent text-[#667085] hover:text-[#344054] hover:border-[#D0D5DD]'}`}
+                  : 'border-transparent text-[#7A7268] hover:text-[#4A4540] hover:border-[#D9CFBF]'}`}
               >
                 <t.icon size={17} strokeWidth={1.9} />
                 {t.label}

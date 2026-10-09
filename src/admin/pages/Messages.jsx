@@ -67,13 +67,13 @@ export default function Messages() {
 
   return (
     <div>
-      <PageHeader title="Messages" description="Enquiries sent through the website's contact form." />
+      <PageHeader eyebrow="Operations" title="Messages" description="Enquiries sent through the website's contact form." />
 
       <Card className="overflow-hidden">
         <div className="grid lg:grid-cols-[380px_minmax(0,1fr)] lg:h-[calc(100vh-232px)] lg:min-h-[560px]">
           {/* List */}
-          <div className={`flex flex-col min-h-0 border-[#EAECF0] lg:border-r ${open ? 'hidden lg:flex' : 'flex'}`}>
-            <div className="p-4 space-y-3 border-b border-[#EAECF0]">
+          <div className={`flex flex-col min-h-0 border-[#E3DCCD] lg:border-r ${open ? 'hidden lg:flex' : 'flex'}`}>
+            <div className="p-4 space-y-3 border-b border-[#E3DCCD]">
               <Segmented
                 label="Message filter"
                 value={filter}
@@ -100,17 +100,17 @@ export default function Messages() {
                     <button
                       type="button"
                       onClick={() => openMessage(m.id)}
-                      className={`relative w-full text-left flex gap-3 px-4 py-3.5 border-b border-[#F2F4F7] transition-colors ${active ? 'bg-[#F9FAFB]' : 'hover:bg-[#FCFCFD]'}`}
+                      className={`relative w-full text-left flex gap-3 px-4 py-3.5 border-b border-[#F2EDE5] transition-colors ${active ? 'bg-[#FAF7F1]' : 'hover:bg-[#FDFBF7]'}`}
                     >
                       {active && <span className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#E75A08]" />}
                       <Avatar name={m.name} size={38} tone={m.isRead ? 'neutral' : 'brand'} />
                       <span className="min-w-0 flex-1">
                         <span className="flex items-baseline gap-2">
-                          <span className={`truncate text-sm ${m.isRead ? 'font-medium text-[#344054]' : 'font-semibold text-[#101828]'}`}>{m.name}</span>
-                          <span className="ml-auto text-xs text-[#667085] whitespace-nowrap">{relative(m.createdAt)}</span>
+                          <span className={`truncate text-sm ${m.isRead ? 'font-medium text-[#4A4540]' : 'font-semibold text-[#1C1A17]'}`}>{m.name}</span>
+                          <span className="ml-auto text-xs text-[#7A7268] whitespace-nowrap">{relative(m.createdAt)}</span>
                         </span>
-                        <span className="block text-xs text-[#667085] truncate">{m.email}</span>
-                        <span className={`block text-[13px] mt-1 line-clamp-2 ${m.isRead ? 'text-[#667085]' : 'text-[#344054]'}`}>{m.message}</span>
+                        <span className="block text-xs text-[#7A7268] truncate">{m.email}</span>
+                        <span className={`block text-[13px] mt-1 line-clamp-2 ${m.isRead ? 'text-[#7A7268]' : 'text-[#4A4540]'}`}>{m.message}</span>
                       </span>
                       {!m.isRead && <span className="w-2 h-2 rounded-full bg-[#E75A08] mt-1.5 flex-shrink-0" aria-label="Unread" />}
                     </button>
@@ -132,15 +132,15 @@ export default function Messages() {
               </div>
             ) : (
               <>
-                <div className="flex flex-wrap items-center gap-2 px-5 py-3 border-b border-[#EAECF0]">
-                  <button type="button" onClick={() => setParam('open', null)} className="lg:hidden inline-flex items-center gap-1.5 text-sm font-semibold text-[#475467] mr-2">
+                <div className="flex flex-wrap items-center gap-2 px-5 py-3 border-b border-[#E3DCCD]">
+                  <button type="button" onClick={() => setParam('open', null)} className="lg:hidden inline-flex items-center gap-1.5 text-sm font-semibold text-[#6B6560] mr-2">
                     <ArrowLeft size={16} /> Inbox
                   </button>
-                  <a href={replyHref} className="inline-flex items-center gap-2 h-9 px-3.5 rounded-lg bg-[#E75A08] hover:bg-[#C2470A] text-white text-sm font-semibold transition-colors">
+                  <a href={replyHref} className="inline-flex items-center gap-2 h-9 px-4 rounded-full bg-[#E75A08] hover:bg-[#C2470A] text-white text-sm font-semibold transition-colors">
                     <Reply size={16} /> Reply by email
                   </a>
                   {open.phone && (
-                    <a href={`tel:${open.phone}`} className="inline-flex items-center gap-2 h-9 px-3.5 rounded-lg border border-[#D0D5DD] bg-white text-sm font-semibold text-[#344054] hover:bg-[#F9FAFB]">
+                    <a href={`tel:${open.phone}`} className="inline-flex items-center gap-2 h-9 px-4 rounded-full border border-[#D9CFBF] bg-white text-sm font-semibold text-[#4A4540] hover:bg-[#FAF7F1]">
                       <Phone size={16} /> Call
                     </a>
                   )}
@@ -155,8 +155,8 @@ export default function Messages() {
                   <div className="flex items-start gap-4">
                     <Avatar name={open.name} size={48} />
                     <div className="min-w-0 flex-1">
-                      <p className="text-lg font-semibold text-[#101828]">{open.name}</p>
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[#475467] mt-0.5">
+                      <p className="text-lg font-semibold text-[#1C1A17]">{open.name}</p>
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[#6B6560] mt-0.5">
                         <span className="flex items-center gap-0.5">
                           <a href={`mailto:${open.email}`} className="hover:text-[#C2470A] break-all">{open.email}</a>
                           <CopyButton value={open.email} label="Copy email" />
@@ -168,11 +168,11 @@ export default function Messages() {
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-[#667085] mt-1">Received {dateTime(open.createdAt)}</p>
+                      <p className="text-xs text-[#7A7268] mt-1">Received {dateTime(open.createdAt)}</p>
                     </div>
                   </div>
-                  <div className="mt-6 rounded-xl border border-[#EAECF0] bg-[#FCFCFD] p-5">
-                    <p className="text-[15px] text-[#344054] leading-relaxed whitespace-pre-wrap break-words">{open.message}</p>
+                  <div className="mt-6 rounded-xl border border-[#E3DCCD] bg-[#FDFBF7] p-5">
+                    <p className="text-[15px] text-[#4A4540] leading-relaxed whitespace-pre-wrap break-words">{open.message}</p>
                   </div>
                 </div>
               </>

@@ -51,11 +51,11 @@ function PackageForm({ initial, onSubmit, onCancel, saving }) {
 
   return (
     <form id="package-form" onSubmit={submit} className="space-y-5" noValidate>
-      <div className="rounded-xl overflow-hidden border border-[#EAECF0] bg-[#F9FAFB] aspect-[16/7] flex items-center justify-center">
+      <div className="rounded-xl overflow-hidden border border-[#E3DCCD] bg-[#FAF7F1] aspect-[16/7] flex items-center justify-center">
         {form.image && !imageFailed ? (
           <img src={form.image} alt="" className="w-full h-full object-cover" onError={() => setImageFailed(true)} onLoad={() => setImageFailed(false)} />
         ) : (
-          <span className="flex flex-col items-center gap-2 text-sm text-[#667085]">
+          <span className="flex flex-col items-center gap-2 text-sm text-[#7A7268]">
             <ImageOff size={22} />
             {form.image ? 'Image could not be loaded' : 'Add an image URL to preview it'}
           </span>
@@ -105,10 +105,10 @@ function PackageForm({ initial, onSubmit, onCancel, saving }) {
         <textarea id="p-desc" rows={4} className={textareaCls} value={form.description} onChange={set('description')} placeholder="What makes this trip special?" />
       </Field>
 
-      <div className="flex items-start justify-between gap-4 rounded-xl border border-[#EAECF0] p-4">
+      <div className="flex items-start justify-between gap-4 rounded-xl border border-[#E3DCCD] p-4">
         <div>
-          <p className="text-sm font-semibold text-[#344054]">Visible on the website</p>
-          <p className="text-[13px] text-[#667085] mt-0.5">Hidden packages can't be booked.</p>
+          <p className="text-sm font-semibold text-[#4A4540]">Visible on the website</p>
+          <p className="text-[13px] text-[#7A7268] mt-0.5">Hidden packages can't be booked.</p>
         </div>
         <Toggle checked={form.isActive} onChange={(v) => setForm((f) => ({ ...f, isActive: v }))} label="Visible on the website" />
       </div>
@@ -184,13 +184,14 @@ export default function Packages() {
   return (
     <div>
       <PageHeader
+        eyebrow="Catalogue"
         title="Packages"
         description={`${num(live)} live · ${num(packages.length - live)} hidden — prices and availability used for bookings.`}
         actions={<Button variant="primary" icon={Plus} onClick={() => setEditing('new')}>New package</Button>}
       />
 
       <Card className="overflow-hidden">
-        <div className="flex flex-col lg:flex-row gap-3 p-4 border-b border-[#EAECF0]">
+        <div className="flex flex-col lg:flex-row gap-3 p-4 border-b border-[#E3DCCD]">
           <Segmented
             label="Visibility"
             value={visibility}
@@ -234,32 +235,32 @@ export default function Packages() {
                 {filtered.map((p) => {
                   const s = stats.get(p.id) ?? { count: 0, revenue: 0 }
                   return (
-                    <tr key={p.id} className={`${rowCls} hover:bg-[#F9FAFB]`}>
+                    <tr key={p.id} className={`${rowCls} hover:bg-[#FAF7F1]`}>
                       <td className={tdCls}>
                         <div className="flex items-center gap-3">
                           {p.image ? (
-                            <img src={p.image} alt="" className="w-14 h-10 rounded-md object-cover flex-shrink-0 bg-[#F2F4F7]" />
+                            <img src={p.image} alt="" className="w-14 h-10 rounded-md object-cover flex-shrink-0 bg-[#F2EDE5]" />
                           ) : (
-                            <span className="w-14 h-10 rounded-md bg-[#F2F4F7] flex items-center justify-center text-[#98A2B3] flex-shrink-0"><ImageOff size={16} /></span>
+                            <span className="w-14 h-10 rounded-md bg-[#F2EDE5] flex items-center justify-center text-[#9C9890] flex-shrink-0"><ImageOff size={16} /></span>
                           )}
                           <div className="min-w-0">
-                            <p className="font-medium text-[#101828] truncate max-w-[280px]">{p.title}</p>
-                            <p className="text-xs text-[#667085] truncate max-w-[280px]">{p.destination}</p>
+                            <p className="font-medium text-[#1C1A17] truncate max-w-[280px]">{p.title}</p>
+                            <p className="text-xs text-[#7A7268] truncate max-w-[280px]">{p.destination}</p>
                           </div>
                         </div>
                       </td>
                       <td className={tdCls}>
                         <Badge>{capitalize(p.category)}</Badge>
-                        <span className="text-xs text-[#667085] ml-2">{p.difficulty}</span>
+                        <span className="text-xs text-[#7A7268] ml-2">{p.difficulty}</span>
                       </td>
                       <td className={`${tdCls} text-right tabular-nums whitespace-nowrap`}>{p.duration} day{p.duration === 1 ? '' : 's'}</td>
-                      <td className={`${tdCls} text-right font-medium text-[#101828] tabular-nums`}>{money(p.price)}</td>
+                      <td className={`${tdCls} text-right font-medium text-[#1C1A17] tabular-nums`}>{money(p.price)}</td>
                       <td className={`${tdCls} text-right tabular-nums`}>{num(s.count)}</td>
                       <td className={`${tdCls} text-right tabular-nums`}>{money(s.revenue)}</td>
                       <td className={tdCls}>
                         <div className="flex items-center gap-2">
                           <Toggle checked={p.isActive} onChange={() => toggle(p)} label={`${p.title} visible on the website`} />
-                          <span className="text-xs text-[#667085] w-10">{p.isActive ? 'Live' : 'Hidden'}</span>
+                          <span className="text-xs text-[#7A7268] w-10">{p.isActive ? 'Live' : 'Hidden'}</span>
                         </div>
                       </td>
                       <td className={tdCls}>

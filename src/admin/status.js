@@ -1,10 +1,11 @@
 import { CircleCheck, CircleX, Clock, Flag } from 'lucide-react'
 
-/** Booking status — rendered as icon + label, never colour alone. */
+/** Booking status — rendered as icon + label, never colour alone. Tones match
+    the website's "My Trips" badges (pending orange, completed warm neutral). */
 export const BOOKING_STATUS = {
-  pending: { label: 'Pending', tone: 'warning', icon: Clock },
+  pending: { label: 'Pending', tone: 'brand', icon: Clock },
   confirmed: { label: 'Confirmed', tone: 'success', icon: CircleCheck },
-  completed: { label: 'Completed', tone: 'info', icon: Flag },
+  completed: { label: 'Completed', tone: 'neutral', icon: Flag },
   cancelled: { label: 'Cancelled', tone: 'danger', icon: CircleX },
 }
 
